@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+  <html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Jukebox Title Strip Creator</title>
+    <script src='pdfmake.min.js'></script>
+    <script src='vfs_fonts.js'></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crel/3.1.0/crel.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.css">
+    <style>
+      .main-content { margin-top: 90px; }
+      .right { text-align: right; }
+      .title input { border-radius: 0; border: 1px solid #fff; padding-left: 0; }
+      .title input:focus, .title input:active { border-color: #fff; border-bottom: 1px solid #ced4da; box-shadow: none; background-color: #f5f5f5; }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-expand-lg fixed-top bg-primary navbar-dark">
+      <div class="container">
+        <a href="../" class="navbar-brand">JB Title Strips</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" id="menu-options" href="#">Options</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="menu-clear" href="#">Clear all</a>
+            </li>
+          </ul>
+
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="http://builtwithbootstrap.com/" target="_blank">JS, CSS, HTML</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+    
+    <div class="container main-content">
+      <div class="bs-docs-section clearfix">
+        <div class="row">
+          <div class="col-lg-12">
+            <table class="table" id="titles">
+              <thead>
+                <tr>
+                  <th>A Side</th>
+                  <th>B Side</th>
+                  <th>Artist</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="title">
+                  <td><input type="text" class="sidea form-control" placeholder="A Side"></td>
+                  <td><input type="text" class="sideb form-control" placeholder="B Side"></td>
+                  <td><input type="text" class="artist form-control" placeholder="Artist"></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="col-lg-12 right">
+              <button class="btn btn-info" id="add-title">+ Add title</button>
+            </div>
+            <div class="col-lg-12">
+              <button class="btn btn-primary" id="write-document">Create PDF</button>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </body>
+  <script src="titlecreator.js"></script>
+  <script>
+    function saveTitles() {
+      var titles=getTitles();
+      sessionStorage.setItem('titles',JSON.stringify(titles));
+    }
+    function getTitles() {
+      var o=[];
+      $('#titles .title').each(function(i){
+        var $inputs=$($(this)[0]).find('input');
+        //potentially wrong, assumes jQuery will pull them out in DOM order but faster than anything else I can think of right now
+        if($($inputs[0]).val()!='' && $($inputs[1]).val()!='' && $($inputs[2]).val()!='')
+          o.push({
+            aside:$($inputs[0]).val(),
+            bside:$($inputs[1]).val(),
+            artist:$($inputs[2]).val()
+          });
+      })
+      return o;
+    }
+    
+    $(document).ready(function(){
+    
+      function addRow(content=null){
+        var html=crel('tr',{'class':'title'},
+          crel('td',crel('input',{'type':'text', 'class':'sidea form-control', 'placeholder':'A Side', 'value':((content===null) ? '' : content.aside) })),
+          crel('td',crel('input',{'type':'text', 'class':'sideb form-control', 'placeholder':'B Side', 'value':((content===null) ? '' : content.bside) })),
+          crel('td',crel('input',{'type':'text', 'class':'artist form-control', 'placeholder':'Artist', 'value':((content===null) ? '' : content.artist) }) )
+        )
+        $('#titles tbody').append(html);
+          
+        $inputs=$('#titles').find('input');
+        $($($inputs)[$($inputs).length-3]).focus();
+      }
+      
+      $('#write-document').on('click',function(e) {
+        e.preventDefault();
+        var titles=getTitles();
+        window.titleCreator.start(titles);
+      });
+
+      $('#add-title').on('click',function(e) {
+        e.preventDefault();
+        addRow();
+      });
+      
+      $('#menu-clear').on('click',function(e) {
+        e.preventDefault();
+        $('#titles tbody').empty();
+        sessionStorage.removeItem('titles');
+        addRow();
+      });
+      
+      $(document.body).on('blur','.artist',function(e) {
+        saveTitles();
+      });
+      
+      var titles=JSON.parse(sessionStorage.getItem('titles'))||[];
+      if(titles.length>0) {
+        $('#titles tbody').empty();
+        titles.forEach(function(e){
+          addRow(e);
+        });
+        addRow();
+      }
+            
+      $inputs=$('#titles').find('input');
+      $($($inputs)[$($inputs).length-3]).focus();
+    });
+  </script>
+</html>
