@@ -31,13 +31,13 @@
               <a class="nav-link" id="menu-options" href="#">Options</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="menu-clear" href="#">Clear all</a>
+              <a class="nav-link" id="menu-export" href="#">Export</a>
             </li>
           </ul>
 
           <ul class="nav navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="http://builtwithbootstrap.com/" target="_blank">JS, CSS, HTML</a>
+              <a class="nav-link" id="menu-clear" href="#">Clear all</a>
             </li>
           </ul>
 
@@ -128,6 +128,21 @@
         $('#titles tbody').empty();
         sessionStorage.removeItem('titles');
         addRow();
+      });
+      
+      $('#menu-export').on('click',function(e) {
+        e.preventDefault();
+        var out={
+          titles:getTitles(),
+          options:window.titleCreator.getOptions()
+        }
+        var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(out));
+        var a = document.createElement('a');
+        a.setAttribute("href", data);
+        a.setAttribute("download","jblabels.json");
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
       });
       
       $(document.body).on('blur','.artist',function(e) {
