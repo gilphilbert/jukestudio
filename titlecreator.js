@@ -2,11 +2,10 @@ window.titleCreator={
   options: JSON.parse(sessionStorage.getItem('options'))||{
     allCaps:true,
     quotes:true,
-    primaryColor:'blue'
+    primaryColor:'red'
   },
   functions:{
     buildCanvases: function() {
-      console.log(titleCreator.options.allCaps);
       var b=[];
       for(i=0;i<20;i++) {
         var j=((i<10) ? i : i - 10);
@@ -134,9 +133,13 @@ window.titleCreator={
       });
       $('#text-sizer').remove();
       return titles;
+    },
+    setOptions: function() {
+      if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='red';
     }
   },
   start:function(titles) {
+    this.functions.setOptions();
     var dd=this.functions.getDocument(titles);
     pdfMake.createPdf(dd).open();
   },
