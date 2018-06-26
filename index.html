@@ -219,6 +219,12 @@
             
       $inputs=$('#titles').find('input');
       $($($inputs)[$($inputs).length-3]).focus();
+
+      //insert the custom font we've already pulled in for PDFMake
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      style.innerHTML = '@font-face {font-family: RetroBold;src: url(data:font/ttf;base64,'+pdfMake.vfs['RetroBold.ttf']+');}';
+      document.getElementsByTagName('head')[0].appendChild(style);
     });
   </script>
 </html>

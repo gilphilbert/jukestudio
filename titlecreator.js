@@ -53,16 +53,16 @@ window.titleCreator={
       var b=[];
       for(i=0;i<10;i++){
         b.push([
-          { text: ((titles.length>i) ? titles[i].aside : ''), font: ((titles.length>i && titles[i].aside.length>34) ? 'RetroCondensed' : 'Retro'), style:'title', margin:[0,5.5,0,0], border: [true, true, true, false]},
-          { text: ((titles.length>i+10) ? titles[i+10].aside : ''), font: ((titles.length>i+10 && titles[i+10].aside.length>34) ? 'RetroCondensed' : 'Retro'), wordSpacing: -.9, style:'title', margin:[0,5.5,0,0], border: [true, true, true, false]}
+          { text: ((titles.length>i) ? titles[i].aside : ''), style:'title', margin:[0,((titles.length>i && titles[i].awrap) ? 1.2 : 5.7 ),0,0], border: [true, true, true, false]},
+          { text: ((titles.length>i+10) ? titles[i+10].aside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].awrap) ? 1.2 : 5.7 ),0,0], border: [true, true, true, false]}
         ]);
         b.push([
-          { text: ((titles.length>i) ? titles[i].artist : ''), font: ((titles.length>i && titles[i].artist.length>27) ? 'RetroCondensed' : 'Retro'), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]},
-          { text: ((titles.length>i+10) ? titles[i+10].artist : ''), font: ((titles.length>i+10 && titles[i+10].arist.length>27) ? 'RetroCondensed' : 'Retro'), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]}
+          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]},
+          { text: ((titles.length>i+10) ? titles[i+10].artist : ''), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]}
         ]);
         b.push([
-          { text: ((titles.length>i) ? titles[i].bside : ''), font: ((titles.length>i && titles[i].bside.length>34) ? 'RetroCondensed' : 'Retro'), style:'title', margin:[0,4.5,0,0], border: [true, false, true, true]},
-          { text: ((titles.length>i+10) ? titles[i+10].bside : ''), font: ((titles.length>i+10 && titles[i+10].bside.length>34) ? 'RetroCondensed' : 'Retro'), style:'title', margin:[0,4.5,0,0], border: [true, false, true, true]}
+          { text: ((titles.length>i) ? titles[i].bside : ''), style:'title', margin:[0,((titles.length>i && titles[i].bwrap) ? .3 : 4.5 ),0,0], border: [true, false, true, true]},
+          { text: ((titles.length>i+10) ? titles[i+10].bside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].bwrap) ? .3 : 4.5 ),0,0], border: [true, false, true, true]}
         ]);
       }
       return {
@@ -114,6 +114,7 @@ window.titleCreator={
       return c;
     },
     formatTitles(titles) {
+      $('body').append(crel('span',{'style':'font-family:RetroBold;font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
       titles.forEach(function(e){
         if(titleCreator.options.allCaps) {
           e.aside=e.aside.toUpperCase();
@@ -124,7 +125,12 @@ window.titleCreator={
           e.aside='"'+e.aside+'"';
           e.bside='"'+e.bside+'"';
         }
+        var w=$('#text-sizer').text(e.aside).width();
+        if(w>266) e.awrap=true;
+        w=$('#text-sizer').text(e.bside).width();
+        if(w>266) e.bwrap=true;
       });
+      $('#text-sizer').remove();
       return titles;
     }
   },
