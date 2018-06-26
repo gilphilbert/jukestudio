@@ -1,5 +1,6 @@
 window.titleCreator={
-  options: {
+  options: JSON.parse(sessionStorage.getItem('options'))||this.defaults,
+  defaults: {
     allCaps:true,
     quotes:true
   },
@@ -53,16 +54,16 @@ window.titleCreator={
       var b=[];
       for(i=0;i<10;i++){
         b.push([
-          { text: ((titles.length>i) ? titles[i].aside : ''), characterSpacing: -.5, wordSpacing: -.9, style:'title', margin:[0,5.5,0,0], border: [true, true, true, false]},
-          { text: ((titles.length>i+10) ? titles[i+10].aside : ''), characterSpacing: -.5, wordSpacing: -.9, style:'title', margin:[0,5.5,0,0], border: [true, true, true, false]}
+          { text: ((titles.length>i) ? titles[i].aside : ''), font: ((titles.length>i && titles[i].aside.length>34) ? 'RetroCondensed' : 'Retro'), style:'title', margin:[0,5.5,0,0], border: [true, true, true, false]},
+          { text: ((titles.length>i+10) ? titles[i+10].aside : ''), font: ((titles.length>i+10 && titles[i+10].aside.length>34) ? 'RetroCondensed' : 'Retro'), wordSpacing: -.9, style:'title', margin:[0,5.5,0,0], border: [true, true, true, false]}
         ]);
         b.push([
-          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]},
-          { text: ((titles.length>i+10) ? titles[i+10].artist : ''), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]}
+          { text: ((titles.length>i) ? titles[i].artist : ''), font: ((titles.length>i && titles[i].artist.length>27) ? 'RetroCondensed' : 'Retro'), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]},
+          { text: ((titles.length>i+10) ? titles[i+10].artist : ''), font: ((titles.length>i+10 && titles[i+10].arist.length>27) ? 'RetroCondensed' : 'Retro'), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]}
         ]);
         b.push([
-          { text: ((titles.length>i) ? titles[i].bside : ''), style:'title', margin:[0,4.5,0,0], border: [true, false, true, true]},
-          { text: ((titles.length>i+10) ? titles[i+10].bside : ''), style:'title', margin:[0,4.5,0,0], border: [true, false, true, true]}
+          { text: ((titles.length>i) ? titles[i].bside : ''), font: ((titles.length>i && titles[i].bside.length>34) ? 'RetroCondensed' : 'Retro'), style:'title', margin:[0,4.5,0,0], border: [true, false, true, true]},
+          { text: ((titles.length>i+10) ? titles[i+10].bside : ''), font: ((titles.length>i+10 && titles[i+10].bside.length>34) ? 'RetroCondensed' : 'Retro'), style:'title', margin:[0,4.5,0,0], border: [true, false, true, true]}
         ]);
       }
       return {
@@ -101,11 +102,13 @@ window.titleCreator={
         styles: {
           artist: {
             fontSize: 9,
-            bold: true
+            bold: true,
+            font: 'Retro'
           },
           title: {
             fontSize: 10.5,
-            bold: true
+            bold: true,
+            font: 'Retro'
           }
         }
       }
@@ -132,5 +135,23 @@ window.titleCreator={
   },
   getOptions:function(){
     return this.options;
+  },
+  setOption:function(option,value){
+    this.options[option]=value;
+    sessionStorage.setItem('options',JSON.stringify(this.getOptions()));
+  },
+  reset:function(){
+    sessionStorage.removeItem('titles');
+    sessionStorage.removeItem('options');
+    this.options=this.defaults;
+  }
+}
+
+pdfMake.fonts = {
+  Retro: {
+    bold: 'RetroBold.ttf'
+  },
+  RetroCondensed: {
+    bold: 'RetroBoldCondensed.ttf'
   }
 }
