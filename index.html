@@ -12,19 +12,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crel/3.1.0/crel.min.js"></script>
     <link rel="stylesheet" href="bootstrap.css">
     <style>
+      .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus { color: #FFC930; }
       .main-content { margin-top: 90px; }
       .right { text-align: right; }
+      .btn { border-radius: .17rem; border-width: 2px; }
+      .btn.btn-info.nofill { background: rgba(0,0,0,0) !important; color: #3498DB; }
       .title input { border-radius: 0; border: 1px solid #fff; padding-left: 0; }
       .title input:focus, .title input:active { border-color: #fff; border-bottom: 1px solid #ced4da; box-shadow: none; background-color: #f5f5f5; }
-      .modal-content { border: none; }
-      .modal-header { padding: 1rem .75rem; background-color: #3498DB; border-color: #3498DB; border-bottom: none; }
+      .modal-content { border: none; border-radius: .2rem; }
+      .modal-header { padding: 1rem .75rem; background-color: #3498DB; border-color: #3498DB; border-bottom: none; border-top-left-radius: .2rem; border-top-right-radius: .2rem; }
       .modal-header h4 { font-size: 1rem; color: #fff; }
+      .modal-footer { justify-content: center; }
+      .modal-footer .btn { padding: .375rem 1.35rem; }
       .modal .close { color: #fff; opacity: 1; }
       .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before { background-color: #3498DB; }
     </style>
   </head>
   <body>
-    <div class="navbar navbar-expand-lg fixed-top bg-primary navbar-dark">
+    <div class="navbar navbar-expand-lg fixed-top bg-info navbar-dark">
       <div class="container">
         <a href="../" class="navbar-brand">JB TITLE STRIPS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +112,7 @@
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-info nofill" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-info save-options">Save</button>
           </div>
         </div>
@@ -199,7 +204,7 @@
         a.remove();
       });
       
-      $(document.body).on('blur','.artist',function(e) {
+      $(document.body).on('blur','.artist, .sidea, .sideb',function(e) {
         saveTitles();
       });
       

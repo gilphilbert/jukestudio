@@ -140,12 +140,7 @@ window.titleCreator={
     sessionStorage.setItem('options',JSON.stringify(this.getOptions()));
   },
   reset:function(){
-    sessionStorage.removeItem('titles');
-    sessionStorage.removeItem('options');
-    this.options={
-      allCaps:true,
-      quotes:true
-    };
+    sessionStorage.removeItem('titles')
   }
 }
 
