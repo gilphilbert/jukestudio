@@ -1,10 +1,12 @@
 window.titleCreator={
   options: JSON.parse(sessionStorage.getItem('options'))||{
     allCaps:true,
-    quotes:true
+    quotes:true,
+    primaryColor:'blue'
   },
   functions:{
     buildCanvases: function() {
+      console.log(titleCreator.options.allCaps);
       var b=[];
       for(i=0;i<20;i++) {
         var j=((i<10) ? i : i - 10);
@@ -17,7 +19,7 @@ window.titleCreator={
               x1: 0, y1: 36,
               x2: 224, y2: 36,
               lineWidth: 9,
-              lineColor: 'red',
+              lineColor: titleCreator.options.primaryColor,
             },
               {
               type: 'rect',
@@ -26,7 +28,7 @@ window.titleCreator={
               w: 160,
               h: 18,
               color: 'white',
-              lineColor: 'red',
+              lineColor: titleCreator.options.primaryColor,
               lineWidth: 1.5
             },
               {
@@ -34,14 +36,14 @@ window.titleCreator={
               lineWidth: 3,
               closePath: true,
               points: [{x: 32, y: 27}, {x: 32, y: 45}, {x: 40, y: 36}],
-              color: 'red'
+              color: titleCreator.options.primaryColor
             },
               {
               type: 'polyline',
               lineWidth: 3,
               closePath: true,
               points: [{x: 193, y: 27}, {x: 193, y: 45}, {x: 184, y: 36}],
-              color: 'red'
+              color: titleCreator.options.primaryColor
             }
           ],
           absolutePosition: {x: x, y: y}
@@ -77,8 +79,8 @@ window.titleCreator={
         layout: {
           hLineWidth: function (i, node) {return 1},
           vLineWidth: function (i, node) {return 1},
-          hLineColor: 'red',
-          vLineColor: 'red'
+          hLineColor: titleCreator.options.primaryColor,
+          vLineColor: titleCreator.options.primaryColor
         },
         'pageBreak':((last===false) ? 'after' : '')
       }
