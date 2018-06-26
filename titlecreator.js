@@ -1,6 +1,5 @@
 window.titleCreator={
-  options: JSON.parse(sessionStorage.getItem('options'))||this.defaults,
-  defaults: {
+  options: JSON.parse(sessionStorage.getItem('options'))||{
     allCaps:true,
     quotes:true
   },
@@ -143,7 +142,10 @@ window.titleCreator={
   reset:function(){
     sessionStorage.removeItem('titles');
     sessionStorage.removeItem('options');
-    this.options=this.defaults;
+    this.options={
+      allCaps:true,
+      quotes:true
+    };
   }
 }
 
