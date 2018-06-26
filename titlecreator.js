@@ -135,7 +135,7 @@ window.titleCreator={
       return titles;
     },
     setOptions: function() {
-      if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='red';
+      if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
     }
   },
   start:function(titles) {
