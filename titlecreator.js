@@ -131,7 +131,6 @@ window.titleCreator={
         }
         var w=$('#text-sizer').text(e.aside).width();
         if(w>266) e.awrap=true;
-        console.log(w);
         w=$('#text-sizer').text(e.bside).width();
         if(w>266) e.bwrap=true;
       });
