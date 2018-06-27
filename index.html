@@ -109,6 +109,14 @@
                 </div>
               </div>
               <div class="form-group">
+                <label for="option-style">Style</label>
+                <select class="form-control" id="option-style">
+                  <option value="arrows">Arrows</option>
+                  <option value="diamond">Diamond</option>
+                  <!--<option value="holly">Holly</option>-->
+                </select>
+              </div>
+              <div class="form-group">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="option-artistFillColor" checked="">
                   <label class="custom-control-label" for="option-artistFillColor">Colored background for artist</label>
@@ -132,8 +140,6 @@
               <div class="form-group">
                 <label for="option-font">Font</label>
                 <select class="form-control" id="option-font">
-                  <option value="Retro" style="font-family:Retro">Retro</option>
-                  <option value="RetroCondensed" style="font-family:RetroCondensed">Retro Condensed</option>
                 </select>
               </div>
             </fieldset>
@@ -151,7 +157,7 @@
   <script>
     function saveTitles() {
       var titles=getTitles();
-      sessionStorage.setItem('titles',JSON.stringify(titles));
+      localStorage.setItem('titles',JSON.stringify(titles));
     }
     function getTitles() {
       var o=[];
@@ -210,6 +216,7 @@
         $('#option-titleFillColor').prop('checked',options.titleFillColor);
         $('#option-primaryColor').val(options.primaryColor);
         $('#option-font').val(options.font);
+        $('#option-style').val(options.style);
         $('#options-modal').modal();
       });
 
@@ -221,6 +228,7 @@
         window.titleCreator.setOption('artistFillColor',$('#option-artistFillColor').prop('checked'));
         window.titleCreator.setOption('titleFillColor',$('#option-titleFillColor').prop('checked'));
         window.titleCreator.setOption('font',$('#option-font').val());
+        window.titleCreator.setOption('style',$('#option-style').val());
         $('#options-modal').modal('hide');
       });
       
@@ -243,7 +251,7 @@
         saveTitles();
       });
       
-      var titles=JSON.parse(sessionStorage.getItem('titles'))||[];
+      var titles=JSON.parse(localStorage.getItem('titles'))||[];
       if(titles.length>0) {
         $('#titles tbody').empty();
         titles.forEach(function(e){
@@ -258,8 +266,13 @@
       //insert the custom font we've already pulled in for PDFMake
       var style = document.createElement('style');
       style.type = 'text/css';
-      style.innerHTML = '@font-face {font-family: Retro;src: url(data:font/ttf;base64,'+pdfMake.vfs['Retro.ttf']+');}';
-      style.append('@font-face {font-family: RetroCondensed;src: url(data:font/ttf;base64,'+pdfMake.vfs['RetroCondensed.ttf']+');}');
+      //style.innerHTML = '@font-face {font-family: Retro;src: url(data:font/ttf;base64,'+pdfMake.vfs['Retro.ttf']+');}';
+      //style.append('@font-face {font-family: RetroCondensed;src: url(data:font/ttf;base64,'+pdfMake.vfs['RetroCondensed.ttf']+');}');
+      for(var key in pdfMake.vfs) {
+        if(pdfMake.vfs.hasOwnProperty(key) && key.indexOf('ttf')>0)
+          style.append('@font-face {font-family: '+key.substr(0,key.length-4)+';src: url(data:font/ttf;base64,'+pdfMake.vfs[key]+');}');
+          $('#option-font').append('<option value="'+key.substr(0,key.length-4)+'" style="font-family:'+key.substr(0,key.length-4)+'">'+key.substr(0,key.length-4)+'</option>');
+      }
       document.getElementsByTagName('head')[0].appendChild(style);
     });
   </script>
