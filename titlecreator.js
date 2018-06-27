@@ -2,7 +2,7 @@ window.titleCreator={
   options: JSON.parse(sessionStorage.getItem('options'))||{
     allCaps:true,
     quotes:true,
-    primaryColor:'red',
+    primaryColor:'#ff0000',
     artistFillColor:false,
     titleFillColor:false,
     font:'Retro'
