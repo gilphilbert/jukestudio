@@ -102,7 +102,6 @@
                   <label class="custom-control-label" for="option-uppercase">Force uppercase</label>
                 </div>
               </div>
-            <fieldset>
               <div class="form-group">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="option-quotes" checked="">
@@ -110,7 +109,19 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="primaryColor">Primary color</label>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="option-artistFillColor" checked="">
+                  <label class="custom-control-label" for="option-artistFillColor">Colored background for artist</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="option-titleFillColor" checked="">
+                  <label class="custom-control-label" for="option-titleFillColor">Colored background for titles</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="primaryColor">Color</label>
                 <select class="form-control" id="option-primaryColor">
                   <option value="#ff0000">Red</option>
                   <option value="#00a0de">Blue</option>
@@ -188,6 +199,8 @@
         var options=window.titleCreator.getOptions();
         $('#option-uppercase').prop('checked',options.allCaps);
         $('#option-quotes').prop('checked',options.quotes);
+        $('#option-artistFillColor').prop('checked',options.artistFillColor);
+        $('#option-titleFillColor').prop('checked',options.titleFillColor);
         $('#option-primaryColor').val(options.primaryColor);
         $('#options-modal').modal();
       });
@@ -197,6 +210,8 @@
         window.titleCreator.setOption('allCaps',$('#option-uppercase').prop('checked'));
         window.titleCreator.setOption('quotes',$('#option-quotes').prop('checked'));
         window.titleCreator.setOption('primaryColor',$('#option-primaryColor').val());
+        window.titleCreator.setOption('artistFillColor',$('#option-artistFillColor').prop('checked'));
+        window.titleCreator.setOption('titleFillColor',$('#option-titleFillColor').prop('checked'));
         $('#options-modal').modal('hide');
       });
       

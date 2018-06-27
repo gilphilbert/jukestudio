@@ -2,7 +2,9 @@ window.titleCreator={
   options: JSON.parse(sessionStorage.getItem('options'))||{
     allCaps:true,
     quotes:true,
-    primaryColor:'red'
+    primaryColor:'red',
+    artistFillColor:false,
+    titleFillColor:false,
   },
   functions:{
     buildCanvases: function() {
@@ -26,7 +28,7 @@ window.titleCreator={
               y: 27,
               w: 160,
               h: 18,
-              color: 'white',
+              color: ((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white'),
               lineColor: titleCreator.options.primaryColor,
               lineWidth: 1.5
             },
@@ -54,16 +56,16 @@ window.titleCreator={
       var b=[];
       for(i=0;i<10;i++){
         b.push([
-          { text: ((titles.length>i) ? titles[i].aside : ''), style:'title', margin:[0,((titles.length>i && titles[i].awrap) ? 1.2 : 5.7 ),0,0], border: [true, true, true, false]},
-          { text: ((titles.length>i+10) ? titles[i+10].aside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].awrap) ? 1.2 : 5.7 ),0,0], border: [true, true, true, false]}
+          { text: ((titles.length>i) ? titles[i].aside : ''), style:'title', margin:[0,((titles.length>i && titles[i].awrap) ? 1.2 : 5.7 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
+          { text: ((titles.length>i+10) ? titles[i+10].aside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].awrap) ? 1.2 : 5.7 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')}
         ]);
         b.push([
-          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]},
-          { text: ((titles.length>i+10) ? titles[i+10].artist : ''), style:'artist', margin:[0,2,0,0], border: [true, false, true, false]}
+          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
+          { text: ((titles.length>i+10) ? titles[i+10].artist : ''), style:'artist', margin:[0,2,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')}
         ]);
         b.push([
-          { text: ((titles.length>i) ? titles[i].bside : ''), style:'title', margin:[0,((titles.length>i && titles[i].bwrap) ? .3 : 4.5 ),0,0], border: [true, false, true, true]},
-          { text: ((titles.length>i+10) ? titles[i+10].bside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].bwrap) ? .3 : 4.5 ),0,0], border: [true, false, true, true]}
+          { text: ((titles.length>i) ? titles[i].bside : ''), style:'title', margin:[0,((titles.length>i && titles[i].bwrap) ? .3 : 4.5 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
+          { text: ((titles.length>i+10) ? titles[i+10].bside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].bwrap) ? .3 : 4.5 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')}
         ]);
       }
       return {
@@ -133,17 +135,17 @@ window.titleCreator={
       });
       $('#text-sizer').remove();
       return titles;
-    },
-    setOptions: function() {
-      if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
     }
   },
   start:function(titles) {
-    this.functions.setOptions();
+    this.getOptions();
     var dd=this.functions.getDocument(titles);
     pdfMake.createPdf(dd).open();
   },
   getOptions:function(){
+    if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
+    if(!titleCreator.options.hasOwnProperty('artistFillColor')) this.options.artistFillColor='false';
+    if(!titleCreator.options.hasOwnProperty('titleFillColor')) this.options.titleFillColor='false';
     return this.options;
   },
   setOption:function(option,value){
@@ -163,3 +165,18 @@ pdfMake.fonts = {
     bold: 'RetroBoldCondensed.ttf'
   }
 }
+
+function getTintedColor(color, v) {
+  if (color.length >6) { color= color.substring(1,color.length)}
+  var rgb = parseInt(color, 16); 
+  var r = Math.abs(((rgb >> 16) & 0xFF)+v); if (r>255) r=r-(r-255);
+  var g = Math.abs(((rgb >> 8) & 0xFF)+v); if (g>255) g=g-(g-255);
+  var b = Math.abs((rgb & 0xFF)+v); if (b>255) b=b-(b-255);
+  r = Number(r < 0 || isNaN(r)) ? 0 : ((r > 255) ? 255 : r).toString(16); 
+  if (r.length == 1) r = '0' + r;
+  g = Number(g < 0 || isNaN(g)) ? 0 : ((g > 255) ? 255 : g).toString(16); 
+  if (g.length == 1) g = '0' + g;
+  b = Number(b < 0 || isNaN(b)) ? 0 : ((b > 255) ? 255 : b).toString(16); 
+  if (b.length == 1) b = '0' + b;
+  return "#" + r + g + b;
+} 
