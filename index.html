@@ -121,12 +121,19 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="primaryColor">Color</label>
+                <label for="option-primaryColor">Color</label>
                 <select class="form-control" id="option-primaryColor">
                   <option value="#ff0000">Red</option>
                   <option value="#00a0de">Blue</option>
                   <option value="#5fae6f">Green</option>
                   <option value="#80578f">Purple</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="option-font">Font</label>
+                <select class="form-control" id="option-font">
+                  <option value="Retro" style="font-family:Retro">Retro</option>
+                  <option value="RetroCondensed" style="font-family:RetroCondensed">Retro Condensed</option>
                 </select>
               </div>
             </fieldset>
@@ -202,6 +209,7 @@
         $('#option-artistFillColor').prop('checked',options.artistFillColor);
         $('#option-titleFillColor').prop('checked',options.titleFillColor);
         $('#option-primaryColor').val(options.primaryColor);
+        $('#option-font').val(options.font);
         $('#options-modal').modal();
       });
 
@@ -212,6 +220,7 @@
         window.titleCreator.setOption('primaryColor',$('#option-primaryColor').val());
         window.titleCreator.setOption('artistFillColor',$('#option-artistFillColor').prop('checked'));
         window.titleCreator.setOption('titleFillColor',$('#option-titleFillColor').prop('checked'));
+        window.titleCreator.setOption('font',$('#option-font').val());
         $('#options-modal').modal('hide');
       });
       
@@ -249,7 +258,8 @@
       //insert the custom font we've already pulled in for PDFMake
       var style = document.createElement('style');
       style.type = 'text/css';
-      style.innerHTML = '@font-face {font-family: RetroBold;src: url(data:font/ttf;base64,'+pdfMake.vfs['RetroBold.ttf']+');}';
+      style.innerHTML = '@font-face {font-family: Retro;src: url(data:font/ttf;base64,'+pdfMake.vfs['Retro.ttf']+');}';
+      style.append('@font-face {font-family: RetroCondensed;src: url(data:font/ttf;base64,'+pdfMake.vfs['RetroCondensed.ttf']+');}');
       document.getElementsByTagName('head')[0].appendChild(style);
     });
   </script>

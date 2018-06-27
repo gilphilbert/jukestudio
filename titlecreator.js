@@ -5,6 +5,7 @@ window.titleCreator={
     primaryColor:'red',
     artistFillColor:false,
     titleFillColor:false,
+    font:'Retro'
   },
   functions:{
     buildCanvases: function() {
@@ -105,19 +106,19 @@ window.titleCreator={
           artist: {
             fontSize: 9,
             bold: true,
-            font: 'Retro'
+            font: titleCreator.options.font
           },
           title: {
             fontSize: 10.5,
             bold: true,
-            font: 'Retro'
+            font: titleCreator.options.font
           }
         }
       }
       return c;
     },
     formatTitles(titles) {
-      $('body').append(crel('span',{'style':'font-family:RetroBold;font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
+      $('body').append(crel('span',{'style':'font-family:'+titleCreator.options.font+';font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
       titles.forEach(function(e){
         if(titleCreator.options.allCaps) {
           e.aside=e.aside.toUpperCase();
@@ -130,6 +131,7 @@ window.titleCreator={
         }
         var w=$('#text-sizer').text(e.aside).width();
         if(w>266) e.awrap=true;
+        console.log(w);
         w=$('#text-sizer').text(e.bside).width();
         if(w>266) e.bwrap=true;
       });
@@ -146,6 +148,7 @@ window.titleCreator={
     if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
     if(!titleCreator.options.hasOwnProperty('artistFillColor')) this.options.artistFillColor='false';
     if(!titleCreator.options.hasOwnProperty('titleFillColor')) this.options.titleFillColor='false';
+    if(!titleCreator.options.hasOwnProperty('font')) this.options.font='Retro';
     return this.options;
   },
   setOption:function(option,value){
@@ -159,10 +162,10 @@ window.titleCreator={
 
 pdfMake.fonts = {
   Retro: {
-    bold: 'RetroBold.ttf'
+    bold: 'Retro.ttf'
   },
   RetroCondensed: {
-    bold: 'RetroBoldCondensed.ttf'
+    bold: 'RetroCondensed.ttf'
   }
 }
 
