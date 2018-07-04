@@ -6,7 +6,8 @@ window.titleCreator={
     artistFillColor:false,
     titleFillColor:false,
     font:'Retro',
-    style:'arrows'
+    style:'arrows',
+    labels:'standard'
   },
   functions:{
     drawDesign: function(style) {
@@ -67,7 +68,83 @@ window.titleCreator={
           break;
         case 'holly':
           return [];
-        break;
+          break;
+        case 'trees':
+          return [
+            {
+              type: 'line',
+              x1: 48, y1: 36,
+              x2: 58, y2: 36,
+              lineWidth: 1.5,
+              lineColor: '#2DAA5F'
+            },
+            {
+              type: 'ellipse',
+              x:15,
+              y:36,
+              r1:2,
+              color: '#ff0000'
+            },
+            {
+              type: 'polyline',
+              closePath: true,
+              points: [
+                {x: 36.75, y: 44.5},
+                {x: 36.75, y: 42.25},
+                {x: 30, y: 42.25},
+                {x: 33.75, y: 36.5},
+                {x: 31.75, y: 36.5},
+                {x: 34.5, y: 32.25},
+                {x: 33.25, y: 32.25},
+                {x: 37.25, y: 25},
+                {x: 41.25, y: 32.25},
+                {x: 40.25, y: 32.25},
+                {x: 43, y: 36.5},
+                {x: 41, y: 36.5},
+                {x: 44.5, y: 42.25},
+                {x: 37.75, y: 42.25},
+                {x: 37.75, y: 44.5}
+              ],
+              color: '#2DAA5F'
+            },
+            {
+              type: 'polyline',
+              closePath: true,
+              points: [
+                {x: 26.75, y: 44.5},
+                {x: 26.75, y: 42.25},
+                {x: 20, y: 42.25},
+                {x: 23.75, y: 36.5},
+                {x: 21.75, y: 36.5},
+                {x: 24.5, y: 32.25},
+                {x: 23.25, y: 32.25},
+                {x: 27.25, y: 25},
+                {x: 31.25, y: 32.25},
+                {x: 30.25, y: 32.25},
+                {x: 33, y: 36.5},
+                {x: 31, y: 36.5},
+                {x: 34.5, y: 42.25},
+                {x: 27.75, y: 42.25},
+                {x: 27.75, y: 44.5}
+              ],
+              color: '#2DAA5F'
+            },
+            {
+              type: 'line',
+              x1: 167, y1: 36,
+              x2: 177, y2: 36,
+              lineWidth: 1.5,
+              lineColor: '#2DAA5F'
+            },
+            {
+              type: 'ellipse',
+              x:208,
+              y:36,
+              r1:2,
+              color: '#ff0000'
+            },
+          ];
+          break;
       }
     },
     buildCanvases: function() {
@@ -115,21 +192,27 @@ window.titleCreator={
       }
       return b;
     },
-    buildTable: function(titles,last){
+    buildTable: function(titles,last,columns=2){
       var b=[];
       for(i=0;i<10;i++){
-        b.push([
-          { text: ((titles.length>i) ? titles[i].aside : ''), style:'title', margin:[0,((titles.length>i && titles[i].awrap) ? 1.2 : 6.7 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
-          { text: ((titles.length>i+10) ? titles[i+10].aside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].awrap) ? 1.2 : 6.7 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')}
-        ]);
-        b.push([
-          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
-          { text: ((titles.length>i+10) ? titles[i+10].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')}
-        ]);
-        b.push([
+        var x=[
+          { text: ((titles.length>i) ? titles[i].aside : ''), style:'title', margin:[0,((titles.length>i && titles[i].awrap) ? 1.2 : 7.5 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
+        ];
+        if(columns==2) x.push({ text: ((titles.length>i+10) ? titles[i+10].aside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].awrap) ? 1.2 : 7.5 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')});
+
+        var y=[
+          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
+        ];
+        if(columns==2) y.push({ text: ((titles.length>i+10) ? titles[i+10].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
+        
+        var z=[
           { text: ((titles.length>i) ? titles[i].bside : ''), style:'title', margin:[0,((titles.length>i && titles[i].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
-          { text: ((titles.length>i+10) ? titles[i+10].bside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')}
-        ]);
+        ];
+        if(columns==2) z.push({ text: ((titles.length>i+10) ? titles[i+10].bside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
+        
+        b.push(x);
+        b.push(y);
+        b.push(z);
       }
       return {
         'alignment': 'center',
@@ -137,26 +220,27 @@ window.titleCreator={
           heights: [
             21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5
           ],
-          widths: [215,215],
+          widths: ((columns==2) ? [215,215] : [215]),
           body: b
         },
         layout: {
           hLineWidth: function (i, node) {return 1},
           vLineWidth: function (i, node) {return 1},
-          hLineColor: titleCreator.options.primaryColor,
-          vLineColor: titleCreator.options.primaryColor
+          hLineColor: ((titleCreator.options.labels=="standard") ? titleCreator.options.primaryColor : '#ffffff'),
+          vLineColor: ((titleCreator.options.labels=="standard") ? titleCreator.options.primaryColor : '#ffffff')
         },
         'pageBreak':((last===false) ? 'after' : '')
       }
     },
-    buildPages: function(titles) {
+    buildPages: function(titles,columns) {
       var p=[];
       var last=false;
       while(titles.length>0) {
         var page=titles.splice(0,20);
         if(titles.length==0) last=true;
-        p.push(this.buildCanvases());
-        p.push(this.buildTable(page,last));
+        if(titleCreator.options.labels=="standard")
+          p.push(this.buildCanvases());
+        p.push(this.buildTable(page,last,2));
       }
       return p;
     },
@@ -175,11 +259,38 @@ window.titleCreator={
             bold: true,
             font: titleCreator.options.font
           }
-        }
+        },
+        pageSize:'LETTER'
       }
       return c;
     },
-    formatTitles(titles) {
+    single12:function(titles){
+      var columns=1;
+      titles=this.formatTitles(titles);
+      var c = {
+        content: this.buildPages(titles,columns),
+        styles: {
+          artist: {
+            fontSize: 9,
+            bold: true,
+            font: titleCreator.options.font
+          },
+          title: {
+            fontSize: 10.5,
+            bold: true,
+            font: titleCreator.options.font
+          }
+        },
+        pageSize:{width:225, height: 936},
+        pageMargins: [ 0, 31.5, 0, 0 ]
+        /*
+                pageSize:'LETTER',
+        pageMargins: [ 193.5, 31.5, 0, 0 ]
+*/
+      }
+      return c; 
+    },
+    formatTitles: function(titles) {
       $('body').append(crel('span',{'style':'font-family:'+titleCreator.options.font+';font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
       titles.forEach(function(e){
         if(titleCreator.options.allCaps) {
@@ -201,8 +312,17 @@ window.titleCreator={
     }
   },
   start:function(titles) {
-    this.getOptions();
-    var dd=this.functions.getDocument(titles);
+    var o=this.getOptions();
+    console.log(o);
+    var dd={};
+    switch(o.labels) {
+      case 'single12':
+        dd=this.functions.single12(titles);
+        break;
+      default:
+        dd=this.functions.getDocument(titles);
+        break;
+    }
     pdfMake.createPdf(dd).open();
   },
   getOptions:function(){
@@ -211,6 +331,7 @@ window.titleCreator={
     if(!titleCreator.options.hasOwnProperty('titleFillColor')) this.options.titleFillColor='false';
     if(!titleCreator.options.hasOwnProperty('font')) this.options.font='Retro';
     if(!titleCreator.options.hasOwnProperty('design')) this.options.design='arrows';
+    if(!titleCreator.options.hasOwnProperty('labels')) this.options.design='standard';
     return this.options;
   },
   setOption:function(option,value){
