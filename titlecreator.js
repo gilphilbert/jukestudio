@@ -7,7 +7,7 @@ window.titleCreator={
     titleFillColor:false,
     font:'Retro',
     style:'arrows',
-    labels:'standard'
+    paperType:'standard'
   },
   functions:{
     drawDesign: function(style) {
@@ -151,8 +151,8 @@ window.titleCreator={
       var b=[];
       for(i=0;i<20;i++) {
         var j=((i<10) ? i : i - 10);
-        var x=((i<10) ? 40.5 : 264.5 );
-        var y=(j*72)+40.5;
+        var x=((i<10) ? 81.5 : 305.5 );
+        var y=(j*72)+22.5;
         if(titleCreator.options.style=="holly") {
           b.push({
             image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAANZklEQVR4Xu3de3BU5RnH8ec5GxIU0FExVhtbL+0MKl461hkdrcN4ATeQLGpDmdqOtVop2Uhta63UWqEylepUHdikHR2nqKNWsC1ZJGuiMljteO9MRUY70xKRQBEpXjBckux5OruwIcleQl6S95989x8x533e593PzvzmnJM3Z1X2v9LTqh5Q0Vjmf9VsmbZ1LMwdG8p/65bXlXdu2zNTVA5via9aNpRaxiKAAAKlBDRzcH9Y/ajvQDNbGGnrWFCoeOrSmkllGiwyC5u2lW95qbzzlLKjK/aeH4p8T0SvUrOOD8dsPuutOW91w48AAggMl0A2sMKpJ34iKkdmz67uWS5266zMP98PWjedXKhRdWOsUUTqiy8ivI6zq+H6iJgHAQRyAnmBdYDGNgatHSdFl0SP0MiYlWa6Vi1cL0EwQ7JnUsVfPSJfaos3b4IZAQQQGE6BfZeEU6sWqOqdhS4Jp/9++mQLy9YNpWm6Ys8xrTe07hhKDWMRQACBwQSygXUgtPadOZnJstz9qysStbMD1ScHm6hf2InMTsWbnxpKDWMRQACBwQR6A6vYwGii9n5VvbnYcRPZpiKVA87OPkqbXdx206r3BlsAxxFAAIGDFRg0sKoTtRtEteDNdzPZoSofiMg5eQ1NPhEJ57Q0rFp+sIthHAIIIFBKoGRgRZfWXqiBvlx0ArNbRfWeEsfvaGlILuIjQAABBIZDoGhgXXBf3WFHVXS9LiKTCzUykZUitlFF++3fOjDWFrbEkwX3cQ3HwpkDAQRGn0DBwKpeGjtTAsnstfpGMZJ0On1OEETWqMrR+WPsyZZ48tujj5N3jAACIylQOLASsYdE5YZijU3sZTW5XVRfLDQmCNJVz8x9ZvNILpy5EUBg9AkUDKzokmiFBmM2iupxhUhCk6sCsYtE9Sd5x80+bGlIfmH0UfKOEUBgpAWK3sOKJmJLVOWmgQswk47U9uYvRyfG1qnK6QUDTe3sZ+uTb4/04pkfAQRGl0DRwKpOzPyuqD2aH1j2SI/JL8YEWvySz2SjBeG1qfpVBS8ZRxcx7xYBBIZLoERg1cwSDfJ2q5vZ9Wq6RwJ5vPgibLuJzk3Fm58eroUyDwIIIFD8krAxdq+K3JJ3hpXWr0gknKuiPy3El9n5Lumuyal5qY/gRQABBIZTIBtYmW0MWtZjq+eufic3ebQx1q4iJ/VvZltb4snjqxO1baJ6eaGFpNVmtNYnVw/nIpkLAQQQyAjsC6xE7W9MNUzFm3+ZY5mWqDkjkGCWqPxARY7P/NxEnk7Fm+uiidi/VeXUPEKzD1oakl+GFgEEEBgJgX2B1Vi7RkxObdmePFkWSNi30aWJK4+p0PCvmU2kZvLbVLx5fnVTLPMk0Uje5aLIylS8+cqRWChzIoAAArnA6hDRL5qGV6bqV60cyDLlj1PGHr7riHYxXWRh12MaKf+0EJ2ZrUk1JC+FFQEEEBgJgVxgdYro4WLWbmH3aal5qb0Dm1UnYnFT+SAsi7wZ6Ulv6XvcxExF14tZWUtD8rSRWChzIoAAAvsDK2Y5CjN5ItXQfM1AmmlLZpyd+ZmOKfs0CK1dTEJReShdFlnYOucv/7Upx44Py8c2qspsMflY1Zq0tePXECOAAALDJaBiotVNsX73rURkWXdot5cH6SNDKbszHYYLunoiW8dVdGsQCSI93cG/1Gxay03JN3MLCaee+KaonNvvzMtscaStY/5wLZZ5EEBgdAvkLgl3iOhRxShCkfnPxpsXZ45n/s4wLBtzWd+tC5mzK6sYuzNX3+ebd7YGrZuyv2HkhQACCByqQDawoo21r6voecUmM7P1qYZkwediHTjDqnpaVK/uN4dZZ9DWMf5QF0k9AgggkBHInWE9JqLfKUWSVrm8tb75+aKhNuWEiVYRWSsiZ/SOMXsxaOuYAjUCCCAwHALZwLqiMXZbIHJ35t+VEypl285teXObybrxleVfXzFrRVfR0Lpw4oRw3NgHVPX7IvaCduscXbPpP8OxUOZAAAEE9u90r5khGqzKBdZxEypl3Zbev9I5oGS2fNe4z65de93aPfsuJWO3BNrz8Or61R9DiQACCIy0wL57WH+Ina5pWZ9rFjurRl5pf63gmZaYZb4l51ERPU1UrpbQzuv728KRXjDzI4DA6BXIBtb0ppnnmlnvFoXMz358yTx58OWHpbOrs6SOmc1JNSQfHL2EvHMEEPAlkNs4+pyIXNa36SkTT5Zrzpstd6Wyt7ZKvGxFSzw5y9eC6YMAAqNXoPfxMhJI3iONM4FVOeFYuX/N0qJCJrZH0t1fTc1LdYxeRt45Agj4EOh9gF+0MbZCRb45sOkd0fny+d7PS4aWiLxrGs7dvW3n39cuWNvjY+H0QACB0SfQN7BqVCQ5kGBc+ThZPHORvNr+mjz+xp8GuTqU3SaWuXm/JdWQjI0+Tt4xAgiMpEBvYNUtryvv/Gjvx9mnNgx4ZfZmJb51f/Ym/PPvrRl0PSZSx/PcB2ViAAIIDFGg3zPdo421/1DRrxWaI3MTPnOmtfKfSXnijbzvpugtMbO94ysrjii1wXSIa2Q4AgggkBXoF1jVidoXRfXiYja50Hplw6vF72mZbGxpaB7wLHi0EUAAgUMX6B9YjbG/ZR6FXGra3D2tDds3FA4tAuvQPxVmQACBggL9LwkTsf+pytEHY3XjRddL5ozrrpa78zaX9uzaPb7tZ22ld5weTBPGIIAAAn0E8r6XcEpj3fgK7To/MLtaRX9YSuvMEybLzLNrsr893LC9/cB9LJHaVLw5+7eJvBBAAIHhElAT0XBa1QI1nSMqu9XkXm3b1JRpcEVTbV0Q6iOicliphpdNukTe3vxO798e5r4ObLgWyTwIIIBARkDTl1ct1kB/3pdDzeZpW0d2e3s0EVusKv2OD0pnEoYRPfXZuSvfH3QsAxBAAIGDFNBw6omfiMqR2fEm7Sb258D0OX1uU1vmR1OX1kwqC4J3D3K+PpeF9lAqnrxxqHWMRwABBIoJZAJrq6gcl80rk6eCSOeNmtrxWa7ggvvqDjuqomvXUAlNpDvQnkmr61dvGGot4xFAAIFCApqeWnW3qt7W5+BeFbldWzf9bmBB5gsopKzsfA11uqnerCJjSrGayAupeHO/p0DwMSCAAAKuAtnfEtq0ql+ZSVxUd2YvCT+TBfpKx+5Sk05L1JwRaLBGRSpFbLOJrNJQX9JIz6ucVbl+HNQhgEApgbxtDUPhqk7UzDLRKamGZP1Q6hiLAAIIuAgcUmC5NKQGAQQQcBUgsFzlqEMAAe8CBJZ3choigICrAIHlKkcdAgh4FyCwvJPTEAEEXAUILFc56hBAwLsAgeWdnIYIIOAqQGC5ylGHAALeBQgs7+Q0RAABVwECy1WOOgQQ8C5AYHknpyECCLgKEFiuctQhgIB3AQLLOzkNEUDAVYDAcpWjDgEEvAsQWN7JaYgAAq4CBJarHHUIIOBdgMDyTk5DBBBwFSCwXOWoQwAB7wIElndyGiKAgKsAgeUqRx0CCHgXILC8k9MQAQRcBQgsVznqEEDAuwCB5Z2chggg4CpAYLnKUYcAAt4FCCzv5DREAAFXAQLLVY46BBDwLkBgeSenIQIIuAoQWK5y1CGAgHcBAss7OQ0RQMBVgMBylaMOAQS8CxBY3slpiAACrgIElqscdQgg4F2AwPJOTkMEEHAVILBc5ahDAAHvAgSWd3IaIoCAqwCB5SpHHQIIeBcgsLyT0xABBFwFCCxXOeoQQMC7AIHlnZyGCCDgKkBgucpRhwAC3gUILO/kNEQAAVcBAstVjjoEEPAuQGB5J6chAgi4ChBYrnLUIYCAdwECyzs5DRFAwFWAwHKVow4BBLwLEFjeyWmIAAKuAgSWqxx1CCDgXYDA8k5OQwQQcBUgsFzlqEMAAe8CBJZ3choigICrAIHlKkcdAgh4FyCwvJPTEAEEXAUILFc56hBAwLsAgeWdnIYIIOAqQGC5ylGHAALeBQgs7+Q0RAABVwECy1WOOgQQ8C5AYHknpyECCLgKEFiuctQhgIB3AQLLOzkNEUDAVYDAcpWjDgEEvAsQWN7JaYgAAq4CBJarHHUIIOBdgMDyTk5DBBBwFSCwXOWoQwAB7wIElndyGiKAgKsAgeUqRx0CCHgXILC8k9MQAQRcBQgsVznqEEDAuwCB5Z2chggg4CpAYLnKUYcAAt4FCCzv5DREAAFXAQLLVY46BBDwLkBgeSenIQIIuAoQWK5y1CGAgHcBAss7OQ0RQMBVgMBylaMOAQS8CxBY3slpiAACrgIElqscdQgg4F2AwPJOTkMEEHAVILBc5ahDAAHvAgSWd3IaIoCAqwCB5SpHHQIIeBcgsLyT0xABBFwFCCxXOeoQQMC7AIHlnZyGCCDgKkBgucpRhwAC3gUILO/kNEQAAVcBAstVjjoEEPAuQGB5J6chAgi4ChBYrnLUIYCAdwECyzs5DRFAwFWAwHKVow4BBLwLEFjeyWmIAAKuAgSWqxx1CCDgXYDA8k5OQwQQcBUgsFzlqEMAAe8CBJZ3choigICrAIHlKkcdAgh4FyCwvJPTEAEEXAUILFc56hBAwLvA/wFi8xTEdWcr3wAAAABJRU5ErkJggg==',
@@ -166,14 +166,14 @@ window.titleCreator={
                 x1: 30, y1: 26,
                 x2: 194, y2: 26,
                 lineWidth: 1.5,
-                lineColor: titleCreator.options.primaryColor
+                lineColor: '#ff0000'
               },
               {
                 type: 'line',
                 x1: 30, y1: 46,
                 x2: 194, y2: 46,
                 lineWidth: 1.5,
-                lineColor: titleCreator.options.primaryColor
+                lineColor: '#ff0000'
               }
             ],
             absolutePosition: {x: x, y: y}
@@ -192,23 +192,23 @@ window.titleCreator={
       }
       return b;
     },
-    buildTable: function(titles,last,columns=2){
+    buildTable: function(titles,last,columns,rows){
       var b=[];
-      for(i=0;i<10;i++){
+      for(i=0;i<rows;i++){
         var x=[
           { text: ((titles.length>i) ? titles[i].aside : ''), style:'title', margin:[0,((titles.length>i && titles[i].awrap) ? 1.2 : 7.5 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
         ];
-        if(columns==2) x.push({ text: ((titles.length>i+10) ? titles[i+10].aside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].awrap) ? 1.2 : 7.5 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')});
+        if(columns==2) x.push({ text: ((titles.length>i+rows) ? titles[i+rows].aside : ''), style:'title', margin:[0,((titles.length>i+rows && titles[i+rows].awrap) ? 1.2 : 7.5 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')});
 
         var y=[
           { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
         ];
-        if(columns==2) y.push({ text: ((titles.length>i+10) ? titles[i+10].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
+        if(columns==2) y.push({ text: ((titles.length>i+rows) ? titles[i+rows].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
         
         var z=[
           { text: ((titles.length>i) ? titles[i].bside : ''), style:'title', margin:[0,((titles.length>i && titles[i].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
         ];
-        if(columns==2) z.push({ text: ((titles.length>i+10) ? titles[i+10].bside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+10].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
+        if(columns==2) z.push({ text: ((titles.length>i+rows) ? titles[i+rows].bside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+rows].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
         
         b.push(x);
         b.push(y);
@@ -226,21 +226,21 @@ window.titleCreator={
         layout: {
           hLineWidth: function (i, node) {return 1},
           vLineWidth: function (i, node) {return 1},
-          hLineColor: ((titleCreator.options.labels=="standard") ? titleCreator.options.primaryColor : '#ffffff'),
-          vLineColor: ((titleCreator.options.labels=="standard") ? titleCreator.options.primaryColor : '#ffffff')
+          hLineColor: ((titleCreator.options.paperType=="standard") ? titleCreator.options.primaryColor : '#ffffff'),
+          vLineColor: ((titleCreator.options.paperType=="standard") ? titleCreator.options.primaryColor : '#ffffff')
         },
         'pageBreak':((last===false) ? 'after' : '')
       }
     },
-    buildPages: function(titles,columns) {
+    buildPages: function(titles,columns=2,rows=10) {
       var p=[];
       var last=false;
       while(titles.length>0) {
-        var page=titles.splice(0,20);
+        var page=titles.splice(0,rows*columns);
         if(titles.length==0) last=true;
-        if(titleCreator.options.labels=="standard")
+        if(titleCreator.options.paperType=="standard")
           p.push(this.buildCanvases());
-        p.push(this.buildTable(page,last,2));
+        p.push(this.buildTable(page,last,columns,rows));
       }
       return p;
     },
@@ -260,15 +260,17 @@ window.titleCreator={
             font: titleCreator.options.font
           }
         },
-        pageSize:'LETTER'
+        pageSize:'LETTER',
+        pageMargins: [ 81, 22.5, 0, 0 ]
       }
       return c;
     },
     single12:function(titles){
-      var columns=1;
+      var columns=1,
+          rows=12;
       titles=this.formatTitles(titles);
       var c = {
-        content: this.buildPages(titles,columns),
+        content: this.buildPages(titles,columns,rows),
         styles: {
           artist: {
             fontSize: 9,
@@ -287,6 +289,31 @@ window.titleCreator={
                 pageSize:'LETTER',
         pageMargins: [ 193.5, 31.5, 0, 0 ]
 */
+      }
+      return c; 
+    },
+    double10:function(titles){
+      var columns=2,
+          rows=5;
+      titles=this.formatTitles(titles);
+      var c = {
+        content: this.buildPages(titles,columns,rows),
+        styles: {
+          artist: {
+            fontSize: 9,
+            bold: true,
+            font: titleCreator.options.font
+          },
+          title: {
+            fontSize: 10.5,
+            bold: true,
+            font: titleCreator.options.font
+          }
+        },
+        /*pageSize:{width:450, height: 450},
+        pageMargins: [ 0, 22.5, 0, 40.5 ]*/
+        pageSize:'LETTER',
+        pageMargins: [ 81, 22.5, 0, 0 ]
       }
       return c; 
     },
@@ -313,12 +340,14 @@ window.titleCreator={
   },
   start:function(titles) {
     var o=this.getOptions();
-    console.log(o);
     var dd={};
-    switch(o.labels) {
+    switch(o.paperType) {
       case 'single12':
         dd=this.functions.single12(titles);
         break;
+        case 'double10':
+          dd=this.functions.double10(titles);
+          break;
       default:
         dd=this.functions.getDocument(titles);
         break;
@@ -331,7 +360,7 @@ window.titleCreator={
     if(!titleCreator.options.hasOwnProperty('titleFillColor')) this.options.titleFillColor='false';
     if(!titleCreator.options.hasOwnProperty('font')) this.options.font='Retro';
     if(!titleCreator.options.hasOwnProperty('design')) this.options.design='arrows';
-    if(!titleCreator.options.hasOwnProperty('labels')) this.options.design='standard';
+    if(!titleCreator.options.hasOwnProperty('paperType')) this.options.design='standard';
     return this.options;
   },
   setOption:function(option,value){

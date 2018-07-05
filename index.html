@@ -143,6 +143,13 @@
                 <select class="form-control" id="option-font">
                 </select>
               </div>
+              <div class="form-group">
+                <label for="option-paperType">Paper type</label>
+                <select class="form-control" id="option-paperType">
+                  <option value="standard">Plain Letter</option>
+                  <option value="double10">Pre-printed 5x2</option>
+                </select>
+              </div>
             </fieldset>
           </div>
           <div class="modal-footer">
@@ -216,6 +223,7 @@
         $('#option-artistFillColor').prop('checked',options.artistFillColor);
         $('#option-titleFillColor').prop('checked',options.titleFillColor);
         $('#option-primaryColor').val(options.primaryColor);
+        $('#option-paperType').val(options.paperType);
         $('#option-font').val(options.font);
         $('#option-style').val(options.style);
         $('#options-modal').modal();
@@ -226,6 +234,7 @@
         window.titleCreator.setOption('allCaps',$('#option-uppercase').prop('checked'));
         window.titleCreator.setOption('quotes',$('#option-quotes').prop('checked'));
         window.titleCreator.setOption('primaryColor',$('#option-primaryColor').val());
+        window.titleCreator.setOption('paperType',$('#option-paperType').val());
         window.titleCreator.setOption('artistFillColor',$('#option-artistFillColor').prop('checked'));
         window.titleCreator.setOption('titleFillColor',$('#option-titleFillColor').prop('checked'));
         window.titleCreator.setOption('font',$('#option-font').val());
