@@ -201,9 +201,9 @@ window.titleCreator={
         if(columns==2) x.push({ text: ((titles.length>i+rows) ? titles[i+rows].aside : ''), style:'title', margin:[0,((titles.length>i+rows && titles[i+rows].awrap) ? 1.2 : 7.5 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')});
 
         var y=[
-          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
+          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
         ];
-        if(columns==2) y.push({ text: ((titles.length>i+rows) ? titles[i+rows].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
+        if(columns==2) y.push({ text: ((titles.length>i+rows) ? titles[i+rows].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
         
         var z=[
           { text: ((titles.length>i) ? titles[i].bside : ''), style:'title', margin:[0,((titles.length>i && titles[i].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
