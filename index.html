@@ -12,7 +12,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crel/3.1.0/crel.min.js"></script>
     <link rel="stylesheet" href="bootstrap.css">
     <style>
+      body { padding-top: 40px; }
       .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus { color: #FFC930; }
+      .navbar.bg-default { background: #eeeeee; padding: .5rem 1rem; }
+      .navbar.bg-default a { color: #999999; }
+      .navbar.bg-default a:hover { color: #3498DB; }
       .main-content { margin-top: 90px; }
       .right { text-align: right; }
       .btn { border-radius: .17rem; border-width: 2px; }
@@ -26,6 +30,7 @@
       .modal-footer .btn { padding: .375rem 1.35rem; }
       .modal .close { color: #fff; opacity: 1; }
       .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before { background-color: #3498DB; }
+      #hidden-file { display: none; }
     </style>
   </head>
   <body>
@@ -41,7 +46,7 @@
               <a class="nav-link" id="menu-options" href="#">Options</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="menu-export" href="#">Export</a>
+              <a class="nav-link" id="menu-export" href="#">Import/Export</a>
             </li>
           </ul>
 
@@ -54,6 +59,24 @@
         </div>
       </div>
     </div>
+
+<!--
+    <div class="navbar navbar-expand-sm bg-default">
+      <div class="container">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" id="submenu-add" href="#">Add</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="submenu-edit" href="#">Edit</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="submenu-remove" href="#">Remove</a>
+            </li>
+          </ul>
+      </div>
+    </div>
+-->
     
     <div class="container main-content">
       <div class="bs-docs-section clearfix">
@@ -197,6 +220,41 @@
         </div>
       </div>
     </div>
+    </div>
+
+    <div class="modal fade" id="export-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Export / Import</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <fieldset>
+              <div class="form-group">
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="export-all" name="customRadio" class="custom-control-input" checked="">
+                  <label class="custom-control-label" for="export-all">Export library and settings</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="export-titles" name="customRadio" class="custom-control-input">
+                  <label class="custom-control-label" for="export-titles">Export library only (CSV)</label>
+                </div>
+              </div>
+              <button type="button" class="btn btn-info" id="export">Export</button>
+            </fieldset>
+            <hr/>
+            <fieldset>
+              <input id="hidden-file" type="file" accept=".json,.csv" />
+              <button type="button" class="btn btn-info" id="import" onclick="document.getElementById('hidden-file').click();">Import</button>
+            </fieldset>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info nofill" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </body>
   <script src="titlecreator.js"></script>
@@ -233,7 +291,84 @@
         $inputs=$('#titles').find('input');
         $($($inputs)[$($inputs).length-3]).focus();
       }
+
+      function exportLibrary(csv=false) {
+        var out={
+          titles:getTitles(),
+          options:window.titleCreator.getOptions()
+        }
+
+        var data="",
+            filename="";
+
+        if(csv==false) {
+          data="data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(out));
+          filename="jblabels.json";
+        } else {
+          data = "data:text/csv;charset=utf-8,";
+          out.titles.forEach(function(a){
+            data+=a.aside+','+a.bside+','+a.artist+'\r\n';
+          });
+          filename="jblabels.csv"
+        }
+        var a=document.createElement('a');
+        a.setAttribute("href", data);
+        a.setAttribute("download",filename);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+
+      function importLibrary(file){
+        console.log(file);
+      }
+
+      $('#hidden-file').on('change',function(evt){
+        var file = evt.target.files[0];
+        if(file.type!="application/vnd.ms-excel" && file.type!="application/json") return false;
+
+        readFile = function (file) {
+          var reader = new FileReader();
+          reader.onload = function () {
+            var t=$('#titles tbody tr:last-child input');
+            var used=true;
+            console.log(true);
+            t.each(function(i,v){
+              if($(this).val()=='') used=false;
+            });
+            console.log(used);
+            if(used==false) $('#titles tbody tr:last-child').remove();
+
+            var d={};
+            if(file.type=="application/vnd.ms-excel") {
+              var ar=reader.result.split('\r\n');
+              ar.reverse;
+              ar.forEach(function(e){
+                var b=e.split(',');
+                if(b.length==3)
+                  addRow({aside:b[0],bside:b[1],artist:b[2]});
+              });
+            } else {
+              var ob=JSON.parse(reader.result);
+              if(ob.hasOwnProperty('options') && ob.hasOwnProperty('titles')) {
+                titleCreator.options=ob.options;
+                ob.titles.forEach(function(e){
+                  if(e.hasOwnProperty('aside') && e.hasOwnProperty('bside') && e.hasOwnProperty('artist'))
+                    addRow(e);
+                });
+              }
+            }
+            $('#export-modal').modal('hide');
+            addRow();
+          };
+          reader.readAsBinaryString(file);
+        }(file);
+      });
       
+      $('#export').on('click',function(e) {
+        exportLibrary($('#export-titles').prop('checked'));
+      });
+
       $('#write-document').on('click',function(e) {
         e.preventDefault();
         var titles=getTitles();
@@ -282,17 +417,7 @@
       
       $('#menu-export').on('click',function(e) {
         e.preventDefault();
-        var out={
-          titles:getTitles(),
-          options:window.titleCreator.getOptions()
-        }
-        var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(out));
-        var a = document.createElement('a');
-        a.setAttribute("href", data);
-        a.setAttribute("download","jblabels.json");
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        $('#export-modal').modal();
       });
       
       $(document.body).on('blur','.artist, .sidea, .sideb',function(e) {
