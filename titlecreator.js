@@ -7,8 +7,9 @@ window.titleCreator={
     titleFillColor:false,
     font:'Retro',
     style:'arrows',
-    paperType:'standard'
+    paperType:'letter'
   },
+  titles: {},
   functions:{
     drawDesign: function(style) {
       switch(style) {
@@ -226,28 +227,28 @@ window.titleCreator={
         layout: {
           hLineWidth: function (i, node) {return 1},
           vLineWidth: function (i, node) {return 1},
-          hLineColor: ((titleCreator.options.paperType=="standard") ? titleCreator.options.primaryColor : '#ffffff'),
-          vLineColor: ((titleCreator.options.paperType=="standard") ? titleCreator.options.primaryColor : '#ffffff')
+          hLineColor: ((titleCreator.options.paperType=="letter") ? titleCreator.options.primaryColor : '#ffffff'),
+          vLineColor: ((titleCreator.options.paperType=="letter") ? titleCreator.options.primaryColor : '#ffffff')
         },
         'pageBreak':((last===false) ? 'after' : '')
       }
     },
-    buildPages: function(titles,columns=2,rows=10) {
+    buildPages: function(columns=2,rows=10) {
       var p=[];
       var last=false;
+      var titles=titleCreator.getTitles(true);
       while(titles.length>0) {
         var page=titles.splice(0,rows*columns);
         if(titles.length==0) last=true;
-        if(titleCreator.options.paperType=="standard")
+        if(titleCreator.options.paperType=="letter")
           p.push(this.buildCanvases());
         p.push(this.buildTable(page,last,columns,rows));
       }
       return p;
     },
-    getDocument: function(titles) {
-      titles=this.formatTitles(titles);
+    getDocument: function() {
       var c = {
-        content: this.buildPages(titles),
+        content: this.buildPages(),
         styles: {
           artist: {
             fontSize: 9,
@@ -265,12 +266,11 @@ window.titleCreator={
       }
       return c;
     },
-    single12:function(titles){
+    single12:function(){
       var columns=1,
           rows=12;
-      titles=this.formatTitles(titles);
       var c = {
-        content: this.buildPages(titles,columns,rows),
+        content: this.buildPages(columns,rows),
         styles: {
           artist: {
             fontSize: 9,
@@ -284,20 +284,17 @@ window.titleCreator={
           }
         },
         pageSize:{width:225, height: 936},
-        pageMargins: [ 0, 31.5, 0, 0 ]
-        /*
-                pageSize:'LETTER',
+        pageMargins: [ 0, 31.5, 0, 0 ],
+        pageSize:'LEGAL',
         pageMargins: [ 193.5, 31.5, 0, 0 ]
-*/
       }
       return c; 
     },
-    double10:function(titles){
+    double10:function(){
       var columns=2,
           rows=5;
-      titles=this.formatTitles(titles);
       var c = {
-        content: this.buildPages(titles,columns,rows),
+        content: this.buildPages(columns,rows),
         styles: {
           artist: {
             fontSize: 9,
@@ -338,21 +335,21 @@ window.titleCreator={
       return titles;
     }
   },
-  start:function(titles) {
+  start:function() {
     var o=this.getOptions();
     var dd={};
     switch(o.paperType) {
       case 'single12':
-        dd=this.functions.single12(titles);
+        dd=this.functions.single12();
         break;
         case 'double10':
-          dd=this.functions.double10(titles);
+          dd=this.functions.double10();
           break;
       default:
-        dd=this.functions.getDocument(titles);
+        dd=this.functions.getDocument();
         break;
     }
-    pdfMake.createPdf(dd).open();
+    pdfMake.createPdf(dd).print();
   },
   getOptions:function(){
     if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
@@ -360,7 +357,8 @@ window.titleCreator={
     if(!titleCreator.options.hasOwnProperty('titleFillColor')) this.options.titleFillColor='false';
     if(!titleCreator.options.hasOwnProperty('font')) this.options.font='Retro';
     if(!titleCreator.options.hasOwnProperty('design')) this.options.design='arrows';
-    if(!titleCreator.options.hasOwnProperty('paperType')) this.options.design='standard';
+    if(!titleCreator.options.hasOwnProperty('paperType')) this.options.paperType='letter';
+    if(this.options.paperType=='standard') this.options.paperType='letter';
     return this.options;
   },
   setOption:function(option,value){
@@ -368,10 +366,81 @@ window.titleCreator={
     localStorage.setItem('options',JSON.stringify(this.getOptions()));
   },
   reset:function(){
-    localStorage.removeItem('titles')
+    localStorage.removeItem('titles');
+  },
+  getTitles:function(formatted=false){
+    var t=JSON.parse(JSON.stringify(titleCreator.titles));
+    if(formatted)
+      return this.functions.formatTitles(t);
+    return t;
+  },
+  getTitle:function(id){
+    var found = titleCreator.titles.find(function(e) {
+      return e.id==id;
+    });
+    return found;
+  },
+  addTitles:function(i){
+    i.forEach(function(v){
+      v.id=titleCreator.getNewID();
+      titleCreator.titles=titleCreator.titles.concat(v);
+    });
+    this.saveTitles();
+    return i;
+  },
+  saveTitles:function() {
+    localStorage.setItem('titles',JSON.stringify(this.getTitles()));
+  },
+  removeTitle:function(id){
+    for (var i=this.titles.length-1; i>=0; --i) {
+      if (this.titles[i].id == id) {
+        this.titles.splice(i,1);
+        this.saveTitles();
+        break;
+      }
+    }
+  },
+  retrieveTitles:function() {
+    var t=JSON.parse(localStorage.getItem('titles'))||[];
+    if(t.constructor !== Array) t=[];
+    if(t.length>0)
+      if(! t[0].hasOwnProperty('id'))
+        t=this.addIDs(t);
+    this.titles=t;
+  },
+  addIDs:function(arr){
+    var id=0;
+    arr.forEach(function(i){
+      i['id']=id;
+      id++;
+    });
+    return arr;
+  },
+  getNewID:function(){
+    var t=titleCreator.getTitles();
+    var first=((t.length==0) ? true : false);
+    if(first) return 0;
+    var a=[];
+    t.forEach(function(i){
+      a.push(i.id);
+    });
+    a=a.sort(function (a, b) { return a-b; });
+    for(j=0;j<a[a.length-1];j++)
+      if(a.indexOf(j)==-1)
+        return j
+    return a[a.length-1]+1;
+  },
+  updateTitle:function(item){
+    var id=item.id;
+    this.removeTitle(id);
+    delete item.id;
+    return this.addTitles([item]);
   }
 }
 
+
+//application startup stuff
+titleCreator.retrieveTitles();
 pdfMake.fonts = {
   Retro: {
     bold: 'Retro.ttf'
@@ -383,6 +452,7 @@ pdfMake.fonts = {
     bold: 'ATypewriter.ttf'
   }
 }
+
 
 function getTintedColor(color, v) {
   if (color.length >6) { color= color.substring(1,color.length)}

@@ -4,53 +4,69 @@
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Jukebox Title Strip Creator</title>
+    <title>JUKESTUDIO - Jukebox Title Strip Creator</title>
     <script src='pdfmake.min.js'></script>
     <script src='vfs_fonts.js'></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crel/3.1.0/crel.min.js"></script>
+    <script src="https://use.fontawesome.com/434809f2b1.js"></script>
     <link rel="stylesheet" href="bootstrap.css">
     <style>
-      body { padding-top: 40px; }
+      @import url('https://fonts.googleapis.com/css?family=Work+Sans:300,700');
       .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus { color: #FFC930; }
-      .navbar.bg-default { background: #eeeeee; padding: .5rem 1rem; }
-      .navbar.bg-default a { color: #999999; }
+      .navbar.bg-default { background: #eeeeee; padding: .5rem 1rem; margin-top: 70px; }
+      .navbar.bg-default a { color: #777777; }
       .navbar.bg-default a:hover { color: #3498DB; }
-      .main-content { margin-top: 90px; }
+      .navbar.bg-gray { background-color: #575e68 !important; }
+      .navbar .navbar-brand { font-weight:200; font-family: 'Work Sans', sans-serif; color: #FFC930; }
+      .navbar .navbar-brand strong { font-weight: 700; }
+      .main-content { margin-top: 100px; }
+      #welcome-message { font-family: 'Work Sans', sans-serif; }
+      #welcome-message h2 { font-weight: 700; }
       .right { text-align: right; }
       .btn { border-radius: .17rem; border-width: 2px; }
       .btn.btn-info.nofill { background: rgba(0,0,0,0) !important; color: #3498DB; }
+      .btn.btn-default.nofill { background: rgba(0,0,0,0) !important; color: #666; border-color: #ccc; }
       .title input { border-radius: 0; border: 1px solid #fff; padding-left: 0; }
       .title input:focus, .title input:active { border-color: #fff; border-bottom: 1px solid #ced4da; box-shadow: none; background-color: #f5f5f5; }
       .modal-content { border: none; border-radius: .2rem; }
-      .modal-header { padding: 1rem .75rem; background-color: #3498DB; border-color: #3498DB; border-bottom: none; border-top-left-radius: .2rem; border-top-right-radius: .2rem; }
-      .modal-header h4 { font-size: 1rem; color: #fff; }
+      .modal-header { padding: 1rem .75rem; background-color: #FFC930; border-color: #FFC930; border-bottom: none; border-top-left-radius: .2rem; border-top-right-radius: .2rem; }
+      .modal-header h4 { font-size: 1rem; color: #555555; }
       .modal-footer { justify-content: center; }
       .modal-footer .btn { padding: .375rem 1.35rem; }
-      .modal .close { color: #fff; opacity: 1; }
-      .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before { background-color: #3498DB; }
+      .modal .close { color: #555555; opacity: 1; }
+      .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before { background-color: #FFC930; }
       #hidden-file { display: none; }
+      .table .custom-control-label, .table .custom-control { display: inline; }
+      #title-menu { position: absolute; display:none; }
+      .title-menu-button { padding-left: .5rem; padding-right: .5rem; }
+      a.title-menu-button { color: #555555; }
     </style>
   </head>
   <body>
-    <div class="navbar navbar-expand-lg fixed-top bg-info navbar-dark">
+    <div class="navbar navbar-expand-lg fixed-top bg-gray navbar-dark">
       <div class="container">
-        <a href="../" class="navbar-brand">JB TITLE STRIPS</a>
+        <a href="../" class="navbar-brand"><strong>JUKE</strong>STUDIO</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#add-modal">Add title</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="write-document" href="#">Print</a>
+          </li>
+        </ul>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav">
+          <ul class="nav navbar-nav ml-auto">
             <li class="nav-item">
               <a class="nav-link" id="menu-options" href="#">Options</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" id="menu-export" href="#">Import/Export</a>
             </li>
-          </ul>
-
-          <ul class="nav navbar-nav ml-auto">
             <li class="nav-item">
               <a class="nav-link" id="menu-clear" href="#">Clear all</a>
             </li>
@@ -60,55 +76,30 @@
       </div>
     </div>
 
-<!--
-    <div class="navbar navbar-expand-sm bg-default">
-      <div class="container">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" id="submenu-add" href="#">Add</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="submenu-edit" href="#">Edit</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="submenu-remove" href="#">Remove</a>
-            </li>
-          </ul>
-      </div>
-    </div>
--->
-    
     <div class="container main-content">
       <div class="bs-docs-section clearfix">
         <div class="row">
           <div class="col-lg-12">
-            <table class="table" id="titles">
+            <table class="table table-hover" id="titles">
               <thead>
                 <tr>
                   <th>A Side</th>
                   <th>B Side</th>
                   <th>Artist</th>
+                  <th colspan=2><!--Print--></tr>
                 </tr>
               </thead>
-              <tbody>
-                <tr class="title">
-                  <td><input type="text" class="sidea form-control" placeholder="A Side"></td>
-                  <td><input type="text" class="sideb form-control" placeholder="B Side"></td>
-                  <td><input type="text" class="artist form-control" placeholder="Artist"></td>
-                </tr>
-              </tbody>
+              <tbody></tbody>
             </table>
-            <div class="col-lg-12 right">
-              <button class="btn btn-info" id="add-title">+ Add title</button>
-            </div>
-            <div class="col-lg-12">
-              <button class="btn btn-primary" id="write-document">Create PDF</button>
-            </div>
           </div>
         </div>
-        
       </div>
     </div>
+
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="context-menu">
+        <a class="dropdown-item edit" href="#">Edit</a>
+        <a class="dropdown-item remove" href="#">Remove</a>
+      </div>
 
     <div class="modal fade" id="options-modal">
       <div class="modal-dialog">
@@ -121,13 +112,13 @@
             <fieldset>
               <div class="form-group">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-uppercase" checked="">
+                  <input type="checkbox" class="custom-control-input" id="option-uppercase">
                   <label class="custom-control-label" for="option-uppercase">Force uppercase</label>
                 </div>
               </div>
               <div class="form-group">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-quotes" checked="">
+                  <input type="checkbox" class="custom-control-input" id="option-quotes">
                   <label class="custom-control-label" for="option-quotes">Add quotes to titles</label>
                 </div>
               </div>
@@ -169,14 +160,16 @@
               <div class="form-group">
                 <label for="option-paperType">Paper type</label>
                 <select class="form-control" id="option-paperType">
-                  <option value="standard">Plain Letter</option>
-                  <option value="double10">Pre-printed 5x2</option>
+                  <option value="letter">Plain paper (US Letter)</option>
+                  <option value="double10">Pre-printed 5x2 (HxW)</option>
+                  <option value="single12">Pre-printed 12x1 (HxW)</option>
                 </select>
+                <p id="paperType-message"></p>
               </div>
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-info nofill" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default nofill" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-info save-options">Save</button>
           </div>
         </div>
@@ -193,29 +186,29 @@
           <div class="modal-body">
             <fieldset>
               <div class="form-group">
-                <label for="addSideA">Side A</label>
+                <label for="add-side-a">Side A</label>
                 <input type="text" class="form-control" id="add-side-a"/>
-              </div>
-              <!--
-              <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-uppercase" checked="">
-                  <label class="custom-control-label" for="option-uppercase">Force uppercase</label>
-                </div>
+                <div class="invalid-feedback"></div>
               </div>
               <div class="form-group">
-                <label for="option-paperType">Paper type</label>
-                <select class="form-control" id="option-paperType">
-                  <option value="standard">Plain Letter</option>
-                  <option value="double10">Pre-printed 5x2</option>
-                </select>
+                <label for="add-side-b">Side B</label>
+                <input type="text" class="form-control" id="add-side-b"/>
+                <div class="invalid-feedback"></div>
               </div>
-              -->
+              <div class="form-group">
+                <label for="add-artist">Artist</label>
+                <input type="text" class="form-control" id="add-artist"/>
+                <div class="invalid-feedback"></div>
+              </div>
+              <div class="form-group">
+                <label for="add-artist-b">Side B Artist (if different)</label>
+                <input type="text" class="form-control" id="add-artist-b"/>
+              </div>
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-info nofill" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-info save-options">Save</button>
+            <button type="button" class="btn btn-default nofill" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-info save">Save</button>
           </div>
         </div>
       </div>
@@ -260,43 +253,34 @@
   </body>
   <script src="titlecreator.js"></script>
   <script>
-    function saveTitles() {
-      var titles=getTitles();
-      localStorage.setItem('titles',JSON.stringify(titles));
-    }
-    function getTitles() {
-      var o=[];
-      $('#titles .title').each(function(i){
-        var $inputs=$($(this)[0]).find('input');
-        //potentially wrong, assumes jQuery will pull them out in DOM order but faster than anything else I can think of right now
-        if($($inputs[0]).val()!='' && $($inputs[1]).val()!='' && $($inputs[2]).val()!='')
-          o.push({
-            aside:$($inputs[0]).val(),
-            bside:$($inputs[1]).val(),
-            artist:$($inputs[2]).val()
-          });
-      })
-      return o;
-    }
-    
     $(document).ready(function(){
     
       function addRow(content=null){
-        var html=crel('tr',{'class':'title'},
-          crel('td',crel('input',{'type':'text', 'class':'sidea form-control', 'placeholder':'A Side', 'value':((content===null) ? '' : content.aside) })),
-          crel('td',crel('input',{'type':'text', 'class':'sideb form-control', 'placeholder':'B Side', 'value':((content===null) ? '' : content.bside) })),
-          crel('td',crel('input',{'type':'text', 'class':'artist form-control', 'placeholder':'Artist', 'value':((content===null) ? '' : content.artist) }) )
-        )
+        if(content==null) return;
+
+        var html=crel('tr',{'class':'title','data-id':content.id},
+          crel('td',{'class':'aside'},content.aside),
+          crel('td',{'class':'bside'},content.bside),
+          crel('td',{'class':'artist'},content.artist + ((content.artistb!='' && content.artistb!=null) ? ' / '+content.artistb : '')),
+          //crel('td',
+          //  crel('div', {'class':'custom-control custom-checkbox'},
+          //    crel('input', {'type':'checkbox', 'class':'custom-control-input', 'id':'print-title-'+content.id}),
+          //    crel('label', {'class':'custom-control-label','for':'print-title-'+content.id},'')
+          //  )
+          //),
+          crel('td',
+            crel('a',{'href':'#','class':'title-menu-button'},
+              crel('i',{'class':'fa fa-ellipsis-v','aria-hidden':'true'})
+            )
+          )
+        );
         $('#titles tbody').append(html);
-          
-        $inputs=$('#titles').find('input');
-        $($($inputs)[$($inputs).length-3]).focus();
       }
 
       function exportLibrary(csv=false) {
         var out={
-          titles:getTitles(),
-          options:window.titleCreator.getOptions()
+          titles:titleCreator.getTitles(),
+          options:titleCreator.getOptions()
         }
 
         var data="",
@@ -304,13 +288,13 @@
 
         if(csv==false) {
           data="data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(out));
-          filename="jblabels.json";
+          filename="jukestudio.json";
         } else {
           data = "data:text/csv;charset=utf-8,";
           out.titles.forEach(function(a){
             data+=a.aside+','+a.bside+','+a.artist+'\r\n';
           });
-          filename="jblabels.csv"
+          filename="jukestudio.csv"
         }
         var a=document.createElement('a');
         a.setAttribute("href", data);
@@ -320,10 +304,6 @@
         a.remove();
       }
 
-      function importLibrary(file){
-        console.log(file);
-      }
-
       $('#hidden-file').on('change',function(evt){
         var file = evt.target.files[0];
         if(file.type!="application/vnd.ms-excel" && file.type!="application/json") return false;
@@ -331,14 +311,6 @@
         readFile = function (file) {
           var reader = new FileReader();
           reader.onload = function () {
-            var t=$('#titles tbody tr:last-child input');
-            var used=true;
-            console.log(true);
-            t.each(function(i,v){
-              if($(this).val()=='') used=false;
-            });
-            console.log(used);
-            if(used==false) $('#titles tbody tr:last-child').remove();
 
             var d={};
             if(file.type=="application/vnd.ms-excel") {
@@ -346,21 +318,30 @@
               ar.reverse;
               ar.forEach(function(e){
                 var b=e.split(',');
-                if(b.length==3)
-                  addRow({aside:b[0],bside:b[1],artist:b[2]});
+                if(b.length==3) {
+                  d.append({aside:b[0],bside:b[1],artist:b[2]});
+                }
               });
             } else {
               var ob=JSON.parse(reader.result);
               if(ob.hasOwnProperty('options') && ob.hasOwnProperty('titles')) {
-                titleCreator.options=ob.options;
+                titleCreator.options=ob.options; //should fix this
                 ob.titles.forEach(function(e){
                   if(e.hasOwnProperty('aside') && e.hasOwnProperty('bside') && e.hasOwnProperty('artist'))
-                    addRow(e);
+                    var h=0;
                 });
+                d=ob.titles;
               }
             }
             $('#export-modal').modal('hide');
-            addRow();
+            d=titleCreator.addTitles(d);
+            d.forEach(function(title){
+              addRow({aside:title.aside,bside:title.bside,artist:title.artist,artistb:'',id:title.id});
+            });
+            if(titles.length==0) {
+              $('.main-content #welcome-message').remove();
+              $('.main-content table').show();
+            }
           };
           reader.readAsBinaryString(file);
         }(file);
@@ -370,25 +351,109 @@
         exportLibrary($('#export-titles').prop('checked'));
       });
 
-      $('#write-document').on('click',function(e) {
+      $('#add-modal').on('shown.bs.modal', function() {
+        $("#add-side-a").focus();
+      }).on('hidden.bs.modal', function() {
+        $('#add-modal input').val('');
+      })
+      $('#add-modal .save').on('click',function(e){
         e.preventDefault();
-        var titles=getTitles();
-        if(titles.length>0)
-          window.titleCreator.start(titles);
+        var mand=['add-side-a','add-side-b','add-artist'],
+            cancel=false;
+        mand.forEach(function(v){
+          $input=$('#'+v);
+          if($($input).val()=='') {
+            $($input).addClass('is-invalid').parent().addClass('has-danger').find('.invalid-feedback').text('Please enter a value');
+            cancel=true;
+          } else
+            $($input).removeClass('is-invalid').parent().removeClass('has-danger').find('.invalid-feedback').text('');
+        });
+        if(cancel)
+          return false;
+
+        var t={
+          aside:$('#add-side-a').val(),
+          bside:$('#add-side-b').val(),
+          artist:$('#add-artist').val(),
+          artistb:$('#add-artist-b').val()
+        };
+        if($('#add-modal').data('editID')==undefined) {
+          t=titleCreator.addTitles([t]);
+        } else {
+          var id=$('#add-modal').data('editID');
+          $('#add-modal').removeData('editID');
+          t.id=id;
+          titleCreator.updateTitle(t);
+          $cells=$('table tbody tr[data-id='+id+'] td');
+          $cells.each(function(i,v){
+            if($(v).hasClass('aside')) $(v).text(t.aside);
+            if($(v).hasClass('bside')) $(v).text(t.bside);
+            if($(v).hasClass('artist')) $(v).text(t.artist+((t.artistb!=='') ? ' / '+t.artistb : ''));
+          });
+        }
+        $('#add-modal').modal('hide');
+
+        if($('#welcome-message').length) {
+          $("#welcome-message").hide();
+          $('.main-content table').show();
+        }
+        addRow(t[0]);
       });
 
-      $('#add-title').on('click',function(e) {
-        e.preventDefault();
-        addRow();
+      $(document).on('click', '.title-menu-button', function(e) {
+        var top = e.pageY;
+        var left = e.pageX;
+        $("#context-menu").css({
+          display: "block",
+          top: top,
+          left: left
+        });
+        $("#context-menu").data('row',$(this).parent().parent());
+        return false;
       });
-      
+      $(document).on('click',function(){
+        $("#context-menu").hide();
+      });
+      $("#context-menu .remove").on("click", function(e) {
+        $t=$('#context-menu').data('row');
+        titleCreator.removeTitle($t.data('id'));
+        $t.remove();
+        e.preventDefault();
+      });
+      $("#context-menu .edit").on("click", function(e) {
+        e.preventDefault();
+        $t=$('#context-menu').data('row');
+        id=$t.data('id');
+        var title=titleCreator.getTitle(id);
+        $('#add-modal input#add-side-a').val(title.aside);
+        $('#add-modal input#add-side-b').val(title.bside);
+        $('#add-modal input#add-artist').val(title.artist);
+        $('#add-modal input#add-artist-b').val(title.artistb);
+        $('#add-modal').data('editID',id);
+        $('#add-modal').modal();
+      });
+
+      $('#write-document').on('click',function(e) {
+        e.preventDefault();
+        //need to send an array of ids to print
+
+        window.titleCreator.start();
+      });
+
       $('#menu-clear').on('click',function(e) {
         e.preventDefault();
         $('#titles tbody').empty();
         window.titleCreator.reset();
-        addRow();
       });
       
+      $('#option-paperType').on('change',function(e){
+        e.preventDefault();
+        if($(this).val()=='single12')
+          $('#paperType-message').html('<small><strong>Note:</strong> For these strips, make sure you set the paper type to LEGAL when printing</small>');
+        else
+          $('#paperType-message').text('');
+      });
+
       $('#menu-options').on('click',function(e) {
         e.preventDefault();
         var options=window.titleCreator.getOptions();
@@ -400,6 +465,7 @@
         $('#option-paperType').val(options.paperType);
         $('#option-font').val(options.font);
         $('#option-style').val(options.style);
+        $('#option-paperType').change(); //sets note correctly
         $('#options-modal').modal();
       });
 
@@ -421,27 +487,19 @@
         $('#export-modal').modal();
       });
       
-      $(document.body).on('blur','.artist, .sidea, .sideb',function(e) {
-        saveTitles();
-      });
-      
-      var titles=JSON.parse(localStorage.getItem('titles'))||[];
+      var titles=titleCreator.getTitles();
       if(titles.length>0) {
-        $('#titles tbody').empty();
         titles.forEach(function(e){
           addRow(e);
         });
-        addRow();
+      } else {
+        $('.main-content').prepend('<div class="row" id="welcome-message"><div class="col-md-12"><img src="arrow.svg" style="width: 80px; margin-left: 10px; margin-right: 10px;" class="float-left" ><h2>welcome!</h2>It looks like you\'re new here. Add your records to get started, set some options and hit Print to create yor title strips</div></div></div>');
+        $('.main-content table').hide();
       }
-            
-      $inputs=$('#titles').find('input');
-      $($($inputs)[$($inputs).length-3]).focus();
 
       //insert the custom font we've already pulled in for PDFMake
       var style = document.createElement('style');
       style.type = 'text/css';
-      //style.innerHTML = '@font-face {font-family: Retro;src: url(data:font/ttf;base64,'+pdfMake.vfs['Retro.ttf']+');}';
-      //style.append('@font-face {font-family: RetroCondensed;src: url(data:font/ttf;base64,'+pdfMake.vfs['RetroCondensed.ttf']+');}');
       for(var key in pdfMake.vfs) {
         if(pdfMake.vfs.hasOwnProperty(key) && key.indexOf('ttf')>0)
           style.append('@font-face {font-family: '+key.substr(0,key.length-4)+';src: url(data:font/ttf;base64,'+pdfMake.vfs[key]+');}');
