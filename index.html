@@ -4,6 +4,7 @@
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <title>JUKESTUDIO - Jukebox Title Strip Creator</title>
     <script src='pdfmake.min.js'></script>
     <script src='vfs_fonts.js'></script>
@@ -26,13 +27,13 @@
       #welcome-message h2 { font-weight: 700; }
       .right { text-align: right; }
       .btn { border-radius: .17rem; border-width: 2px; }
-      .btn.btn-info.nofill { background: rgba(0,0,0,0) !important; color: #3498DB; }
-      .btn.btn-default.nofill { background: rgba(0,0,0,0) !important; color: #666; border-color: #ccc; }
+      .btn.btn-default { color: #575e68; }
+      .btn.btn-info { background: #FFC930; border-color: #FFC930; color: #575e68; }
+      .btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active, .show > .btn-info.dropdown-toggle { background: #E4AA06; border-color: #E4AA06 }
       .title input { border-radius: 0; border: 1px solid #fff; padding-left: 0; }
       .title input:focus, .title input:active { border-color: #fff; border-bottom: 1px solid #ced4da; box-shadow: none; background-color: #f5f5f5; }
       .modal-content { border: none; border-radius: .2rem; }
-      .modal-header { padding: 1rem .75rem; background-color: #FFC930; border-color: #FFC930; border-bottom: none; border-top-left-radius: .2rem; border-top-right-radius: .2rem; }
-      .modal-header h4 { font-size: 1rem; color: #555555; }
+      .modal-header { padding: 1rem .75rem; background-color: transparent; border: none; border-top-left-radius: .2rem; border-top-right-radius: .2rem; font-size: 1.2rem; color: #555555; text-align: center; display: block; }
       .modal-footer { justify-content: center; }
       .modal-footer .btn { padding: .375rem 1.35rem; }
       .modal .close { color: #555555; opacity: 1; }
@@ -66,9 +67,6 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" id="menu-export" href="#">Import/Export</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="menu-clear" href="#">Clear all</a>
             </li>
           </ul>
 
@@ -105,8 +103,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Options</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Options
           </div>
           <div class="modal-body">
             <fieldset>
@@ -115,47 +112,10 @@
                   <input type="checkbox" class="custom-control-input" id="option-uppercase">
                   <label class="custom-control-label" for="option-uppercase">Force uppercase</label>
                 </div>
-              </div>
-              <div class="form-group">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="option-quotes">
                   <label class="custom-control-label" for="option-quotes">Add quotes to titles</label>
                 </div>
-              </div>
-              <div class="form-group">
-                <label for="option-style">Style</label>
-                <select class="form-control" id="option-style">
-                  <option value="arrows">Arrows</option>
-                  <option value="diamond">Diamond</option>
-                  <option value="holly">Holly</option>
-                  <!--<option value="trees">Trees</option>-->
-                </select>
-              </div>
-              <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-artistFillColor" checked="">
-                  <label class="custom-control-label" for="option-artistFillColor">Colored background for artist</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-titleFillColor" checked="">
-                  <label class="custom-control-label" for="option-titleFillColor">Colored background for titles</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="option-primaryColor">Color</label>
-                <select class="form-control" id="option-primaryColor">
-                  <option value="#ff0000">Red</option>
-                  <option value="#00a0de">Blue</option>
-                  <option value="#5fae6f">Green</option>
-                  <option value="#80578f">Purple</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="option-font">Font</label>
-                <select class="form-control" id="option-font">
-                </select>
               </div>
               <div class="form-group">
                 <label for="option-paperType">Paper type</label>
@@ -166,10 +126,38 @@
                 </select>
                 <p id="paperType-message"></p>
               </div>
+              <div class="form-group">
+                <label for="option-font">Font</label>
+                <select class="form-control" id="option-font">
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="option-style">Style</label>
+                <select class="form-control onlyplain" id="option-style">
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="option-primaryColor">Color</label>
+                <select class="form-control onlyplain" id="option-primaryColor">
+                  <option value="#ff0000">Red</option>
+                  <option value="#00a0de">Blue</option>
+                  <option value="#5fae6f">Green</option>
+                  <option value="#80578f">Purple</option>
+                </select>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input onlyplain" id="option-artistFillColor" checked="">
+                  <label class="custom-control-label" for="option-artistFillColor">Colored background for artist</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input onlyplain" id="option-titleFillColor" checked="">
+                  <label class="custom-control-label" for="option-titleFillColor">Colored background for titles</label>
+                </div>
+              </div>
+              <button type="button" class="btn btn-info" id="options-clear">Clear library</button>
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default nofill" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-info save-options">Save</button>
           </div>
         </div>
@@ -180,8 +168,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Add new title</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Add new title
           </div>
           <div class="modal-body">
             <fieldset>
@@ -207,7 +194,7 @@
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default nofill" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-info save">Save</button>
           </div>
         </div>
@@ -219,8 +206,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Export / Import</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Export / Import
           </div>
           <div class="modal-body">
             <fieldset>
@@ -244,7 +230,7 @@
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-info nofill" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -440,7 +426,7 @@
         window.titleCreator.start();
       });
 
-      $('#menu-clear').on('click',function(e) {
+      $('#options-clear').on('click',function(e) {
         e.preventDefault();
         $('#titles tbody').empty();
         window.titleCreator.reset();
@@ -452,6 +438,11 @@
           $('#paperType-message').html('<small><strong>Note:</strong> For these strips, make sure you set the paper type to LEGAL when printing</small>');
         else
           $('#paperType-message').text('');
+        if($(this).val()=='letter') {
+          $('.onlyplain').attr('disabled',false);
+	} else {
+          $('.onlyplain').attr('disabled',true);
+        }
       });
 
       $('#menu-options').on('click',function(e) {
@@ -497,14 +488,21 @@
         $('.main-content table').hide();
       }
 
+      var keys=Object.keys(titleCreator.styles)
+      keys.forEach(function(key){
+        $('#option-style').append(crel('option',{'value':key},titleCreator.styles[key].name));
+      });
+
       //insert the custom font we've already pulled in for PDFMake
       var style = document.createElement('style');
       style.type = 'text/css';
       for(var key in pdfMake.vfs) {
-        if(pdfMake.vfs.hasOwnProperty(key) && key.indexOf('ttf')>0)
+        if(pdfMake.vfs.hasOwnProperty(key) && key.indexOf('.ttf')>0) {
           style.append('@font-face {font-family: '+key.substr(0,key.length-4)+';src: url(data:font/ttf;base64,'+pdfMake.vfs[key]+');}');
           $('#option-font').append('<option value="'+key.substr(0,key.length-4)+'" style="font-family:'+key.substr(0,key.length-4)+'">'+key.substr(0,key.length-4)+'</option>');
+        }
       }
+
       document.getElementsByTagName('head')[0].appendChild(style);
     });
   </script>

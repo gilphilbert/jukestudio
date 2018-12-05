@@ -9,9 +9,43 @@ window.titleCreator={
     style:'arrows',
     paperType:'letter'
   },
+  styles: {
+    arrows:{
+      name:'Arrows',
+      maxwidth:280,
+      margins:0
+    },
+    diamond:{
+      name:'Diamond',
+      maxwidth:280,
+      margins:0
+    },
+    holly:{
+      name:'Holly',
+      artistTint:'#ffffff',
+      titleTint:'#ffffff',
+      lineColor:'#ff0000',
+      maxwidth:242,
+      margins:22
+    },
+    candycane:{
+      name:'Candy Cane',
+      artistTint:'#ffffff',
+      titleTint:'#ABDCA8',
+      lineColor:'#D3444A',
+      maxwidth:242,
+      margins:22
+    }
+  },
+  fonts:{
+    Retro:{name:'Retro',titleSize:10,artistSize:9,margins:{aside:[1,7.5],artist:[2.5],bside:[.1,4]}},
+    RetroCondensed:{name:'RetroCondensed',titleSize:10,artistSize:9,margins:{aside:[1,7.5],artist:[2.5],bside:[.1,4]}},
+    ATypewriter:{name:'ATypewriter',titleSize:8.7,artistSize:8,margins:{aside:[0,7.5],artist:[2.5],bside:[0,4]}}
+  },
   titles: {},
   functions:{
     drawDesign: function(style) {
+      var s=titleCreator.getStyle();
       switch(style) {
         case 'arrows':
           return [
@@ -28,7 +62,7 @@ window.titleCreator={
               y: 27,
               w: 160,
               h: 18,
-              color: ((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white'),
+              color: s.artistTint,
               lineColor: titleCreator.options.primaryColor,
               lineWidth: 1.5
             },
@@ -37,14 +71,14 @@ window.titleCreator={
               lineWidth: 3,
               closePath: true,
               points: [{x: 32, y: 27}, {x: 32, y: 45}, {x: 40, y: 36}],
-              color: titleCreator.options.primaryColor
+              color: s.lineColor 
             },
             {
               type: 'polyline',
               lineWidth: 3,
               closePath: true,
               points: [{x: 193, y: 27}, {x: 193, y: 45}, {x: 184, y: 36}],
-              color: titleCreator.options.primaryColor
+              color: s.lineColor
             }
           ];
           break;
@@ -55,100 +89,28 @@ window.titleCreator={
               x1: 0, y1: 36,
               x2: 224, y2: 36,
               lineWidth: 9,
-              lineColor: titleCreator.options.primaryColor,
+              lineColor: s.lineColor,
             },
             {
               type: 'polyline',
               lineWidth: 1.5,
               closePath: true,
               points: [{x: 35, y: 27},{x: 189, y: 27},{x: 198, y: 36},{x: 189, y: 45},{x: 35, y: 45},{x: 27, y: 36}],
-              lineColor: titleCreator.options.primaryColor,
-              color: ((titleCreator.options.artistFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')
+              lineColor: s.lineColor,
+              color: s.artistTint
             }
           ];
           break;
         case 'holly':
           return [];
           break;
-        case 'trees':
-          return [
-            {
-              type: 'line',
-              x1: 48, y1: 36,
-              x2: 58, y2: 36,
-              lineWidth: 1.5,
-              lineColor: '#2DAA5F'
-            },
-            {
-              type: 'ellipse',
-              x:15,
-              y:36,
-              r1:2,
-              color: '#ff0000'
-            },
-            {
-              type: 'polyline',
-              closePath: true,
-              points: [
-                {x: 36.75, y: 44.5},
-                {x: 36.75, y: 42.25},
-                {x: 30, y: 42.25},
-                {x: 33.75, y: 36.5},
-                {x: 31.75, y: 36.5},
-                {x: 34.5, y: 32.25},
-                {x: 33.25, y: 32.25},
-                {x: 37.25, y: 25},
-                {x: 41.25, y: 32.25},
-                {x: 40.25, y: 32.25},
-                {x: 43, y: 36.5},
-                {x: 41, y: 36.5},
-                {x: 44.5, y: 42.25},
-                {x: 37.75, y: 42.25},
-                {x: 37.75, y: 44.5}
-              ],
-              color: '#2DAA5F'
-            },
-            {
-              type: 'polyline',
-              closePath: true,
-              points: [
-                {x: 26.75, y: 44.5},
-                {x: 26.75, y: 42.25},
-                {x: 20, y: 42.25},
-                {x: 23.75, y: 36.5},
-                {x: 21.75, y: 36.5},
-                {x: 24.5, y: 32.25},
-                {x: 23.25, y: 32.25},
-                {x: 27.25, y: 25},
-                {x: 31.25, y: 32.25},
-                {x: 30.25, y: 32.25},
-                {x: 33, y: 36.5},
-                {x: 31, y: 36.5},
-                {x: 34.5, y: 42.25},
-                {x: 27.75, y: 42.25},
-                {x: 27.75, y: 44.5}
-              ],
-              color: '#2DAA5F'
-            },
-            {
-              type: 'line',
-              x1: 167, y1: 36,
-              x2: 177, y2: 36,
-              lineWidth: 1.5,
-              lineColor: '#2DAA5F'
-            },
-            {
-              type: 'ellipse',
-              x:208,
-              y:36,
-              r1:2,
-              color: '#ff0000'
-            },
-          ];
+        case 'candycane':
+          return [];
           break;
       }
     },
     buildCanvases: function() {
+      var style=titleCreator.getStyle();
       var b=[];
       for(i=0;i<20;i++) {
         var j=((i<10) ? i : i - 10);
@@ -156,7 +118,7 @@ window.titleCreator={
         var y=(j*72)+22.5;
         if(titleCreator.options.style=="holly") {
           b.push({
-            image: 'data:image/png;base64,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',
+            image: 'data:image/png;base64,'+pdfMake.vfs['holly.png'],
             width: 200,
             absolutePosition: {x: x+10, y: y+20}
           });
@@ -167,22 +129,62 @@ window.titleCreator={
                 x1: 30, y1: 26,
                 x2: 194, y2: 26,
                 lineWidth: 1.5,
-                lineColor: '#ff0000'
+                lineColor: style.lineColor
               },
               {
                 type: 'line',
                 x1: 30, y1: 46,
                 x2: 194, y2: 46,
                 lineWidth: 1.5,
-                lineColor: '#ff0000'
+                lineColor: style.lineColor
               }
             ],
             absolutePosition: {x: x, y: y}
           });
           b.push({
-            image: 'data:image/png;base64,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',
+            image: 'data:image/png;base64,'+pdfMake.vfs['holly.png'],
             width: 200,
             absolutePosition: {x: x+200, y: y+20}
+          })
+        } else if(titleCreator.options.style=='candycane') {
+          b.push({
+            image: 'data:image/png;base64,'+pdfMake.vfs['candycane.png'],
+            width: 22,
+            absolutePosition: {x: x+5, y: y+8}
+          });
+          b.push({
+            canvas: [
+              {
+                type: 'rect',
+                x: 32.5,
+                y: 27,
+                w: 160,
+                h: 18,
+                color: style.artistTint,
+                lineColor: style.lineColor,
+                lineWidth: 1.5
+              },
+              {
+                type: 'polyline',
+                lineWidth: 3,
+                closePath: true,
+                points: [{x: 32, y: 27}, {x: 32, y: 45}, {x: 40, y: 36}],
+                color: style.lineColor 
+              },
+              {
+                type: 'polyline',
+                lineWidth: 3,
+                closePath: true,
+                points: [{x: 193, y: 27}, {x: 193, y: 45}, {x: 184, y: 36}],
+                color: style.lineColor
+              }
+            ],
+            absolutePosition: {x: x, y: y}
+          });
+          b.push({
+            image: 'data:image/png;base64,'+pdfMake.vfs['candycane.png'],
+            width: 22,
+            absolutePosition: {x: x+197, y: y+8}
           })
         } else {
           b.push({
@@ -194,41 +196,74 @@ window.titleCreator={
       return b;
     },
     buildTable: function(titles,last,columns,rows){
+      var style=titleCreator.getStyle();
+      var f=titleCreator.getFont();
       var b=[];
-      for(i=0;i<rows;i++){
-        var x=[
-          { text: ((titles.length>i) ? titles[i].aside : ''), style:'title', margin:[0,((titles.length>i && titles[i].awrap) ? 1.2 : 7.5 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
-        ];
-        if(columns==2) x.push({ text: ((titles.length>i+rows) ? titles[i+rows].aside : ''), style:'title', margin:[0,((titles.length>i+rows && titles[i+rows].awrap) ? 1.2 : 7.5 ),0,0], border: [true, true, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')});
 
-        var y=[
-          { text: ((titles.length>i) ? titles[i].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
-        ];
-        if(columns==2) y.push({ text: ((titles.length>i+rows) ? titles[i+rows].artist : ''), style:'artist', margin:[0,2.5,0,0], border: [true, false, true, false], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
-        
-        var z=[
-          { text: ((titles.length>i) ? titles[i].bside : ''), style:'title', margin:[0,((titles.length>i && titles[i].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')},
-        ];
-        if(columns==2) z.push({ text: ((titles.length>i+rows) ? titles[i+rows].bside : ''), style:'title', margin:[0,((titles.length>i+10 && titles[i+rows].bwrap) ? .3 : 4 ),0,0], border: [true, false, true, true], fillColor:((titleCreator.options.titleFillColor) ? getTintedColor(titleCreator.options.primaryColor,200) : 'white')})
+      for(i=0;i<rows;i++){
+        var x=[{
+          text: ((titles.length>i) ? titles[i].aside : ''),
+          style:'title',
+          margin:[style.margins,((titles[i])?titles[i].margins.aside:0),style.margins,0],
+          border: [true, true, true, false],
+          fillColor:style.titleTint
+        }];
+        var y=[{
+          text: ((titles.length>i) ? titles[i].artist : ''),
+          style:'artist',
+          margin:[style.margins,((titles[i])?titles[i].margins.artist:0),style.margins,0],
+          border: [true, false, true, false],
+          fillColor:style.titleTint
+        }];
+        var z=[{
+          text: ((titles.length>i) ? titles[i].bside : ''),
+          style:'title',
+          margin:[style.margins,((titles[i])?titles[i].margins.bside:0),style.margins,0],
+          border: [true, false, true, true],
+          fillColor:style.titleTint
+        }];
+
+        if(columns==2) {
+          x.push({
+            text: ((titles.length>i+rows) ? titles[i+rows].aside : ''),
+            style:'title',
+            margin:[style.margins,((titles[i+rows])?titles[i+rows].margins.aside:0),style.margins,0],
+            border: [true, true, true, false],
+            fillColor:style.titleTint
+          });
+          y.push({
+            text: ((titles.length>i+rows) ? titles[i+rows].artist : ''),
+            style:'artist',
+            margin:[style.margins,((titles[i+rows])?titles[i+rows].margins.artist:0),style.margins,0],
+            border: [true, false, true, false],
+            fillColor:style.titleTint
+	  });
+          z.push({
+            text: ((titles.length>i+rows) ? titles[i+rows].bside : ''),
+            style:'title',
+            margin:[style.margins,((titles[i+rows])?titles[i+rows].margins.bside:0),style.margins,0],
+            border: [true, false, true, true],
+            fillColor:style.titleTint
+	  });
+        }
         
         b.push(x);
         b.push(y);
         b.push(z);
-      }
+
+      };
       return {
         'alignment': 'center',
         table: {
-          heights: [
-            21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5
-          ],
+          heights: [21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5],
           widths: ((columns==2) ? [215,215] : [215]),
           body: b
         },
         layout: {
           hLineWidth: function (i, node) {return 1},
           vLineWidth: function (i, node) {return 1},
-          hLineColor: ((titleCreator.options.paperType=="letter") ? titleCreator.options.primaryColor : '#ffffff'),
-          vLineColor: ((titleCreator.options.paperType=="letter") ? titleCreator.options.primaryColor : '#ffffff')
+          hLineColor: style.lineColor,
+          vLineColor: style.lineColor
         },
         'pageBreak':((last===false) ? 'after' : '')
       }
@@ -247,18 +282,21 @@ window.titleCreator={
       return p;
     },
     getDocument: function() {
+      var f=titleCreator.getFont();
       var c = {
         content: this.buildPages(),
         styles: {
           artist: {
-            fontSize: 9,
+            fontSize: f.artistSize,
             bold: true,
-            font: titleCreator.options.font
+            color: "#000000",
+            font: f.name
           },
           title: {
-            fontSize: 10.5,
+            fontSize: f.titleSize,
             bold: true,
-            font: titleCreator.options.font
+            color: "#000000",
+            font: f.name
           }
         },
         pageSize:'LETTER',
@@ -267,20 +305,21 @@ window.titleCreator={
       return c;
     },
     single12:function(){
+      var f=titleCreator.getFont();
       var columns=1,
           rows=12;
       var c = {
         content: this.buildPages(columns,rows),
         styles: {
           artist: {
-            fontSize: 9,
+            fontSize: f.artistSize,
             bold: true,
-            font: titleCreator.options.font
+            font: f.name 
           },
           title: {
-            fontSize: 10.5,
+            fontSize: f.titleSize,
             bold: true,
-            font: titleCreator.options.font
+            font: f.name
           }
         },
         pageSize:{width:225, height: 936},
@@ -291,32 +330,35 @@ window.titleCreator={
       return c; 
     },
     double10:function(){
+      var f=titleCreator.getFont();
       var columns=2,
           rows=5;
       var c = {
         content: this.buildPages(columns,rows),
         styles: {
           artist: {
-            fontSize: 9,
+            fontSize: f.artistSize,
             bold: true,
-            font: titleCreator.options.font
+            font: f.name
           },
           title: {
-            fontSize: 10.5,
+            fontSize: f.titleSize,
             bold: true,
-            font: titleCreator.options.font
+            font: f.name
           }
         },
-        /*pageSize:{width:450, height: 450},
-        pageMargins: [ 0, 22.5, 0, 40.5 ]*/
         pageSize:'LETTER',
         pageMargins: [ 81, 22.5, 0, 0 ]
       }
       return c; 
     },
     formatTitles: function(titles) {
-      $('body').append(crel('span',{'style':'font-family:'+titleCreator.options.font+';font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
+      var f=titleCreator.getFont();
+      var s=titleCreator.getStyle();
+      $('body').append(crel('span',{'style':'font-family:'+f.name+';font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
+
       titles.forEach(function(e){
+        var awrap=false,bwrap=false;
         if(titleCreator.options.allCaps) {
           e.aside=e.aside.toUpperCase();
           e.bside=e.bside.toUpperCase();
@@ -327,9 +369,32 @@ window.titleCreator={
           e.bside='"'+e.bside+'"';
         }
         var w=$('#text-sizer').text(e.aside).width();
-        if(w>266) e.awrap=true;
+        if(w>s.maxwidth) awrap=true;
         w=$('#text-sizer').text(e.bside).width();
-        if(w>266) e.bwrap=true;
+        if(w>s.maxwidth) bwrap=true;
+
+///still needs to take into account long songs with braces... as well as whether it makes more sense to split on braces than length (so braces first, then check for length)
+        if(!awrap) {
+          if(e.aside.substr(e.aside.length-1)==')' && e.aside.substr(0,1)!='(') {
+            x=e.aside.split("(");
+            e.aside=x.join("\n(");
+            awrap=true;
+          }
+        }
+        if(!bwrap) {
+          if(e.bside.substr(e.bside.length-1)==')' && e.bside.substr(0,1)!='(') {
+            x=e.bside.split("(");
+            e.bside=x.join("\n(");
+            bwrap=true;
+          }
+        }
+
+        var m=f.margins;
+        e.margins={
+	  aside:m.aside[((awrap)?0:1)],
+	  artist:m.artist[0],
+	  bside:m.bside[((bwrap)?0:1)]
+	};
       });
       $('#text-sizer').remove();
       return titles;
@@ -349,7 +414,7 @@ window.titleCreator={
         dd=this.functions.getDocument();
         break;
     }
-    pdfMake.createPdf(dd).print();
+    pdfMake.createPdf(dd).open();
   },
   getOptions:function(){
     if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
@@ -361,11 +426,32 @@ window.titleCreator={
     if(this.options.paperType=='standard') this.options.paperType='letter';
     return this.options;
   },
+  getFont:function(){
+    return JSON.parse(JSON.stringify(titleCreator.fonts[titleCreator.options.font]))
+  },
+  getStyle:function(){
+    var s=JSON.parse(JSON.stringify(this.styles[this.options.style]));
+    var o=this.getOptions();
+    if(o.paperType!='letter') {
+      s.artistTint='#ffffff';
+      s.titleTint='#ffffff';
+      s.lineColor='#ffffff';
+    } else {
+      if(!s.hasOwnProperty('artistTint'))
+        s.artistTint=((o.artistFillColor) ? shadeColor2(o.primaryColor,0.8) : '#ffffff');
+      if(!s.hasOwnProperty('titleTint'))
+        s.titleTint=((o.titleFillColor) ? shadeColor2(o.primaryColor,0.8) : '#ffffff');
+      if(!s.hasOwnProperty('lineColor'))
+        s.lineColor=o.primaryColor;
+    }
+    return s;
+  },
   setOption:function(option,value){
     this.options[option]=value;
     localStorage.setItem('options',JSON.stringify(this.getOptions()));
   },
   reset:function(){
+    titleCreator.titles=[];
     localStorage.removeItem('titles');
   },
   getTitles:function(formatted=false){
@@ -454,17 +540,7 @@ pdfMake.fonts = {
 }
 
 
-function getTintedColor(color, v) {
-  if (color.length >6) { color= color.substring(1,color.length)}
-  var rgb = parseInt(color, 16); 
-  var r = Math.abs(((rgb >> 16) & 0xFF)+v); if (r>255) r=r-(r-255);
-  var g = Math.abs(((rgb >> 8) & 0xFF)+v); if (g>255) g=g-(g-255);
-  var b = Math.abs((rgb & 0xFF)+v); if (b>255) b=b-(b-255);
-  r = Number(r < 0 || isNaN(r)) ? 0 : ((r > 255) ? 255 : r).toString(16); 
-  if (r.length == 1) r = '0' + r;
-  g = Number(g < 0 || isNaN(g)) ? 0 : ((g > 255) ? 255 : g).toString(16); 
-  if (g.length == 1) g = '0' + g;
-  b = Number(b < 0 || isNaN(b)) ? 0 : ((b > 255) ? 255 : b).toString(16); 
-  if (b.length == 1) b = '0' + b;
-  return "#" + r + g + b;
-} 
+function shadeColor2(color, percent) {   
+  var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+  return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+}
