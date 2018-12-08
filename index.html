@@ -13,36 +13,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crel/3.1.0/crel.min.js"></script>
     <script src="https://use.fontawesome.com/434809f2b1.js"></script>
     <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <style>
       @import url('https://fonts.googleapis.com/css?family=Work+Sans:300,700');
-      .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus { color: #FFC930; }
+      .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus { color: #FFD166; }
       .navbar.bg-default { background: #eeeeee; padding: .5rem 1rem; margin-top: 70px; }
       .navbar.bg-default a { color: #777777; }
       .navbar.bg-default a:hover { color: #3498DB; }
-      .navbar.bg-gray { background-color: #575e68 !important; }
-      .navbar .navbar-brand { font-weight:200; font-family: 'Work Sans', sans-serif; color: #FFC930; }
+      .navbar.bg-gray { background-color: #26547C !important; }
+      .navbar .navbar-brand { font-weight:200; font-family: 'Work Sans', sans-serif; color: #FFD166; }
       .navbar .navbar-brand strong { font-weight: 700; }
-      .main-content { margin-top: 100px; }
+      .main-content { margin-top: 150px; }
       #welcome-message { font-family: 'Work Sans', sans-serif; }
       #welcome-message h2 { font-weight: 700; }
       .right { text-align: right; }
       .btn { border-radius: .17rem; border-width: 2px; }
-      .btn.btn-default { color: #575e68; }
-      .btn.btn-info { background: #FFC930; border-color: #FFC930; color: #575e68; }
+      .btn:focus, .btn.focus { box-shadow: none; }
+      .btn.btn-default { color: #888; border-color: #dddddd; }
+      .btn.btn-success { color: #ffffff; background-color: #06D6A0; border-color: #06D6A0; }
+      .btn.btn-primary { color: #ffffff; background-color: #6487A7; border-color: #6487A7; }
+      .btn.btn-info { background: #FFD166; border-color: #FFD166; color: #575e68; }
+      .btn.btn-danger { background: #C05E31; border-color: #C05E31; color: #ffffff; }
       .btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active, .show > .btn-info.dropdown-toggle { background: #E4AA06; border-color: #E4AA06 }
+      .btn-nofill { background-color: transparent; }
       .title input { border-radius: 0; border: 1px solid #fff; padding-left: 0; }
       .title input:focus, .title input:active { border-color: #fff; border-bottom: 1px solid #ced4da; box-shadow: none; background-color: #f5f5f5; }
       .modal-content { border: none; border-radius: .2rem; }
-      .modal-header { padding: 1rem .75rem; background-color: transparent; border: none; border-top-left-radius: .2rem; border-top-right-radius: .2rem; font-size: 1.2rem; color: #555555; text-align: center; display: block; }
-      .modal-footer { justify-content: center; }
-      .modal-footer .btn { padding: .375rem 1.35rem; }
+      .modal-header { padding: 2rem .75rem 1rem .75rem; background-color: transparent; border: none; border-top-left-radius: .2rem; border-top-right-radius: .2rem; font-size: 1.2rem; color: #555555; text-align: center; display: block; }
+      .modal-header img { height: 40px; display: block; margin-left: auto; margin-right: auto; margin-bottom: .75rem; }
+      .modal-footer { justify-content: center; border-top: none; padding-bottom: 2rem; }
+      .modal-footer .btn { padding: .5rem 1.5rem; width: 35%; }
       .modal .close { color: #555555; opacity: 1; }
-      .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before { background-color: #FFC930; }
+      .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before { background-color: #FFD166; }
       #hidden-file { display: none; }
       .table .custom-control-label, .table .custom-control { display: inline; }
       #title-menu { position: absolute; display:none; }
       .title-menu-button { padding-left: .5rem; padding-right: .5rem; }
       a.title-menu-button { color: #555555; }
+      .navbar { padding: .75rem; }
+      .navbar.toolbar { margin-top: 60px; padding: .5rem; background-color: #26547C !important; }
+      .navbar .btn { margin-right: 4px; border: none; }
+      .navbar .btn.btn-default { background-color: #26547C; }
+      .modal-body svg { display: block; margin-left: auto; margin-right: auto; }
     </style>
   </head>
   <body>
@@ -52,27 +64,27 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="modal" data-target="#add-modal">Add title</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="write-document" href="#">Print</a>
-          </li>
-        </ul>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="nav navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" id="menu-options" href="#">Options</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" id="menu-export" href="#">Import/Export</a>
             </li>
           </ul>
-
         </div>
       </div>
     </div>
+    <nav class="navbar navbar-light bg-light fixed-top toolbar">
+      <div class="container">
+      <form class="form-inline">
+        <div class="input-group">
+	<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-modal"><img src="images/record.svg" style="height:21px"/></button>
+	<button type="button" class="btn btn-default" id="menu-options"><img src="images/design.svg" style="height:21px"/></button>
+	<button type="button" class="btn btn-default" id="write-document"><img src="images/print-white.svg" style="height:21px"/></button>
+        </div>
+      </form>
+    </nav>
 
     <div class="container main-content">
       <div class="bs-docs-section clearfix">
@@ -103,20 +115,11 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            Options
+            <img src="images/design-dark.svg"/>
+            Design
           </div>
           <div class="modal-body">
             <fieldset>
-              <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-uppercase">
-                  <label class="custom-control-label" for="option-uppercase">Force uppercase</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-quotes">
-                  <label class="custom-control-label" for="option-quotes">Add quotes to titles</label>
-                </div>
-              </div>
               <div class="form-group">
                 <label for="option-paperType">Paper type</label>
                 <select class="form-control" id="option-paperType">
@@ -132,33 +135,46 @@
                 </select>
               </div>
               <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="option-uppercase">
+                  <label class="custom-control-label" for="option-uppercase">Force uppercase</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="option-quotes">
+                  <label class="custom-control-label" for="option-quotes">Add quotes to titles</label>
+                </div>
+              </div>
+              <div class="form-group">
                 <label for="option-style">Style</label>
                 <select class="form-control onlyplain" id="option-style">
                 </select>
               </div>
               <div class="form-group">
-                <label for="option-primaryColor">Color</label>
-                <select class="form-control onlyplain" id="option-primaryColor">
+                <label for="option-primaryColor">Color</label><br>
+                <select class="form-control onlyplain nocolor" id="option-primaryColor">
                   <option value="#ff0000">Red</option>
                   <option value="#00a0de">Blue</option>
                   <option value="#5fae6f">Green</option>
                   <option value="#80578f">Purple</option>
+                  <option value="#EE6B3F">Orange</option>
                 </select>
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input onlyplain" id="option-artistFillColor" checked="">
+                  <input type="checkbox" class="custom-control-input onlyplain nocolor" id="option-artistFillColor" checked="">
                   <label class="custom-control-label" for="option-artistFillColor">Colored background for artist</label>
                 </div>
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input onlyplain" id="option-titleFillColor" checked="">
+                  <input type="checkbox" class="custom-control-input onlyplain nocolor" id="option-titleFillColor" checked="">
                   <label class="custom-control-label" for="option-titleFillColor">Colored background for titles</label>
                 </div>
               </div>
-              <button type="button" class="btn btn-info" id="options-clear">Clear library</button>
             </fieldset>
+	    <p style="align:center:">
+	      <img src="images/designs/arrows.svg" style="width: 25%;" id="design-preview" class="svg" />
+            </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-info save-options">Save</button>
+            <button type="button" class="btn btn-default btn-nofill" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success save-options">Save</button>
           </div>
         </div>
       </div>
@@ -168,34 +184,31 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            Add new title
+            <img src="images/record-dark.svg"/>
+            Add record 
           </div>
           <div class="modal-body">
             <fieldset>
               <div class="form-group">
-                <label for="add-side-a">Side A</label>
-                <input type="text" class="form-control" id="add-side-a"/>
+                <input type="text" class="form-control" id="add-side-a" placeholder="Side A"/>
                 <div class="invalid-feedback"></div>
               </div>
               <div class="form-group">
-                <label for="add-side-b">Side B</label>
-                <input type="text" class="form-control" id="add-side-b"/>
+                <input type="text" class="form-control" id="add-side-b" placeholder="Side B"/>
                 <div class="invalid-feedback"></div>
               </div>
               <div class="form-group">
-                <label for="add-artist">Artist</label>
-                <input type="text" class="form-control" id="add-artist"/>
+                <input type="text" class="form-control" id="add-artist" placeholder="Artist"/>
                 <div class="invalid-feedback"></div>
               </div>
               <div class="form-group">
-                <label for="add-artist-b">Side B Artist (if different)</label>
-                <input type="text" class="form-control" id="add-artist-b"/>
+                <input type="text" class="form-control" id="add-artist-b" placeholder="Side B artist (if different)"/>
               </div>
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-info save">Save</button>
+            <button type="button" class="btn btn-default btn-nofill" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success save">Save</button>
           </div>
         </div>
       </div>
@@ -206,7 +219,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            Export / Import
+            Library
           </div>
           <div class="modal-body">
             <fieldset>
@@ -220,17 +233,21 @@
                   <label class="custom-control-label" for="export-titles">Export library only (CSV)</label>
                 </div>
               </div>
-              <button type="button" class="btn btn-info" id="export">Export</button>
+              <button type="button" class="btn btn-primary" id="export">Export</button>
             </fieldset>
             <hr/>
             <fieldset>
               <input id="hidden-file" type="file" accept=".json,.csv" />
               <p><small><strong>Note</strong>: To import a library in CSV format, your file must be arranged with exactly three columns as follows: Side A, Side B, Artist</small></p>
-              <button type="button" class="btn btn-info" id="import" onclick="document.getElementById('hidden-file').click();">Import</button>
+              <button type="button" class="btn btn-primary" id="import" onclick="document.getElementById('hidden-file').click();">Import</button>
+            </fieldset>
+            <hr/>
+            <fieldset>
+              <button type="button" class="btn btn-danger" id="options-clear">Clear library</button>
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default btn-nofill" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -434,15 +451,35 @@
       
       $('#option-paperType').on('change',function(e){
         e.preventDefault();
+	//set note to use LEGAL not letter
         if($(this).val()=='single12')
           $('#paperType-message').html('<small><strong>Note:</strong> For these strips, make sure you set the paper type to LEGAL when printing</small>');
         else
           $('#paperType-message').text('');
+        //only enable valid options depending on paperType (letter paper needs designs, others are pre-printed)
         if($(this).val()=='letter') {
           $('.onlyplain').attr('disabled',false);
+          $('#option-style').change(); //update the preview
 	} else {
           $('.onlyplain').attr('disabled',true);
+          $('#design-preview').attr('src','images/designs/plain.svg');
+	  inlineSVG($('#design-preview'));
         }
+      });
+
+      $('#option-style').on('change',function(e){
+        e.preventDefault();
+        if($(this).val()=='holly' || $(this).val()=='candycane')
+          $('.nocolor').attr('disabled',true);
+        else
+          $('.nocolor').attr('disabled',false);
+
+      });
+
+      $('#option-artistFillColor, #option-titleFillColor, #option-primaryColor, #option-style, #option-font, #option-uppercase, #option-quotes').on('change',function(e) {
+        e.preventDefault();
+        $('#design-preview').attr('src','images/designs/'+$('#option-style').val()+'.svg');
+	inlineSVG($('#design-preview'));
       });
 
       $('#menu-options').on('click',function(e) {
@@ -457,6 +494,11 @@
         $('#option-font').val(options.font);
         $('#option-style').val(options.style);
         $('#option-paperType').change(); //sets note correctly
+        $('#option-style').change(); //sets note correctly
+
+        $('#design-preview').attr('src','images/designs/'+options.style+'.svg');
+	inlineSVG($('#design-preview'));
+
         $('#options-modal').modal();
       });
 
@@ -493,7 +535,6 @@
         $('#option-style').append(crel('option',{'value':key},titleCreator.styles[key].name));
       });
 
-      //insert the custom font we've already pulled in for PDFMake
       var style = document.createElement('style');
       style.type = 'text/css';
       for(var key in pdfMake.vfs) {
@@ -504,6 +545,70 @@
       }
 
       document.getElementsByTagName('head')[0].appendChild(style);
+
+      function addSVGText($g,text,options) {
+        var newText = document.createElementNS('http://www.w3.org/2000/svg',"text");
+	var k=Object.keys(options);
+        k.forEach(function(key) {
+          newText.setAttributeNS(null,key,options[key]);
+        });
+        var textNode = document.createTextNode(text);
+        newText.appendChild(textNode);
+        $g.append(newText);
+      }
+
+      function buildPreview() {
+        var pc=$('#option-primaryColor').val(),
+	    t=shadeColor2(pc,0.8);
+        $('#design-preview #design').css('fill',pc);
+        if($('#option-artistFillColor').is(':checked'))
+          $('#design-preview #artist_fill').css('fill',t);
+        if($('#option-titleFillColor').is(':checked'))
+          $('#design-preview #title_fill').css('fill',t);
+
+	var uc=$('#option-uppercase').is(":checked"),
+	uq=$('#option-quotes').is(":checked"),
+	text=[
+          ((uq)?'"':'')+((uc)?'A SIDE':'A Side')+((uq)?'"':''),
+          ((uq)?'"':'')+((uc)?'B SIDE':'B Side')+((uq)?'"':''),
+          ((uc)?'ARTIST':'Artist')
+        ];
+
+        var $g=$('#options-modal svg g');
+	var font=$('#option-font option:selected').text();
+
+	var options={"x":112.5,"y":19,"text-anchor":"middle","font-size":"13px","font-family":$('#option-font option:selected').text()}
+        addSVGText($g,text[0],options);
+
+        options["y"]=63;
+        addSVGText($g,text[1],options);
+
+        options["y"]=36;
+        options["alignment-baseline"]="central";
+        options["font-size"]="10px";
+        addSVGText($g,text[2],options);
+      }
+
+      function inlineSVG($img,primaryColor) {
+        var imgID = $img.attr('id');
+        var imgClass = $img.attr('class');
+        var imgURL = $img.attr('src');
+        jQuery.get(imgURL, function(data) {
+          var $svg = jQuery(data).find('svg');
+          if(typeof imgID !== 'undefined') {
+            $svg = $svg.attr('id', imgID);
+          }
+          if(typeof imgClass !== 'undefined') {
+            $svg = $svg.attr('class', imgClass+' replaced-svg');
+            $svg = $svg.removeAttr('xmlns:a');
+            if(!$svg.attr('viewBox') && $svg.attr('height') && $svg.attr('width')) {
+              $svg.attr('viewBox', '0 0 ' + $svg.attr('height') + ' ' + $svg.attr('width'))
+            }
+            $img.replaceWith($svg);
+            buildPreview();
+	  }
+        }, 'xml');
+      };
     });
   </script>
 </html>
