@@ -12,27 +12,31 @@ window.titleCreator={
   styles: {
     arrows:{
       name:'Arrows',
+      sname:'arrows',
       maxwidth:280,
-      margins:0
+      margins:8
     },
     diamond:{
       name:'Diamond',
+      sname:'diamond',
       maxwidth:280,
-      margins:0
+      margins:8
     },
     holly:{
       name:'Holly',
+      sname:'holly',
       artistTint:'#ffffff',
       titleTint:'#ffffff',
-      lineColor:'#ff0000',
+      primaryColor:'#ff0000',
       maxwidth:242,
       margins:22
     },
     candycane:{
       name:'Candy Cane',
+      sname:'candycane',
       artistTint:'#ffffff',
       titleTint:'#ABDCA8',
-      lineColor:'#D3444A',
+      primaryColor:'#D3444A',
       maxwidth:242,
       margins:22
     }
@@ -44,79 +48,14 @@ window.titleCreator={
   },
   titles: {},
   functions:{
-    drawDesign: function(style) {
-      var s=titleCreator.getStyle();
-      switch(style) {
-        case 'arrows':
-          return [
-            {
-              type: 'line',
-              x1: 0, y1: 36,
-              x2: 224, y2: 36,
-              lineWidth: 9,
-              lineColor: titleCreator.options.primaryColor,
-            },
-            {
-              type: 'rect',
-              x: 32.5,
-              y: 27,
-              w: 160,
-              h: 18,
-              color: s.artistTint,
-              lineColor: titleCreator.options.primaryColor,
-              lineWidth: 1.5
-            },
-            {
-              type: 'polyline',
-              lineWidth: 3,
-              closePath: true,
-              points: [{x: 32, y: 27}, {x: 32, y: 45}, {x: 40, y: 36}],
-              color: s.lineColor 
-            },
-            {
-              type: 'polyline',
-              lineWidth: 3,
-              closePath: true,
-              points: [{x: 193, y: 27}, {x: 193, y: 45}, {x: 184, y: 36}],
-              color: s.lineColor
-            }
-          ];
-          break;
-        case 'diamond':
-          return [
-            {
-              type: 'line',
-              x1: 0, y1: 36,
-              x2: 224, y2: 36,
-              lineWidth: 9,
-              lineColor: s.lineColor,
-            },
-            {
-              type: 'polyline',
-              lineWidth: 1.5,
-              closePath: true,
-              points: [{x: 35, y: 27},{x: 189, y: 27},{x: 198, y: 36},{x: 189, y: 45},{x: 35, y: 45},{x: 27, y: 36}],
-              lineColor: s.lineColor,
-              color: s.artistTint
-            }
-          ];
-          break;
-        case 'holly':
-          return [];
-          break;
-        case 'candycane':
-          return [];
-          break;
-      }
-    },
-    buildCanvases: function() {
-      var style=titleCreator.getStyle();
+    buildCanvases: function(titles) {
       var b=[];
-      for(i=0;i<20;i++) {
+      for(i=0;i<titles.length;i++) {
+        var style=titles[i].style;
         var j=((i<10) ? i : i - 10);
         var x=((i<10) ? 81.5 : 305.5 );
         var y=(j*72)+22.5;
-        if(titleCreator.options.style=="holly") {
+        if(style.sname=="holly") {
           b.push({
             image: 'data:image/png;base64,'+pdfMake.vfs['holly.png'],
             width: 200,
@@ -125,18 +64,27 @@ window.titleCreator={
           b.push({
             canvas: [
               {
+                type: 'rect',
+                x: 0,
+                y: 0,
+                w: 224,
+                h: 72,
+                lineColor: style.primaryColor,
+                lineWidth: 1
+              },
+              {
                 type: 'line',
                 x1: 30, y1: 26,
                 x2: 194, y2: 26,
                 lineWidth: 1.5,
-                lineColor: style.lineColor
+                lineColor: style.primaryColor
               },
               {
                 type: 'line',
                 x1: 30, y1: 46,
                 x2: 194, y2: 46,
                 lineWidth: 1.5,
-                lineColor: style.lineColor
+                lineColor: style.primaryColor
               }
             ],
             absolutePosition: {x: x, y: y}
@@ -146,7 +94,7 @@ window.titleCreator={
             width: 200,
             absolutePosition: {x: x+200, y: y+20}
           })
-        } else if(titleCreator.options.style=='candycane') {
+        } else if(style.sname=='candycane') {
           b.push({
             image: 'data:image/png;base64,'+pdfMake.vfs['candycane.png'],
             width: 22,
@@ -156,12 +104,21 @@ window.titleCreator={
             canvas: [
               {
                 type: 'rect',
+                x: 0,
+                y: 0,
+                w: 224,
+                h: 72,
+                lineColor: style.primaryColor,
+                lineWidth: 1
+              },
+              {
+                type: 'rect',
                 x: 32.5,
                 y: 27,
                 w: 160,
                 h: 18,
                 color: style.artistTint,
-                lineColor: style.lineColor,
+                lineColor: style.primaryColor,
                 lineWidth: 1.5
               },
               {
@@ -169,14 +126,14 @@ window.titleCreator={
                 lineWidth: 3,
                 closePath: true,
                 points: [{x: 32, y: 27}, {x: 32, y: 45}, {x: 40, y: 36}],
-                color: style.lineColor 
+                color: style.primaryColor 
               },
               {
                 type: 'polyline',
                 lineWidth: 3,
                 closePath: true,
                 points: [{x: 193, y: 27}, {x: 193, y: 45}, {x: 184, y: 36}],
-                color: style.lineColor
+                color: style.primaryColor
               }
             ],
             absolutePosition: {x: x, y: y}
@@ -186,71 +143,160 @@ window.titleCreator={
             width: 22,
             absolutePosition: {x: x+197, y: y+8}
           })
-        } else {
+        } else if(style.sname=="diamond") {
           b.push({
-            canvas: this.drawDesign(titleCreator.options.style),
+            canvas:[
+              {
+                type: 'rect',
+                x: 0,
+                y: 0,
+                w: 224,
+                h: 72,
+                lineColor: style.primaryColor,
+                lineWidth: 1
+              },
+              {
+                type: 'line',
+                x1: 0, y1: 36,
+                x2: 224, y2: 36,
+                lineWidth: 9,
+                lineColor: style.primaryColor,
+              },
+              {
+                type: 'polyline',
+                lineWidth: 1.5,
+                closePath: true,
+                points: [{x: 35, y: 27},{x: 189, y: 27},{x: 198, y: 36},{x: 189, y: 45},{x: 35, y: 45},{x: 27, y: 36}],
+                lineColor: style.primaryColor,
+                color: style.artistTint
+              }
+            ],
             absolutePosition: {x: x, y: y}
-          })
+          });
+        } else if(style.sname=="arrows") {
+          b.push({
+            canvas:[
+              {
+                type: 'rect',
+                x: 0,
+                y: 0,
+                w: 224,
+                h: 72,
+                lineColor: style.primaryColor,
+                lineWidth: 1
+              },
+              {
+                type: 'line',
+                x1: 0, y1: 36,
+                x2: 224, y2: 36,
+                lineWidth: 9,
+                lineColor: style.primaryColor,
+              },
+              {
+                type: 'rect',
+                x: 32.5,
+                y: 27,
+                w: 160,
+                h: 18,
+                color: style.artistTint,
+                lineColor: style.primaryColor,
+                lineWidth: 1.5
+              },
+              {
+                type: 'polyline',
+                lineWidth: 3,
+                closePath: true,
+                points: [{x: 32, y: 27}, {x: 32, y: 45}, {x: 40, y: 36}],
+                color: style.primaryColor 
+              },
+              {
+                type: 'polyline',
+                lineWidth: 3,
+                closePath: true,
+                points: [{x: 193, y: 27}, {x: 193, y: 45}, {x: 184, y: 36}],
+                color: style.primaryColor
+              }
+            ],
+            absolutePosition: {x: x, y: y}
+          });
         }
+	      /*
+	if(true){
+          b.push({
+            image: 'data:image/png;base64,'+pdfMake.vfs['star.png'],
+            width: 12,
+            absolutePosition: { x:x, y:y+30 }
+          });
+	}
+	*/
       }
       return b;
     },
     buildTable: function(titles,last,columns,rows){
-      var style=titleCreator.getStyle();
-      var f=titleCreator.getFont();
       var b=[];
-
-      for(i=0;i<rows;i++){
+      for(i=0;i<titles.length;i++){
+        var t=titles[i];
         var x=[{
-          text: ((titles.length>i) ? titles[i].aside : ''),
-          style:'title',
-          margin:[style.margins,((titles[i])?titles[i].margins.aside:0),style.margins,0],
-          border: [true, true, true, false],
-          fillColor:style.titleTint
+          text: ((titles.length>i) ? t.aside : ''),
+          margin:[t.style.margins,((t)?t.style.font.margins.aside:0),t.style.margins,0],
+          border: [false, false, false, false],
+          fillColor:t.style.titleTint,
+          font:t.style.font.name,
+          fontSize:t.style.font.titleSize,
+          bold:true
         }];
         var y=[{
-          text: ((titles.length>i) ? titles[i].artist : ''),
-          style:'artist',
-          margin:[style.margins,((titles[i])?titles[i].margins.artist:0),style.margins,0],
-          border: [true, false, true, false],
-          fillColor:style.titleTint
+          text: ((titles.length>i) ? t.artist : ''),
+          margin:[t.style.margins,((t)?t.style.font.margins.artist:0),t.style.margins,0],
+          border: [false, false, false, false],
+          fillColor:t.style.titleTint,
+          font:t.style.font.name,
+          fontSize:t.style.font.artistSize,
+          bold:true
         }];
         var z=[{
-          text: ((titles.length>i) ? titles[i].bside : ''),
-          style:'title',
-          margin:[style.margins,((titles[i])?titles[i].margins.bside:0),style.margins,0],
-          border: [true, false, true, true],
-          fillColor:style.titleTint
+          text: ((titles.length>i) ? t.bside : ''),
+          margin:[t.style.margins,((t)?t.style.font.margins.bside:0),t.style.margins,0],
+          border: [false, false, false, false],
+          fillColor:t.style.titleTint,
+          font:t.style.font.name,
+          fontSize:t.style.font.titleSize,
+          bold:true
         }];
-
         if(columns==2) {
+          t=((titles.length>i+rows)?titles[i+rows]:false);
           x.push({
-            text: ((titles.length>i+rows) ? titles[i+rows].aside : ''),
-            style:'title',
-            margin:[style.margins,((titles[i+rows])?titles[i+rows].margins.aside:0),style.margins,0],
-            border: [true, true, true, false],
-            fillColor:style.titleTint
+            text: ((t) ? t.aside : ''),
+            margin:((t)?[t.style.margins,t.style.font.margins.aside,t.style.margins,0]:[0,0,0,0]),
+            border: [false, false, false, false],
+            fillColor:((t)?t.style.titleTint:false),
+            font:((t)?t.style.font.name:false),
+            fontSize:((t)?t.style.font.titleSize:0),
+            bold:true
           });
           y.push({
-            text: ((titles.length>i+rows) ? titles[i+rows].artist : ''),
-            style:'artist',
-            margin:[style.margins,((titles[i+rows])?titles[i+rows].margins.artist:0),style.margins,0],
-            border: [true, false, true, false],
-            fillColor:style.titleTint
+            text: ((t) ? t.artist : ''),
+            margin:((t)?[t.style.margins,t.style.font.margins.artist,t.style.margins,0]:[0,0,0,0]),
+            border: [false, false, false, false],
+            fillColor:((t)?t.style.titleTint:false),
+            font:((t)?t.style.font.name:false),
+            fontSize:((t)?t.style.font.artistSize:0),
+            bold:true
 	  });
           z.push({
-            text: ((titles.length>i+rows) ? titles[i+rows].bside : ''),
-            style:'title',
-            margin:[style.margins,((titles[i+rows])?titles[i+rows].margins.bside:0),style.margins,0],
-            border: [true, false, true, true],
-            fillColor:style.titleTint
+            text: ((t) ? t.bside : ''),
+            margin:((t)?[t.style.margins,t.style.font.margins.bside,t.style.margins,0]:[0,0,0,0]),
+            border: [false, false, false, false],
+            fillColor:((t)?t.style.titleTint:false),
+            font:((t)?t.style.font.name:false),
+            fontSize:((t)?t.style.font.titleSize:0),
+            bold:true
 	  });
         }
-        
+
         b.push(x);
         b.push(y);
         b.push(z);
-
       };
       return {
         'alignment': 'center',
@@ -259,69 +305,43 @@ window.titleCreator={
           widths: ((columns==2) ? [215,215] : [215]),
           body: b
         },
-        layout: {
-          hLineWidth: function (i, node) {return 1},
-          vLineWidth: function (i, node) {return 1},
-          hLineColor: style.lineColor,
-          vLineColor: style.lineColor
-        },
         'pageBreak':((last===false) ? 'after' : '')
       }
     },
-    buildPages: function(columns=2,rows=10) {
+    buildPages: function(ts,columns=2,rows=10) {
       var p=[];
       var last=false;
-      var titles=titleCreator.getTitles(true);
+      var tx=titleCreator.getTitles(true);
+      var titles=[];
+      if(ts.length>0) {
+        ts.forEach(function(t){
+          titles.push(tx[t]);
+        });
+      } else {
+        titles=tx;
+      }
       while(titles.length>0) {
         var page=titles.splice(0,rows*columns);
         if(titles.length==0) last=true;
-        if(titleCreator.options.paperType=="letter")
-          p.push(this.buildCanvases());
+        if(titleCreator.getPaperType()=="letter")
+          p.push(this.buildCanvases(page));
         p.push(this.buildTable(page,last,columns,rows));
       }
       return p;
     },
-    getDocument: function() {
-      var f=titleCreator.getFont();
+    getDocument: function(titles) {
       var c = {
-        content: this.buildPages(),
-        styles: {
-          artist: {
-            fontSize: f.artistSize,
-            bold: true,
-            color: "#000000",
-            font: f.name
-          },
-          title: {
-            fontSize: f.titleSize,
-            bold: true,
-            color: "#000000",
-            font: f.name
-          }
-        },
+        content: this.buildPages(titles),
         pageSize:'LETTER',
         pageMargins: [ 81, 22.5, 0, 0 ]
       }
       return c;
     },
-    single12:function(){
-      var f=titleCreator.getFont();
+    single12:function(titles){
       var columns=1,
           rows=12;
       var c = {
-        content: this.buildPages(columns,rows),
-        styles: {
-          artist: {
-            fontSize: f.artistSize,
-            bold: true,
-            font: f.name 
-          },
-          title: {
-            fontSize: f.titleSize,
-            bold: true,
-            font: f.name
-          }
-        },
+        content: this.buildPages(titles,columns,rows),
         pageSize:{width:225, height: 936},
         pageMargins: [ 0, 31.5, 0, 0 ],
         pageSize:'LEGAL',
@@ -329,49 +349,41 @@ window.titleCreator={
       }
       return c; 
     },
-    double10:function(){
-      var f=titleCreator.getFont();
+    double10:function(titles){
       var columns=2,
           rows=5;
       var c = {
-        content: this.buildPages(columns,rows),
-        styles: {
-          artist: {
-            fontSize: f.artistSize,
-            bold: true,
-            font: f.name
-          },
-          title: {
-            fontSize: f.titleSize,
-            bold: true,
-            font: f.name
-          }
-        },
+        content: this.buildPages(titles,columns,rows),
         pageSize:'LETTER',
         pageMargins: [ 81, 22.5, 0, 0 ]
       }
       return c; 
     },
     formatTitles: function(titles) {
-      var f=titleCreator.getFont();
-      var s=titleCreator.getStyle();
-      $('body').append(crel('span',{'style':'font-family:'+f.name+';font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
-
+      $('body').append(crel('span',{'style':'font-family:Arial;font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
+      var toArray=false;
+      if(!Array.isArray(titles)) {
+        titles=[titles];
+        toArray=true;
+      }
       titles.forEach(function(e){
+        e.style=titleCreator.getStyle(((e.style)?e.style:false));
+        e.style.font=titleCreator.getFont(((e.font)?e.font:titleCreator.getOptions('font')));
+
         var awrap=false,bwrap=false;
-        if(titleCreator.options.allCaps) {
+        if(e.style.allCaps) {
           e.aside=e.aside.toUpperCase();
           e.bside=e.bside.toUpperCase();
           e.artist=e.artist.toUpperCase();
         }
-        if(titleCreator.options.quotes) {
+        if(e.style.quotes) {
           e.aside='"'+e.aside+'"';
           e.bside='"'+e.bside+'"';
         }
-        var w=$('#text-sizer').text(e.aside).width();
-        if(w>s.maxwidth) awrap=true;
+        var w=$('#text-sizer').css('font-family',e.style.font.name).text(e.aside).width();
+        if(w>e.style.maxwidth) awrap=true;
         w=$('#text-sizer').text(e.bside).width();
-        if(w>s.maxwidth) bwrap=true;
+        if(w>e.style.maxwidth) bwrap=true;
 
 ///still needs to take into account long songs with braces... as well as whether it makes more sense to split on braces than length (so braces first, then check for length)
         if(!awrap) {
@@ -389,61 +401,70 @@ window.titleCreator={
           }
         }
 
-        var m=f.margins;
-        e.margins={
-	  aside:m.aside[((awrap)?0:1)],
-	  artist:m.artist[0],
-	  bside:m.bside[((bwrap)?0:1)]
-	};
+        e.style.font.margins={
+	  aside:e.style.font.margins.aside[((awrap)?0:1)],
+	  artist:e.style.font.margins.artist[0],
+	  bside:e.style.font.margins.bside[((bwrap)?0:1)]
+        }
       });
       $('#text-sizer').remove();
+
+      if(toArray) titles=titles[0];
       return titles;
     }
   },
-  start:function() {
-    var o=this.getOptions();
+  start:function(titles) {
     var dd={};
-    switch(o.paperType) {
+    switch(this.getPaperType()) {
       case 'single12':
-        dd=this.functions.single12();
+        dd=this.functions.single12(titles);
         break;
         case 'double10':
-          dd=this.functions.double10();
+          dd=this.functions.double10(titles);
           break;
       default:
-        dd=this.functions.getDocument();
+        dd=this.functions.getDocument(titles);
         break;
     }
     pdfMake.createPdf(dd).open();
   },
-  getOptions:function(){
+  getPaperType:function(){
+    return this.options.paperType;
+  },
+  getOptions:function(x=false){
     if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
     if(!titleCreator.options.hasOwnProperty('artistFillColor')) this.options.artistFillColor='false';
     if(!titleCreator.options.hasOwnProperty('titleFillColor')) this.options.titleFillColor='false';
     if(!titleCreator.options.hasOwnProperty('font')) this.options.font='Retro';
-    if(!titleCreator.options.hasOwnProperty('design')) this.options.design='arrows';
     if(!titleCreator.options.hasOwnProperty('paperType')) this.options.paperType='letter';
-    if(this.options.paperType=='standard') this.options.paperType='letter';
+    if(this.options.paperType=='standard') this.options.paperType='letter'
+    if(x && this.options.hasOwnProperty(x))
+      return this.options[x];
     return this.options;
   },
-  getFont:function(){
-    return JSON.parse(JSON.stringify(titleCreator.fonts[titleCreator.options.font]))
+  getFont:function(f){
+    return JSON.parse(JSON.stringify(titleCreator.fonts[f]))
   },
-  getStyle:function(){
-    var s=JSON.parse(JSON.stringify(this.styles[this.options.style]));
+  getStyle:function(t){
     var o=this.getOptions();
+    var s=JSON.parse(JSON.stringify(this.styles[((t)?t:o.style)]));
     if(o.paperType!='letter') {
       s.artistTint='#ffffff';
       s.titleTint='#ffffff';
-      s.lineColor='#ffffff';
+      s.primaryColor='#ffffff';
     } else {
       if(!s.hasOwnProperty('artistTint'))
         s.artistTint=((o.artistFillColor) ? shadeColor2(o.primaryColor,0.8) : '#ffffff');
       if(!s.hasOwnProperty('titleTint'))
         s.titleTint=((o.titleFillColor) ? shadeColor2(o.primaryColor,0.8) : '#ffffff');
-      if(!s.hasOwnProperty('lineColor'))
-        s.lineColor=o.primaryColor;
+      if(!s.hasOwnProperty('primaryColor'))
+        s.primaryColor=o.primaryColor;
     }
+    var k=Object.keys(o);
+    k.forEach(function(key){
+      if(key!='paperType')
+        if(!s.hasOwnProperty(key)) s[key]=o[key];
+    });
     return s;
   },
   setOption:function(option,value){
@@ -451,8 +472,9 @@ window.titleCreator={
     localStorage.setItem('options',JSON.stringify(this.getOptions()));
   },
   reset:function(){
-    titleCreator.titles=[];
+    titleCreator.titles={};
     localStorage.removeItem('titles');
+    window.location.reload();
   },
   getTitles:function(formatted=false){
     var t=JSON.parse(JSON.stringify(titleCreator.titles));
@@ -460,10 +482,25 @@ window.titleCreator={
       return this.functions.formatTitles(t);
     return t;
   },
-  getTitle:function(id){
-    var found = titleCreator.titles.find(function(e) {
-      return e.id==id;
-    });
+  getTitle:function(id=false,formatted=false){
+    var t=JSON.parse(JSON.stringify(titleCreator.titles));
+    var found = false;
+    if(!jQuery.isEmptyObject(t)) {
+      found=t.find(function(e) {
+        return e.id==id;
+      });
+    }
+    if(id===false) {
+      found={
+        id:0,
+        artist: 'Artist',
+        aside: 'A-Side',
+        bside: 'B-Side',
+        artistb: ''
+      }
+    }
+    if(formatted && found)
+      return this.functions.formatTitles(found);
     return found;
   },
   addTitles:function(i){
@@ -517,10 +554,8 @@ window.titleCreator={
     return a[a.length-1]+1;
   },
   updateTitle:function(item){
-    var id=item.id;
-    this.removeTitle(id);
-    delete item.id;
-    return this.addTitles([item]);
+    titleCreator.titles[item.id]=item;
+    this.saveTitles();
   }
 }
 
