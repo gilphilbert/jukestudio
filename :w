@@ -115,28 +115,6 @@
           artist:$('#add-artist').val(),
           artistb:$('#add-artist-b').val()
         };
-
-        var o=titleCreator.getOptions();
-        if($('#title-primaryColor').val()!=o.primaryColor) 
-          t.primaryColor=$('#title-primaryColor').val();
-        else
-          delete(t['primaryColor']);
-
-        if($('#title-style').val()!=o.style) 
-          t.style=$('#title-style').val();
-        else
-          delete(t['style']);
-
-        if($('#title-artistFillColor').prop('checked')!=o.artistFillColor) 
-          t.artistFillColor=$('#title-artistFillColor').prop('checked');
-        else
-          delete(t['artistFillColor']);
-
-        if($('#title-titleFillColor').prop('checked')!=o.titleFillColor)
-          t.titleFillColor=$('#title-titleFillColor').prop('checked');
-        else
-          delete(t['titleFillColor']);
-
         if($('#add-modal').data('editID')==undefined) {
           t=titleCreator.addTitles([t]);
         } else {
@@ -255,7 +233,9 @@
           title.style.primaryColor=$('#title-primaryColor').val();
           var tint=shadeColor2(title.style.primaryColor,0.8);
           title.style.artistTint=(($('#title-artistFillColor').prop('checked'))?tint:'#ffffff');
-          title.style.titleTint=(($('#title-titleFillColor').prop('checked'))?tint:'#ffffff');
+          title.style.titleTint=((title.style.titleFillColor==true)?tint:'#ffffff');
+console.log(title);
+          
 	  inlineSVG($('#title-preview'),'images/designs/'+$('#title-style').val()+'.svg',title);
         }
       });
@@ -318,13 +298,8 @@
         var o=titleCreator.getOptions();
         //set correct values for style settings
         $('#title-primaryColor').val(((title.primaryColor))?title.primaryColor:o.primaryColor);
-
-        var afc=((title.hasOwnProperty('artistFillColor'))?title.artistFillColor:o.artistFillColor);
-        $('#title-artistFillColor').prop('checked',afc);
-
-        var tfc=((title.hasOwnProperty('titleFillColor'))?title.titleFillColor:o.titleFillColor);
-        $('#title-titleFillColor').prop('checked',tfc);
-
+        $('#title-artistFillColor').prop('checked',((title.artistFillColor))?true:false);
+        $('#title-titleFillColor').prop('checked',((title.titleFillColor))?true:false);
         //get the name of the style for this title
         var s=((title.style)?title.style:o.style);
         inlineSVG($('#title-preview'),'images/designs/'+s+'.svg',titleCreator.getTitle(id,true));
@@ -391,6 +366,16 @@
           text.style.titleTint=(($('#option-titleFillColor').is(':checked'))?tint:'#ffffff');
           text.style.artistTint=(($('#option-artistFillColor').is(':checked'))?tint:'#ffffff');
         }
+
+        //if(o!=false) {
+        //  var keys=Object.keys(o);
+        //  keys.forEach(function(key){
+        //    if(key=='font')
+        //      text.style.font=titleCreator.getFont(o.font);
+        //    else
+        //      text.style[key]=o[key];
+        //  });
+        // }
 
         //color the design
         $svg.find('#design').css('fill',text.style.primaryColor);

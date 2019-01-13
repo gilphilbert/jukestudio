@@ -234,7 +234,7 @@ window.titleCreator={
     },
     buildTable: function(titles,last,columns,rows){
       var b=[];
-      for(i=0;i<titles.length;i++){
+      for(i=0;i<rows&&i<titles.length;i++){
         var t=titles[i];
         var x=[{
           text: ((titles.length>i) ? t.aside : ''),
@@ -368,15 +368,35 @@ window.titleCreator={
       }
       titles.forEach(function(e){
         e.style=titleCreator.getStyle(((e.style)?e.style:false));
+
+        var k=['primaryColor','font','allCaps','quotes','titleFillColor','artistFillColor'];
+        k.forEach(function(key){
+          if(e.hasOwnProperty(key)) {
+            e.style[key]=e[key];
+            if(key=='titleFillColor')
+              if(e.titleFillColor)
+                e.style.titleTint=shadeColor2(e.style.primaryColor,0.8);
+              else
+                e.style.titleTint='#ffffff';
+            if(key=='artistFillColor')
+              if(e.artistFillColor)
+                e.style.artistTint=shadeColor2(e.style.primaryColor,0.8);
+              else
+                e.style.artistTint='#ffffff';
+          }
+          delete(e[key]);
+        });
+        console.log(e.style);
+
         e.style.font=titleCreator.getFont(((e.font)?e.font:titleCreator.getOptions('font')));
 
         var awrap=false,bwrap=false;
-        if(e.style.allCaps) {
+        if(e.allCaps || (e.allCaps==null && e.style.allCaps)) {
           e.aside=e.aside.toUpperCase();
           e.bside=e.bside.toUpperCase();
           e.artist=e.artist.toUpperCase();
         }
-        if(e.style.quotes) {
+        if(e.style.quotes || (e.quotes==null && e.style.quotes)) {
           e.aside='"'+e.aside+'"';
           e.bside='"'+e.bside+'"';
         }
@@ -406,6 +426,7 @@ window.titleCreator={
 	  artist:e.style.font.margins.artist[0],
 	  bside:e.style.font.margins.bside[((bwrap)?0:1)]
         }
+
       });
       $('#text-sizer').remove();
 
@@ -462,7 +483,7 @@ window.titleCreator={
     }
     var k=Object.keys(o);
     k.forEach(function(key){
-      if(key!='paperType')
+      if(key!='paperType' && key!='style')
         if(!s.hasOwnProperty(key)) s[key]=o[key];
     });
     return s;
