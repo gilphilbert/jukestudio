@@ -386,8 +386,6 @@ window.titleCreator={
           }
           delete(e[key]);
         });
-        console.log(e.style);
-
         e.style.font=titleCreator.getFont(((e.font)?e.font:titleCreator.getOptions('font')));
 
         var awrap=false,bwrap=false;
@@ -396,29 +394,51 @@ window.titleCreator={
           e.bside=e.bside.toUpperCase();
           e.artist=e.artist.toUpperCase();
         }
-        if(e.style.quotes || (e.quotes==null && e.style.quotes)) {
-          e.aside='"'+e.aside+'"';
-          e.bside='"'+e.bside+'"';
-        }
-        var w=$('#text-sizer').css('font-family',e.style.font.name).text(e.aside).width();
-        if(w>e.style.maxwidth) awrap=true;
-        w=$('#text-sizer').text(e.bside).width();
-        if(w>e.style.maxwidth) bwrap=true;
+        $('#text-sizer').css('font-family',e.style.font.name);
 
-///still needs to take into account long songs with braces... as well as whether it makes more sense to split on braces than length (so braces first, then check for length)
-        if(!awrap) {
-          if(e.aside.substr(e.aside.length-1)==')' && e.aside.substr(0,1)!='(') {
-            x=e.aside.split("(");
-            e.aside=x.join("\n(");
-            awrap=true;
+        if(e.aside.indexOf('/')==-1 && (e.aside.lastIndexOf('(')>0 || e.aside.indexOf(')')<e.aside.length<1)) {
+          var x=e.aside.split("(");
+          if(e.aside.indexOf('(')==0)
+            x.join(")\n");
+          else
+            x=x.join("\n(");
+          w=$('#text-sizer').html(x.replace('\n','<br>')).width();
+          if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
+            e.aside=x;
+          awrap=true;
+        } else {
+          if(e.aside.indexOf('/')>=1) {
+            e.aside=e.aside.replace('/',"\n");
+	    awrap=true;
+          } else {
+            w=$('#text-sizer').text(e.aside).width();
+            if(w>e.style.maxwidth) awrap=true;
           }
-        }
-        if(!bwrap) {
-          if(e.bside.substr(e.bside.length-1)==')' && e.bside.substr(0,1)!='(') {
-            x=e.bside.split("(");
-            e.bside=x.join("\n(");
-            bwrap=true;
+	}
+
+        if(e.bside.indexOf('/')==-1 && (e.bside.lastIndexOf('(')>0 || e.bside.indexOf(')')<e.bside.length<1)) {
+          var x=e.bside.split("(");
+          if(e.bside.indexOf('(')==0)
+            x.join(")\n");
+          else
+            x=x.join("\n(");
+          w=$('#text-sizer').html(x.replace('\n','<br>')).width();
+          if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
+            e.bside=x;
+          bwrap=true;
+        } else {
+          if(e.bside.indexOf('/')>=1) {
+            e.bside=e.bside.replace('/',"\n");
+	    bwrap=true;
+          } else {
+            w=$('#text-sizer').text(e.bside).width();
+            if(w>e.style.maxwidth) bwrap=true;
           }
+	}
+
+        if(e.style.quotes || (e.quotes==null && e.style.quotes)) {
+          e.aside='"'+e.aside.trim()+'"';
+          e.bside='"'+e.bside.trim()+'"';
         }
 
         e.style.font.margins={
