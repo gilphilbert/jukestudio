@@ -77,6 +77,7 @@
             }
             $('#export-modal').modal('hide');
             d=titleCreator.addTitles(d);
+	    $('#titles tr#no-records').remove();
             d.forEach(function(title){
               addRow({aside:title.aside,bside:title.bside,artist:title.artist,artistb:'',id:title.id});
             });

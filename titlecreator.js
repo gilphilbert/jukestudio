@@ -13,13 +13,13 @@ window.titleCreator={
     arrows:{
       name:'Arrows',
       sname:'arrows',
-      maxwidth:280,
+      maxwidth:265,
       margins:8
     },
     diamond:{
       name:'Diamond',
       sname:'diamond',
-      maxwidth:280,
+      maxwidth:265,
       margins:8
     },
     holly:{
@@ -396,50 +396,71 @@ window.titleCreator={
         }
         $('#text-sizer').css('font-family',e.style.font.name);
 
-        if(e.aside.indexOf('/')==-1 && (e.aside.lastIndexOf('(')>0 || e.aside.indexOf(')')<e.aside.length<1)) {
-          var x=e.aside.split("(");
-          if(e.aside.indexOf('(')==0)
-            x.join(")\n");
-          else
+        var sq=((e.quotes || (e.quotes==null && e.style.quotes))?true:false);
+
+        if(e.aside.indexOf('/')==-1 && (e.aside.indexOf('(')>=0 || e.aside.indexOf(')')>=0) && !(e.aside.indexOf('(')==0 && e.aside.indexOf(')')==e.aside.length-1)) {
+          var x;
+          if(e.aside.indexOf(')')==e.aside.length-1) {
+            x=trimArray(e.aside.split("("));
+            if(sq)
+              x[0]='"'+x[0]+'"';
             x=x.join("\n(");
+	  } else {
+            x=trimArray(e.aside.split(")"));
+            if(sq)
+              x[1]='"'+x[1]+'"';
+            x=x.join(")\n");
+          }
           w=$('#text-sizer').html(x.replace('\n','<br>')).width();
           if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
             e.aside=x;
           awrap=true;
         } else {
           if(e.aside.indexOf('/')>=1) {
-            e.aside=e.aside.replace('/',"\n");
+            //e.aside=e.aside.replace('/',"\n");
+            var x=trimArray(e.aside.split('/'));
+            if(sq)
+              for(i=0;i<x.length;i++) x[i]='"'+x[i]+'"';
+	    e.aside=x.join("\n");
 	    awrap=true;
           } else {
             w=$('#text-sizer').text(e.aside).width();
             if(w>e.style.maxwidth) awrap=true;
+            if(sq) e.aside='"'+e.aside+'"';
           }
 	}
 
-        if(e.bside.indexOf('/')==-1 && (e.bside.lastIndexOf('(')>0 || e.bside.indexOf(')')<e.bside.length<1)) {
-          var x=e.bside.split("(");
-          if(e.bside.indexOf('(')==0)
-            x.join(")\n");
-          else
+        if(e.bside.indexOf('/')==-1 && (e.bside.indexOf('(')>=0 || e.bside.indexOf(')')>=0) && !(e.bside.indexOf('(')==0 && e.bside.indexOf(')')==e.bside.length-1)) {
+          var x;
+          if(e.bside.indexOf(')')==e.bside.length-1) {
+            x=trimArray(e.bside.split("("));
+            if(sq)
+              x[0]='"'+x[0]+'"';
             x=x.join("\n(");
+	  } else {
+            x=trimArray(e.bside.split(")"));
+            if(sq)
+              x[1]='"'+x[1]+'"';
+            x=x.join(")\n");
+          }
           w=$('#text-sizer').html(x.replace('\n','<br>')).width();
           if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
             e.bside=x;
           bwrap=true;
         } else {
           if(e.bside.indexOf('/')>=1) {
-            e.bside=e.bside.replace('/',"\n");
+            //e.bside=e.bside.replace('/',"\n");
+            var x=trimArray(e.bside.split('/'));
+            if(sq)
+              for(i=0;i<x.length;i++) x[i]='"'+x[i]+'"';
+	    e.bside=x.join("\n");
 	    bwrap=true;
           } else {
             w=$('#text-sizer').text(e.bside).width();
             if(w>e.style.maxwidth) bwrap=true;
+            if(sq) e.bside='"'+e.bside+'"';
           }
 	}
-
-        if(e.style.quotes || (e.quotes==null && e.style.quotes)) {
-          e.aside='"'+e.aside.trim()+'"';
-          e.bside='"'+e.bside.trim()+'"';
-        }
 
         e.style.font.margins={
 	  aside:e.style.font.margins.aside[((awrap)?0:1)],
@@ -619,4 +640,9 @@ pdfMake.fonts = {
 function shadeColor2(color, percent) {   
   var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
   return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+}
+function trimArray(arr) {
+  for(i=0;i<arr.length;i++)
+    arr[i]=arr[i].trim();
+  return arr;
 }
