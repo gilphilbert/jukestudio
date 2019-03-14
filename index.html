@@ -6,14 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <title>JUKESTUDIO - Jukebox Title Strip Creator</title>
-    <script src='pdfmake.min.js'></script>
-    <script src='vfs_fonts.js'></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crel/3.1.0/crel.min.js"></script>
     <script src="https://use.fontawesome.com/434809f2b1.js"></script>
     <link rel="stylesheet" href="bootstrap.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">-->
+    <link rel="preload" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous" as="style" onload="this.rel='stylesheet'">
     <style>
       @import url('https://fonts.googleapis.com/css?family=Work+Sans:300,700');
       .form-control { border: none; border-radius: 0; border-bottom: 1px solid #ddd; }
@@ -343,6 +342,8 @@
     </div>
 
   </body>
+  <script src='pdfmake.min.js'></script>
+  <script src='vfs_fonts.js'></script>
   <script src="titlecreator.js?ver=1.15"></script>
   <script src="jukestudio.js?ver=1.15"></script>
 </html>
