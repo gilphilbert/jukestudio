@@ -4,14 +4,24 @@
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?2=OmJ3Mz7X8k">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?2=OmJ3Mz7X8k">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?2=OmJ3Mz7X8k">
+    <link rel="manifest" href="/site.webmanifest?2=OmJ3Mz7X8k">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg?2=OmJ3Mz7X8k" color="#eac03e">
+    <link rel="shortcut icon" href="/favicon.ico?2=OmJ3Mz7X8k">
+    <meta name="apple-mobile-web-app-title" content="Juke Studio">
+    <meta name="application-name" content="Juke Studio">
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#ffffff">
+
     <title>JUKESTUDIO - Jukebox Title Strip Creator</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crel/3.1.0/crel.min.js"></script>
-    <script src="https://use.fontawesome.com/434809f2b1.js"></script>
+    <!--<script src="https://use.fontawesome.com/434809f2b1.js"></script>-->
     <link rel="stylesheet" href="bootstrap.css">
-    <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">-->
     <link rel="preload" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous" as="style" onload="this.rel='stylesheet'">
     <style>
       @import url('https://fonts.googleapis.com/css?family=Work+Sans:300,700');
@@ -24,6 +34,7 @@
       .navbar.bg-gray { background-color: #26547C !important; }
       .navbar .navbar-brand { font-weight:200; font-family: 'Work Sans', sans-serif; color: #FFD166; }
       .navbar .navbar-brand strong { font-weight: 700; }
+      .navbar .navbar-brand img { height: 28px; margin-right: 4px; }
       .main-content { margin-top: 150px; }
       .right { text-align: right; }
       .btn { border-radius: .17rem; border-width: 2px; }
@@ -73,7 +84,7 @@
   <body>
     <div class="navbar navbar-expand-lg fixed-top bg-gray navbar-dark">
       <div class="container">
-        <a href="../" class="navbar-brand"><strong>JUKE</strong>STUDIO</a>
+	      <a href="../" class="navbar-brand"><img src="/favicon.ico" /><strong>JUKE</strong>STUDIO</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

@@ -61,7 +61,9 @@
               ar.forEach(function(e){
                 var b=e.split(',');
                 if(b.length==3) {
-                  d.push({aside:b[0],bside:b[1],artist:b[2]});
+                  d.push({aside:b[0],bside:b[1],artist:b[2],artistb:''});
+                } else if(b.length==4) {
+                  d.push({aside:b[0],bside:b[1],artist:b[2],artistb:b[3]});
                 }
               });
             } else {
@@ -79,7 +81,7 @@
             d=titleCreator.addTitles(d);
 	    $('#titles tr#no-records').remove();
             d.forEach(function(title){
-              addRow({aside:title.aside,bside:title.bside,artist:title.artist,artistb:'',id:title.id});
+              addRow({aside:title.aside,bside:title.bside,artist:title.artist,artistb:title.artistb,id:title.id});
             });
           };
           reader.readAsBinaryString(file);
@@ -194,6 +196,12 @@
       });
       $(".open-add-modal").on("click", function(e) {
 	$('#add-modal .modal-header .title').text('Add record');
+        var s=titleCreator.getStyle();
+        $('#title-style').val(s.sname);
+        $('#title-primaryColor').val(s.primaryColor);
+        $('#title-artistFillColor').prop('checked',s.artistFillColor);
+        $('#title-titleFillColor').prop('checked',s.titleFillColor);
+        inlineSVG($('#title-preview'),'images/designs/'+s.sname+'.svg',titleCreator.getTitle(false,true));
         $('#add-modal').modal();
       });
 
@@ -414,13 +422,13 @@
         addSVGText($g,text.aside,options);
 
         options["y"]=61;
-        options["id"]="bside"
+        options["class"]="bside"
         addSVGText($g,text.bside,options);
 
         options["y"]=37;
         options["alignment-baseline"]="central";
         options["font-size"]=text.style.font.artistSize+"px";
-        options["id"]="artist"
+        options["class"]="artist"
         addSVGText($g,text.artist,options);
       }
 

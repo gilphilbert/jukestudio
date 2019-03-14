@@ -14,13 +14,15 @@ window.titleCreator={
       name:'Arrows',
       sname:'arrows',
       maxwidth:265,
-      margins:8
+      margins:8,
+      mergeArtist: true
     },
     diamond:{
       name:'Diamond',
       sname:'diamond',
       maxwidth:265,
-      margins:8
+      margins:8,
+      mergeArtist: true
     },
     holly:{
       name:'Holly',
@@ -29,7 +31,8 @@ window.titleCreator={
       titleTint:'#ffffff',
       primaryColor:'#ff0000',
       maxwidth:242,
-      margins:22
+      margins:22,
+      mergeArtist: true
     },
     candycane:{
       name:'Candy Cane',
@@ -38,7 +41,8 @@ window.titleCreator={
       titleTint:'#ABDCA8',
       primaryColor:'#D3444A',
       maxwidth:242,
-      margins:22
+      margins:22,
+      mergeArtist: true
     }
   },
   fonts:{
@@ -246,7 +250,7 @@ window.titleCreator={
           bold:true
         }];
         var y=[{
-          text: ((titles.length>i) ? t.artist : ''),
+          text: ((titles.length>i) ? t.artist+((t.artistb!='' && t.style.mergeArtist)?' / '+t.artistb:'') : ''),
           margin:[t.style.margins,((t)?t.style.font.margins.artist:0),t.style.margins,0],
           border: [false, false, false, false],
           fillColor:t.style.titleTint,
@@ -393,6 +397,7 @@ window.titleCreator={
           e.aside=e.aside.toUpperCase();
           e.bside=e.bside.toUpperCase();
           e.artist=e.artist.toUpperCase();
+          e.artistb=e.artistb.toUpperCase();
         }
         $('#text-sizer').css('font-family',e.style.font.name);
 
@@ -556,8 +561,8 @@ window.titleCreator={
       found={
         id:0,
         artist: 'Artist',
-        aside: 'A-Side',
-        bside: 'B-Side',
+        aside: 'Side A',
+        bside: 'Side B',
         artistb: ''
       }
     }
