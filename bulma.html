@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="assets/juke.css">
 <style>
 .is-center { text-align: center; }
-#preview-strip { width: 50%; }
+#preview-strip { width: 25%; }
 .navbar-brand img { height: 35px; width: auto; }
 </style>
   </head>
@@ -103,7 +103,7 @@
             </p>
           </header>
           <section class="modal-card-body">
-            <img src="" class="preview-strip">
+            <img src="images/logo.svg" id="preview-strip">
             <p>to get started, click 'add record' menu to add your first record, then set some design options and click 'print'!</p>
           </section>
           <footer class="modal-card-foot columns">
@@ -126,6 +126,9 @@
             </p>
           </header>
           <section class="modal-card-body">
+            <p class="is-center">
+            <img src="" style="width: 25%;" id="design-preview" class="svg" />
+            </p>
             <div class="field">
               <label class="label">paper type</label>
               <div class="control">
@@ -187,7 +190,6 @@
               <input class="is-checkradio" id="design-title-fill" type="checkbox" name="">
               <label for="design-title-fill">colored background for title</label>
             </div>
-            <img src="" style="width: 25%;" id="design-preview" class="svg" />
           </section>
           <footer class="modal-card-foot columns">
             <button class="button column is-light close-modal">cancel</button>
@@ -210,6 +212,9 @@
             </p>
           </header>
           <section class="modal-card-body">
+            <p class="is-center">
+              <img src="" id="add-record-preview" class="preview-strip" />
+            </p>
             <div class="field">
               <div class="control">
                 <input class="input" type="text" id="add-side-a" placeholder="side a">
@@ -230,7 +235,6 @@
                 <input class="input" type="text" id="add-artist-b" placeholder="side b artist (if different)">
               </div>
             </div>
-            <img src="" id="add-record-preview" class="preview-strip" />
             <div class="box" id="style-override">
               <div class="field">
                 <input class="is-checkradio" id="title-style-override" type="checkbox" name="">
