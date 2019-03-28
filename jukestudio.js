@@ -3,19 +3,12 @@
       function addRow(content=null){
         if(content==null) return;
 
-        var html=crel('tr',{'class':'title','data-id':content.id},
-          crel('td',
-            crel('input', {'type':'checkbox', 'class':'print-check', 'data-id':content.id}),
-          ),
-	  crel('td',{'class':'aside'},content.aside),
-          crel('td',{'class':'bside'},content.bside),
-          crel('td',{'class':'artist'},content.artist + ((content.artistb!='' && content.artistb!=null) ? ' / '+content.artistb : '')),
-          crel('td',
-            crel('a',{'href':'#','class':'delete-title text-danger'},
-              crel('i',{'class':'fa fa-trash-alt','aria-hidden':'true'})
-            )
-          )
-        );
+        var html='<tr class="title" data-id="'+content.id+'">';
+        html+='<td><input type="checkbox" class="print-check" data-id="'+content.id+'"></td>';
+        html+='<td class="aside">'+content.aside+'</td>';
+        html+='<td class="bside">'+content.bside+'</td>';
+        html+='<td class="artist">'+content.artist+((content.artistb!='' && content.artistb!=null)?' / '+content.artistb:'')+'</td>';
+        html+='<td><a href="#" class="delete-title text-danger"><img src="images/trash.svg" style="height:15px;"></td>';
         $('#titles tbody').append(html);
       }
 
@@ -197,11 +190,11 @@
       $(".open-add-modal").on("click", function(e) {
 	$('#add-modal .modal-header .title').text('Add record');
         var s=titleCreator.getStyle();
-        $('#title-style').val(s.sname);
+        $('#title-style').val(s.style);
         $('#title-primaryColor').val(s.primaryColor);
         $('#title-artistFillColor').prop('checked',s.artistFillColor);
         $('#title-titleFillColor').prop('checked',s.titleFillColor);
-        inlineSVG($('#title-preview'),'images/designs/'+s.sname+'.svg',titleCreator.getTitle(false,true));
+        inlineSVG($('#title-preview'),'images/designs/'+s.style+'.svg',titleCreator.getTitle(false,true));
         $('#add-modal').modal();
       });
 
@@ -366,7 +359,7 @@
       }
 
       function stringBreaker(string,style) {
-        $('body').append(crel('span',{'style':'font-family:'+style.font.name+';font-size:'+style.font.titleSize+'px;font-weight:bold;display:none','id':'text-sizer'}));
+        $('body').append('<span style="font-family:'+style.font.name+';font-size:'+style.font.titleSize+'px;font-weight:bold;display:none" id="text-sizer"');
         $('#text-sizer').text(string);
         if($('#text-sizer').width()>(225-(style.margins*2))) {
           var x=string.split(" ");
@@ -474,8 +467,8 @@
       //populate the list of styles from titleCreator
       var keys=Object.keys(titleCreator.styles)
       keys.forEach(function(key){
-        $('#option-style').append(crel('option',{'value':key},titleCreator.styles[key].name));
-        $('#title-style').append(crel('option',{'value':key},titleCreator.styles[key].name));
+        $('#option-style').append('<option value="'+key+'">'+titleCreator.styles[key].name+'</option>');
+        $('#title-style').append('<option value="'+key+'">'+titleCreator.styles[key].name+'</option>');
       });
 
     });

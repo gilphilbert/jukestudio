@@ -17,14 +17,12 @@
     <meta name="theme-color" content="#ffffff">
 
     <title>JUKESTUDIO - Jukebox Title Strip Creator</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crel/3.1.0/crel.min.js"></script>
-    <!--<script src="https://use.fontawesome.com/434809f2b1.js"></script>-->
-    <link rel="stylesheet" href="bootstrap.css">
-    <link rel="preload" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous" as="style" onload="this.rel='stylesheet'">
+    <script src="assets/jquery-3.3.1.min.js"></script>
+    <script src="assets/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap.css">
+    <link rel="stylesheet" href="fonts/stylesheet.css">
     <style>
-      @import url('https://fonts.googleapis.com/css?family=Work+Sans:300,700');
+      body { font-family: 'Work Sans'; }
       .form-control { border: none; border-radius: 0; border-bottom: 1px solid #ddd; }
       .form-control:focus { -webkit-box-shadow: none; box-shadow: none; border-color: #E4B33F; }
       .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus { color: #FFD166; }
@@ -232,7 +230,7 @@
             </fieldset>
 	    <p class="text-center">
 	      <img src="" style="width: 25%;" id="title-preview" class="svg" />
-              <a data-toggle="collapse" href="#collapseExample"><i class="fa fa-chevron-down"></i></a>
+	      <a data-toggle="collapse" href="#collapseExample"><img src="images/chevron.svg" style="height:15px;"></a>
               <div class="collapse" id="collapseExample">
                 <div class="card card-body">
                   <fieldset>
@@ -353,8 +351,8 @@
     </div>
 
   </body>
-  <script src='pdfmake.min.js'></script>
-  <script src='vfs_fonts.js'></script>
-  <script src="titlecreator.js?ver=1.15"></script>
+  <script src='assets/pdfmake.min.js'></script>
+  <script src='assets/vfs_fonts.js'></script>
+  <script src="assets/titlecreator.js?ver=1.15"></script>
   <script src="jukestudio.js?ver=1.15"></script>
 </html>

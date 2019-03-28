@@ -12,21 +12,21 @@ window.titleCreator={
   styles: {
     arrows:{
       name:'Arrows',
-      sname:'arrows',
+      style:'arrows',
       maxwidth:265,
       margins:8,
       mergeArtist: true
     },
     diamond:{
       name:'Diamond',
-      sname:'diamond',
+      style:'diamond',
       maxwidth:265,
       margins:8,
       mergeArtist: true
     },
     holly:{
       name:'Holly',
-      sname:'holly',
+      style:'holly',
       artistTint:'#ffffff',
       titleTint:'#ffffff',
       primaryColor:'#ff0000',
@@ -36,7 +36,7 @@ window.titleCreator={
     },
     candycane:{
       name:'Candy Cane',
-      sname:'candycane',
+      style:'candycane',
       artistTint:'#ffffff',
       titleTint:'#ABDCA8',
       primaryColor:'#D3444A',
@@ -59,7 +59,7 @@ window.titleCreator={
         var j=((i<10) ? i : i - 10);
         var x=((i<10) ? 81.5 : 305.5 );
         var y=(j*72)+22.5;
-        if(style.sname=="holly") {
+        if(style.style=="holly") {
           b.push({
             image: 'data:image/png;base64,'+pdfMake.vfs['holly.png'],
             width: 200,
@@ -98,7 +98,7 @@ window.titleCreator={
             width: 200,
             absolutePosition: {x: x+200, y: y+20}
           })
-        } else if(style.sname=='candycane') {
+        } else if(style.style=='candycane') {
           b.push({
             image: 'data:image/png;base64,'+pdfMake.vfs['candycane.png'],
             width: 22,
@@ -147,7 +147,7 @@ window.titleCreator={
             width: 22,
             absolutePosition: {x: x+197, y: y+8}
           })
-        } else if(style.sname=="diamond") {
+        } else if(style.style=="diamond") {
           b.push({
             canvas:[
               {
@@ -177,7 +177,7 @@ window.titleCreator={
             ],
             absolutePosition: {x: x, y: y}
           });
-        } else if(style.sname=="arrows") {
+        } else if(style.style=="arrows") {
           b.push({
             canvas:[
               {
@@ -364,7 +364,7 @@ window.titleCreator={
       return c; 
     },
     formatTitles: function(titles) {
-      $('body').append(crel('span',{'style':'font-family:Arial;font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
+      $('body').append('<span style="font-family:Arial;font-size:10.5pt;font-weight:bold;display:none" id="text-sizer"></span>');
       var toArray=false;
       if(!Array.isArray(titles)) {
         titles=[titles];
@@ -496,7 +496,7 @@ window.titleCreator={
     pdfMake.createPdf(dd).open();
   },
   getPaperType:function(){
-    return this.options.paperType;
+    return JSON.parse(JSON.stringify(this.options.paperType));
   },
   getOptions:function(x=false){
     if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
@@ -505,9 +505,10 @@ window.titleCreator={
     if(!titleCreator.options.hasOwnProperty('font')) this.options.font='Retro';
     if(!titleCreator.options.hasOwnProperty('paperType')) this.options.paperType='letter';
     if(this.options.paperType=='standard') this.options.paperType='letter'
-    if(x && this.options.hasOwnProperty(x))
-      return this.options[x];
-    return this.options;
+    var o=JSON.parse(JSON.stringify(this.options));
+    if(x && o.hasOwnProperty(x))
+      return o[x];
+    return o;
   },
   getFont:function(f){
     return JSON.parse(JSON.stringify(titleCreator.fonts[f]))
@@ -532,6 +533,7 @@ window.titleCreator={
       if(key!='paperType' && key!='style')
         if(!s.hasOwnProperty(key)) s[key]=o[key];
     });
+    s.font=this.fonts[s.font];
     return s;
   },
   setOption:function(option,value){
