@@ -307,10 +307,11 @@
     <!-- END MODALS -->
   </body>
   <script src="assets/crel.min.js"></script>
+  <script src="assets/lokijs.min.js"></script>
   <script src="assets/jquery-3.3.1.min.js"></script>
   <script src='assets/pdfmake.min.js'></script>
   <script src='assets/vfs_fonts.js'></script>
-  <script src="assets/titlecreator.js?ver=1.15"></script>
+  <script src="assets/titlecreatorb.js?ver=1.15"></script>
 <script>
 
 //----- HELPER FUNCTIONS
@@ -677,15 +678,23 @@ document.querySelector('#add-record-modal .save').addEventListener('click',funct
       delete(t['titleFillColor']);
   }
 
-  //do some stuff to see if we're editing an existing title
-  t=titleCreator.addTitles([t]);
-  addRow(t[0]);
+  var dl=document.getElementById('add-record-modal').dataset;
+  if(dl.hasOwnProperty('id')) {
+    t.id=dl['id'];
+    titleCreator.updateTitle(t);
+    var c=document.querySelector('#record-table tr[data-id="'+t.id+'"]');
+    c.querySelector('.aside strong').innerText=t.aside;
+    c.querySelector('.aside small').innerText=t.artist;
+    c.querySelector('.bside strong').innerText=t.bside;
+    c.querySelector('.bside small').innerText=((t.artistb!='')?t.artistb:t.artist);
+  } else {
+    t=titleCreator.addTitles([t]);
+    addRow(t[0]);
+  }
   toggleModal('add-record-modal');
 });
 
-//-- EDIT RECORD --//
-
-//-- DELETE RECORD MODAL --//
+//-- TABLE ROW CLICK (DELETE/EDIT) --//
 document.querySelectorAll('#record-table tbody').forEach(function(e){
   e.addEventListener('click', function (event) {
     var id=event.target.closest('tr').dataset.id;
@@ -708,7 +717,6 @@ document.querySelectorAll('#record-table tbody').forEach(function(e){
       document.getElementById('add-artist-b').value=t.artistb;
       var override=false;
       ['style','primaryColor','artistFillColor','titleFillColor'].forEach(function(e) {
-        console.log(e);
         if(t.hasOwnProperty(e)) {
           override=true;
           switch(e) {
@@ -743,10 +751,12 @@ document.getElementById('delete-record').addEventListener('click',function(e){
 
 
 //----- DETECT WHEN DOM IS LOADED AND START APP
+/*
 if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
   startApp();
 } else {
   document.addEventListener("DOMContentLoaded", startApp);
 }
+*/
 </script>
 </html>
