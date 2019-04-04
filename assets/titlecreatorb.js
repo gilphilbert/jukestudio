@@ -305,15 +305,8 @@ window.titleCreator={
     buildPages: function(ts,columns=2,rows=10) {
       var p=[];
       var last=false;
-      var tx=titleCreator.getTitles(true);
-      var titles=[];
-      if(ts.length>0) {
-        ts.forEach(function(t){
-          titles.push(tx[t]);
-        });
-      } else {
-        titles=tx;
-      }
+      var tx=titleCreator.getTitles(true,((ts.length>0)?ts:[]));
+      var titles=tx;
       while(titles.length>0) {
         var page=titles.splice(0,rows*columns);
         if(titles.length==0) last=true;
@@ -354,7 +347,7 @@ window.titleCreator={
       return c; 
     },
     formatTitles: function(titles) {
-      $('body').append('<span style="font-family:Arial;font-size:10.5pt;font-weight:bold;display:none" id="text-sizer"></span>');
+      var textSizer=document.body.appendChild(crel('span',{'style':'font-family:Arial;font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
       var toArray=false;
       if(!Array.isArray(titles)) {
         titles=[titles];
@@ -389,7 +382,7 @@ window.titleCreator={
           e.artist=e.artist.toUpperCase();
           e.artistb=e.artistb.toUpperCase();
         }
-        $('#text-sizer').css('font-family',e.style.font.name);
+        textSizer.style.fontFamily=e.style.font.name;
 
         var sq=((e.quotes || (e.quotes==null && e.style.quotes))?true:false);
 
@@ -406,7 +399,8 @@ window.titleCreator={
               x[1]='"'+x[1]+'"';
             x=x.join(")\n");
           }
-          w=$('#text-sizer').html(x.replace('\n','<br>')).width();
+          textSizer.innerHTML=x.replace('\n','<br>');
+          w=textSizer.style.maxwidth;
           if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
             e.aside=x;
           awrap=true;
@@ -419,7 +413,8 @@ window.titleCreator={
 	    e.aside=x.join("\n");
 	    awrap=true;
           } else {
-            w=$('#text-sizer').text(e.aside).width();
+            textSizer.innerHTML=e.aside;
+            w=textSizer.style.maxwidth;
             if(w>e.style.maxwidth) awrap=true;
             if(sq) e.aside='"'+e.aside+'"';
           }
@@ -438,7 +433,8 @@ window.titleCreator={
               x[1]='"'+x[1]+'"';
             x=x.join(")\n");
           }
-          w=$('#text-sizer').html(x.replace('\n','<br>')).width();
+          textSizer.innerHTML=x.replace('\n','<br>');
+          w=textSizer.style.maxwidth;
           if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
             e.bside=x;
           bwrap=true;
@@ -451,7 +447,8 @@ window.titleCreator={
 	    e.bside=x.join("\n");
 	    bwrap=true;
           } else {
-            w=$('#text-sizer').text(e.bside).width();
+            textSizer.innerText=e.bside;
+            w=textSizer.style.maxwidth;
             if(w>e.style.maxwidth) bwrap=true;
             if(sq) e.bside='"'+e.bside+'"';
           }
@@ -464,7 +461,7 @@ window.titleCreator={
         }
 
       });
-      $('#text-sizer').remove();
+      textSizer.parentNode.removeChild(textSizer);
 
       if(toArray) titles=titles[0];
       return titles;
@@ -524,29 +521,27 @@ window.titleCreator={
     if(oo.hasOwnProperty(option))
       oo[option]=value;
     o.update(oo);
+    titleCreator.db.saveDatabase();
   },
   reset:function(){
-//!!!!!!
-    titleCreator.titles={};
-    localStorage.removeItem('titles');
+    var titles=titleCreator.db.getCollection('titles');
+    titles.clear();
+    titleCreator.db.saveDatabase();
     window.location.reload();
   },
-  getTitles:function(formatted=false){
+  getTitles:function(formatted=false,list=[]){
     var col=titleCreator.db.getCollection('titles');
-    var t=col.find();
+    var t=false;
+    if(list.length==0)
+      t=col.find();
+    else
+      t=col.find({'id':{$in:list}});
     if(formatted)
       return this.functions.formatTitles(t);
     return t;
   },
   getTitle:function(id=false,formatted=false){
-//!!!!!!
-    var t=JSON.parse(JSON.stringify(titleCreator.titles));
-    var found = false;
-    if(!jQuery.isEmptyObject(t)) {
-      found=t.find(function(e) {
-        return e.id==id;
-      });
-    }
+    var found=null;
     if(id===false) {
       found={
         id:0,
@@ -555,8 +550,12 @@ window.titleCreator={
         bside: 'Side B',
         artistb: ''
       }
+    } else {
+      found=titleCreator.db.getCollection('titles').findOne({'id':parseInt(id)});
+      found=stripMD(found);
     }
-    if(formatted && found)
+
+    if(formatted===true && found!==null)
       return this.functions.formatTitles(found);
     return found;
   },
@@ -565,19 +564,51 @@ window.titleCreator={
     i.forEach(function(v){
       titles.insert(v);
     });
+    titleCreator.db.saveDatabase();
     return i;
   },
   removeTitle:function(id){
-console.log(id);
+    id=parseInt(id);
     var titles=titleCreator.db.getCollection('titles');
-console.log(titles);
     var r=titles.findOne({'id':id});
-console.log(r);
-    //titles.remove(r);
+    titles.remove(r);
+    titleCreator.db.saveDatabase();
   },
   updateTitle:function(item){
-//!!!!!!
-    titleCreator.titles[item.id]=item;
+    var titles=titleCreator.db.getCollection('titles');
+    var r=titles.findOne({'id':parseInt(item.id)});
+    var k=Object.keys(item);
+    k.forEach(function(key){
+      if(key!=='id')
+        r[key]=item[key]
+    });
+    titles.update(r);
+    titleCreator.db.saveDatabase();
+  },
+  exportDB:function(csv=false) {
+    var data='',
+        ext='';
+    if(csv) {
+      //export CSV
+      data="data:text/csv;charset=utf-8,";
+      var titles=this.getTitles();
+      titles.forEach(function(t){
+        data+=t.aside+','+t.bside+','+t.artist+','+t.artistb+"\n";
+      });
+      ext='csv';
+    } else {
+      //export JSON
+      //data='data:text/json;charset=utf-8,'
+      data=this.db.serialize();
+      ext='json';
+    }
+
+    var a=document.createElement('a');
+    a.setAttribute('href', data);
+    a.setAttribute('download','jukestudio.'+ext);
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   }
 }
 
@@ -595,21 +626,38 @@ pdfMake.fonts = {
 
 titleCreator.db=new loki("jukestudio.db",{
   autoload: true,
-  autoloadCallback : databaseInitialize,
-  autosave: true, 
-  autosaveInterval: 4000 // save every four seconds for our example
+  autoloadCallback : databaseInitialize
 });
 
 function databaseInitialize() {
+///if creating, trigger the import action
   var titles=titleCreator.db.getCollection("titles");
   if (titles===null) {
-    titles=titleCreator.db.addCollection("titles");
+    titles=titleCreator.db.addCollection("titles",{'clone':true});
+    options=titleCreator.db.addCollection("options",{'clone':true});
+    importLocalStorage(titles,options);
   }
-  titles.on('insert', function(input) { input.id = input.$loki; });
+  titles.addListener('insert',function(input){ input.id=input.$loki; titleCreator.db.getCollection('titles').update(input); });
 
-  var options=titleCreator.db.getCollection("options");
-  if (options===null) {
-    options=titleCreator.db.addCollection("options");
+  startApp();
+}
+
+function importLocalStorage(titles,options) {
+  //import the old titles
+  var oldTitles=localStorage.getItem('titles');
+  if(oldTitles!==null) {
+    JSON.parse(oldTitles).forEach(function(e){
+       titles.insert(e);
+    });
+    localStorage.removeItem('titles')
+  }
+
+  //import the old options
+  var oldOptions=localStorage.getItem('options');
+  if(oldOptions!==null) {
+    oldOptions=JSON.parse(oldOptions)
+    options.insert(oldOptions);
+  } else {
     options.insert({
       allCaps:true,
       quotes:true,
@@ -621,7 +669,8 @@ function databaseInitialize() {
       paperType:'letter'
     });
   }
-  startApp();
+  localStorage.removeItem('options')
+  titleCreator.db.saveDatabase();
 }
 
 

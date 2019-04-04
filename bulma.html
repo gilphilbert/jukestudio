@@ -46,7 +46,7 @@
             <a class="navbar-item change-design" href="#">
               design
             </a>
-            <a class="navbar-item" href="#">
+            <a class="navbar-item print-titles" href="#">
               print
             </a>
           </div>
@@ -308,7 +308,6 @@
   </body>
   <script src="assets/crel.min.js"></script>
   <script src="assets/lokijs.min.js"></script>
-  <script src="assets/jquery-3.3.1.min.js"></script>
   <script src='assets/pdfmake.min.js'></script>
   <script src='assets/vfs_fonts.js'></script>
   <script src="assets/titlecreatorb.js?ver=1.15"></script>
@@ -605,15 +604,29 @@ document.querySelector('.navbar .add-record').addEventListener('click', function
   toggleModal('add-record-modal');
   document.querySelector("#add-side-a").focus();
 });
-//-- UPDATE SVG TEXT WHEN ADD INPUTS CHANGE --//
-document.querySelectorAll('#add-side-a,#add-side-b,#add-artist,#add-artist-b').forEach(function(e){
-  e.addEventListener('keyup', function(event) {
+function buildAddPreview() {
     s=titleCreator.getTitle(false,true);
     var art=document.getElementById('add-artist').value+((document.getElementById('add-artist-b').value=='')?'':' / '+document.getElementById('add-artist-b').value);
     s.aside=((s.style.quotes)?'"':'')+((s.style.allCaps)?document.getElementById('add-side-a').value.toUpperCase():document.getElementById('add-side-a').value)+((s.style.quotes)?'"':''),
     s.bside=((s.style.quotes)?'"':'')+((s.style.allCaps)?document.getElementById('add-side-b').value.toUpperCase():document.getElementById('add-side-b').value)+((s.style.quotes)?'"':''),
     s.artist=((s.style.allCaps)?art.toUpperCase():art)
+    if(document.getElementById('title-style-override').checked) {
+      s.style.primaryColor=document.getElementById('title-primary-color').value;
+      s.style.style=document.getElementById('title-style').value;
+      s.style.artistFillColor=document.getElementById('title-artist-fill').checked;
+      s.style.titleFillColor=document.getElementById('title-title-fill').checked;
+    }
     buildPreview('add-record-preview',s);
+}
+//-- UPDATE SVG TEXT WHEN ADD INPUTS CHANGE --//
+document.querySelectorAll('#add-side-a,#add-side-b,#add-artist,#add-artist-b').forEach(function(e){
+  e.addEventListener('keyup', function(event) {
+    buildAddPreview();
+  });
+});
+document.querySelectorAll('#title-style,#title-primary-color,#title-artist-fill,#title-title-fill,#title-style-override').forEach(function(e){
+  e.addEventListener('change', function(event) {
+    buildAddPreview();
   });
 });
 //-- STYLE OVERRRIDE (ADD RECORD) --//
@@ -694,10 +707,11 @@ document.querySelector('#add-record-modal .save').addEventListener('click',funct
   toggleModal('add-record-modal');
 });
 
-//-- TABLE ROW CLICK (DELETE/EDIT) --//
+
 document.querySelectorAll('#record-table tbody').forEach(function(e){
   e.addEventListener('click', function (event) {
     var id=event.target.closest('tr').dataset.id;
+    var classList=event.target.classList;
     if(event.target.classList.contains('delete-button')) {
       event.preventDefault();
       var rd=document.querySelector('#delete-modal .record-detail');
@@ -722,8 +736,8 @@ document.querySelectorAll('#record-table tbody').forEach(function(e){
           switch(e) {
             case 'style': document.getElementById('title-style').value=t.style; break;
             case 'primaryColor': document.getElementById('title-primary-color').value=t.primaryColor; break;
-            case 'artistFillColor': document.getElementById('title-artist-fill').value=t.artistFillColor; break;
-            case 'titleFillColor': document.getElementById('title-title-fill').value=t.titleFillColor; break;
+            case 'artistFillColor': document.getElementById('title-artist-fill').checked=t.artistFillColor; break;
+            case 'titleFillColor': document.getElementById('title-title-fill').checked=t.titleFillColor; break;
           }
         }
       });
@@ -738,6 +752,8 @@ document.querySelectorAll('#record-table tbody').forEach(function(e){
     }
   });
 });
+
+
 //-- DELETE RECORD --//
 document.getElementById('delete-record').addEventListener('click',function(e){
   var id=document.getElementById('delete-modal').dataset.id;
@@ -746,6 +762,17 @@ document.getElementById('delete-record').addEventListener('click',function(e){
     removeRow(id);
     document.getElementById('delete-modal').classList.remove('is-active'); 
   }
+});
+
+
+//-- PRINT --//
+document.querySelector('.navbar .print-titles').addEventListener('click', function(event) {
+  event.preventDefault();
+  var selected=[];
+  document.querySelectorAll('.print-check:checked').forEach(function(e){
+    selected.push(parseInt(e.dataset.id)); 
+  });
+  titleCreator.start([]);
 });
 //----- END EVENT HANDLERS
 
