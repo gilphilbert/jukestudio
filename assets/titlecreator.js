@@ -1,14 +1,4 @@
 window.titleCreator={
-  options: JSON.parse(localStorage.getItem('options'))||{
-    allCaps:true,
-    quotes:true,
-    primaryColor:'#ff0000',
-    artistFillColor:false,
-    titleFillColor:false,
-    font:'Retro',
-    style:'arrows',
-    paperType:'letter'
-  },
   styles: {
     arrows:{
       name:'Arrows',
@@ -315,19 +305,12 @@ window.titleCreator={
     buildPages: function(ts,columns=2,rows=10) {
       var p=[];
       var last=false;
-      var tx=titleCreator.getTitles(true);
-      var titles=[];
-      if(ts.length>0) {
-        ts.forEach(function(t){
-          titles.push(tx[t]);
-        });
-      } else {
-        titles=tx;
-      }
+      var tx=titleCreator.getTitles(true,((ts.length>0)?ts:[]));
+      var titles=tx;
       while(titles.length>0) {
         var page=titles.splice(0,rows*columns);
         if(titles.length==0) last=true;
-        if(titleCreator.getPaperType()=="letter")
+        if(titleCreator.getOptions('paperType')=="letter")
           p.push(this.buildCanvases(page));
         p.push(this.buildTable(page,last,columns,rows));
       }
@@ -364,7 +347,7 @@ window.titleCreator={
       return c; 
     },
     formatTitles: function(titles) {
-      $('body').append('<span style="font-family:Arial;font-size:10.5pt;font-weight:bold;display:none" id="text-sizer"></span>');
+      var textSizer=document.body.appendChild(crel('span',{'style':'font-family:Arial;font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
       var toArray=false;
       if(!Array.isArray(titles)) {
         titles=[titles];
@@ -399,7 +382,7 @@ window.titleCreator={
           e.artist=e.artist.toUpperCase();
           e.artistb=e.artistb.toUpperCase();
         }
-        $('#text-sizer').css('font-family',e.style.font.name);
+        textSizer.style.fontFamily=e.style.font.name;
 
         var sq=((e.quotes || (e.quotes==null && e.style.quotes))?true:false);
 
@@ -416,7 +399,8 @@ window.titleCreator={
               x[1]='"'+x[1]+'"';
             x=x.join(")\n");
           }
-          w=$('#text-sizer').html(x.replace('\n','<br>')).width();
+          textSizer.innerHTML=x.replace('\n','<br>');
+          w=textSizer.style.maxwidth;
           if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
             e.aside=x;
           awrap=true;
@@ -429,7 +413,8 @@ window.titleCreator={
 	    e.aside=x.join("\n");
 	    awrap=true;
           } else {
-            w=$('#text-sizer').text(e.aside).width();
+            textSizer.innerHTML=e.aside;
+            w=textSizer.style.maxwidth;
             if(w>e.style.maxwidth) awrap=true;
             if(sq) e.aside='"'+e.aside+'"';
           }
@@ -448,7 +433,8 @@ window.titleCreator={
               x[1]='"'+x[1]+'"';
             x=x.join(")\n");
           }
-          w=$('#text-sizer').html(x.replace('\n','<br>')).width();
+          textSizer.innerHTML=x.replace('\n','<br>');
+          w=textSizer.style.maxwidth;
           if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
             e.bside=x;
           bwrap=true;
@@ -461,7 +447,8 @@ window.titleCreator={
 	    e.bside=x.join("\n");
 	    bwrap=true;
           } else {
-            w=$('#text-sizer').text(e.bside).width();
+            textSizer.innerText=e.bside;
+            w=textSizer.style.maxwidth;
             if(w>e.style.maxwidth) bwrap=true;
             if(sq) e.bside='"'+e.bside+'"';
           }
@@ -474,7 +461,7 @@ window.titleCreator={
         }
 
       });
-      $('#text-sizer').remove();
+      textSizer.parentNode.removeChild(textSizer);
 
       if(toArray) titles=titles[0];
       return titles;
@@ -482,7 +469,7 @@ window.titleCreator={
   },
   start:function(titles) {
     var dd={};
-    switch(this.getPaperType()) {
+    switch(this.getOptions('paperType')) {
       case 'single12':
         dd=this.functions.single12(titles);
         break;
@@ -495,17 +482,9 @@ window.titleCreator={
     }
     pdfMake.createPdf(dd).open();
   },
-  getPaperType:function(){
-    return JSON.parse(JSON.stringify(this.options.paperType));
-  },
   getOptions:function(x=false){
-    if(!titleCreator.options.hasOwnProperty('primaryColor')) this.options.primaryColor='#ff0000';
-    if(!titleCreator.options.hasOwnProperty('artistFillColor')) this.options.artistFillColor='false';
-    if(!titleCreator.options.hasOwnProperty('titleFillColor')) this.options.titleFillColor='false';
-    if(!titleCreator.options.hasOwnProperty('font')) this.options.font='Retro';
-    if(!titleCreator.options.hasOwnProperty('paperType')) this.options.paperType='letter';
-    if(this.options.paperType=='standard') this.options.paperType='letter'
-    var o=JSON.parse(JSON.stringify(this.options));
+    var o=titleCreator.db.getCollection('options').findOne();
+    o=stripMD(o);
     if(x && o.hasOwnProperty(x))
       return o[x];
     return o;
@@ -514,7 +493,7 @@ window.titleCreator={
     return JSON.parse(JSON.stringify(titleCreator.fonts[f]))
   },
   getStyle:function(t){
-    var o=this.getOptions();
+    var o=titleCreator.db.getCollection('options').findOne();
     var s=JSON.parse(JSON.stringify(this.styles[((t)?t:o.style)]));
     if(o.paperType!='letter') {
       s.artistTint='#ffffff';
@@ -537,28 +516,32 @@ window.titleCreator={
     return s;
   },
   setOption:function(option,value){
-    this.options[option]=value;
-    localStorage.setItem('options',JSON.stringify(this.getOptions()));
+    var o=titleCreator.db.getCollection('options');
+    var oo=o.findOne();
+    if(oo.hasOwnProperty(option))
+      oo[option]=value;
+    o.update(oo);
+    titleCreator.db.saveDatabase();
   },
   reset:function(){
-    titleCreator.titles={};
-    localStorage.removeItem('titles');
+    var titles=titleCreator.db.getCollection('titles');
+    titles.clear();
+    titleCreator.db.saveDatabase();
     window.location.reload();
   },
-  getTitles:function(formatted=false){
-    var t=JSON.parse(JSON.stringify(titleCreator.titles));
+  getTitles:function(formatted=false,list=[]){
+    var col=titleCreator.db.getCollection('titles');
+    var t=false;
+    if(list.length==0)
+      t=col.find();
+    else
+      t=col.find({'id':{$in:list}});
     if(formatted)
       return this.functions.formatTitles(t);
     return t;
   },
   getTitle:function(id=false,formatted=false){
-    var t=JSON.parse(JSON.stringify(titleCreator.titles));
-    var found = false;
-    if(!jQuery.isEmptyObject(t)) {
-      found=t.find(function(e) {
-        return e.id==id;
-      });
-    }
+    var found=null;
     if(id===false) {
       found={
         id:0,
@@ -567,70 +550,92 @@ window.titleCreator={
         bside: 'Side B',
         artistb: ''
       }
+    } else {
+      found=titleCreator.db.getCollection('titles').findOne({'id':parseInt(id)});
+      found=stripMD(found);
     }
-    if(formatted && found)
+
+    if(formatted===true && found!==null)
       return this.functions.formatTitles(found);
     return found;
   },
   addTitles:function(i){
+    var titles=titleCreator.db.getCollection('titles');
+    var o=[];
     i.forEach(function(v){
-      v.id=titleCreator.getNewID();
-      titleCreator.titles=titleCreator.titles.concat(v);
+      o.push(titles.insert(v));
     });
-    this.saveTitles();
-    return i;
-  },
-  saveTitles:function() {
-    localStorage.setItem('titles',JSON.stringify(this.getTitles()));
+    titleCreator.db.saveDatabase();
+    return o;
   },
   removeTitle:function(id){
-    for (var i=this.titles.length-1; i>=0; --i) {
-      if (this.titles[i].id == id) {
-        this.titles.splice(i,1);
-        this.saveTitles();
-        break;
-      }
-    }
-  },
-  retrieveTitles:function() {
-    var t=JSON.parse(localStorage.getItem('titles'))||[];
-    if(t.constructor !== Array) t=[];
-    if(t.length>0)
-      if(! t[0].hasOwnProperty('id'))
-        t=this.addIDs(t);
-    this.titles=t;
-  },
-  addIDs:function(arr){
-    var id=0;
-    arr.forEach(function(i){
-      i['id']=id;
-      id++;
-    });
-    return arr;
-  },
-  getNewID:function(){
-    var t=titleCreator.getTitles();
-    var first=((t.length==0) ? true : false);
-    if(first) return 0;
-    var a=[];
-    t.forEach(function(i){
-      a.push(i.id);
-    });
-    a=a.sort(function (a, b) { return a-b; });
-    for(j=0;j<a[a.length-1];j++)
-      if(a.indexOf(j)==-1)
-        return j
-    return a[a.length-1]+1;
+    id=parseInt(id);
+    var titles=titleCreator.db.getCollection('titles');
+    var r=titles.findOne({'id':id});
+    titles.remove(r);
+    titleCreator.db.saveDatabase();
   },
   updateTitle:function(item){
-    titleCreator.titles[item.id]=item;
-    this.saveTitles();
+    var titles=titleCreator.db.getCollection('titles');
+    var r=titles.findOne({'id':parseInt(item.id)});
+    var k=Object.keys(item);
+    k.forEach(function(key){
+      if(key!=='id')
+        r[key]=item[key]
+    });
+    titles.update(r);
+    titleCreator.db.saveDatabase();
+  },
+  exportDB:function(csv=false) {
+    var data='',
+        ext='';
+    if(csv) {
+      //export CSV
+      data="data:text/csv;charset=utf-8,";
+      var titles=this.getTitles();
+      titles.forEach(function(t){
+        data+=t.aside+','+t.bside+','+t.artist+','+t.artistb+"\r\n";
+      });
+      ext='csv';
+    } else {
+      //export JSON
+      data="data:text/json;charset=utf-8,";
+      data+=encodeURIComponent(this.db.serialize());
+      ext='json';
+    }
+
+    var a=document.createElement('a');
+    a.setAttribute('href', data);
+    a.setAttribute('download','jukestudio.'+ext);
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  },
+  importDB:function(data,type) {
+    var out=[];
+    if(type=='csv') {
+      var lines=data.split('\r\n');
+      var inTitles=[];
+      lines.reverse;
+      lines.forEach(function(line){
+        var fields=line.split(',');
+        if(fields.length>=3) {
+          inTitles.push({aside:fields[0],bside:fields[1],artist:fields[2],artistb:((fields.length==4)?fields[3]:'')});
+        }
+      });
+      if(inTitles!=[])
+        out=this.addTitles(inTitles);
+
+    } else {
+      var ob=JSON.parse(data);
+      if(ob.filename=='jukestudio.db')
+        titleCreator.loadJSONObject(ob);
+      out=ob.collections[0];
+    }
+    return out;
   }
 }
 
-
-//application startup stuff
-titleCreator.retrieveTitles();
 pdfMake.fonts = {
   Retro: {
     bold: 'Retro.ttf'
@@ -643,6 +648,55 @@ pdfMake.fonts = {
   }
 }
 
+titleCreator.db=new loki("jukestudio.db",{
+  autoload: true,
+  autoloadCallback : databaseInitialize
+});
+
+function databaseInitialize() {
+///if creating, trigger the import action
+  var titles=titleCreator.db.getCollection("titles");
+  if (titles===null) {
+    titles=titleCreator.db.addCollection("titles",{'clone':true});
+    options=titleCreator.db.addCollection("options",{'clone':true});
+    importLocalStorage(titles,options);
+  }
+  titles.addListener('insert',function(input){ input.id=input.$loki; titleCreator.db.getCollection('titles').update(input); });
+
+  startApp();
+}
+
+function importLocalStorage(titles,options) {
+  //import the old titles
+  var oldTitles=localStorage.getItem('titles');
+  if(oldTitles!==null) {
+    JSON.parse(oldTitles).forEach(function(e){
+       titles.insert(e);
+    });
+    localStorage.removeItem('titles')
+  }
+
+  //import the old options
+  var oldOptions=localStorage.getItem('options');
+  if(oldOptions!==null) {
+    oldOptions=JSON.parse(oldOptions)
+    options.insert(oldOptions);
+  } else {
+    options.insert({
+      allCaps:true,
+      quotes:true,
+      primaryColor:'#ff0000',
+      artistFillColor:false,
+      titleFillColor:false,
+      font:'Retro',
+      style:'arrows',
+      paperType:'letter'
+    });
+  }
+  localStorage.removeItem('options')
+  titleCreator.db.saveDatabase();
+}
+
 
 function shadeColor2(color, percent) {   
   var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
@@ -652,4 +706,13 @@ function trimArray(arr) {
   for(i=0;i<arr.length;i++)
     arr[i]=arr[i].trim();
   return arr;
+}
+function stripMD(results) {
+  var record={}
+  var keys=Object.keys(results);
+  for(i=0;i<keys.length;i++) {
+    if(keys[i]!=='$loki' && keys[i]!=='meta')
+      record[keys[i]]=results[keys[i]]
+  }
+  return record
 }

@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-  <html lang='en'>
+<html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?2=OmJ3Mz7X8k">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?2=OmJ3Mz7X8k">
@@ -16,343 +15,848 @@
     <meta name="msapplication-TileColor" content="#2d89ef">
     <meta name="theme-color" content="#ffffff">
 
-    <title>JUKESTUDIO - Jukebox Title Strip Creator</title>
-    <script src="assets/jquery-3.3.1.min.js"></script>
-    <script src="assets/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="assets/bootstrap.css">
-    <link rel="stylesheet" href="fonts/stylesheet.css">
-    <style>
-      body { font-family: 'Work Sans'; }
-      .form-control { border: none; border-radius: 0; border-bottom: 1px solid #ddd; }
-      .form-control:focus { -webkit-box-shadow: none; box-shadow: none; border-color: #E4B33F; }
-      .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus { color: #FFD166; }
-      .navbar.bg-default { background: #eeeeee; padding: .5rem 1rem; margin-top: 70px; }
-      .navbar.bg-default a { color: #777777; }
-      .navbar.bg-default a:hover { color: #3498DB; }
-      .navbar.bg-gray { background-color: #26547C !important; }
-      .navbar .navbar-brand { font-weight:200; font-family: 'Work Sans', sans-serif; color: #FFD166; }
-      .navbar .navbar-brand strong { font-weight: 700; }
-      .navbar .navbar-brand img { height: 28px; margin-right: 4px; }
-      .main-content { margin-top: 150px; }
-      .right { text-align: right; }
-      .btn { border-radius: .17rem; border-width: 2px; }
-      .btn:focus, .btn.focus { box-shadow: none; }
-      .btn.btn-default { color: #666; border-color: #dddddd; }
-      .btn.btn-success { color: #ffffff; background-color: #00BD8E; border-color: #00BD8E; }
-      .btn.btn-primary { color: #ffffff; background-color: #6487A7; border-color: #6487A7; }
-      .btn.btn-info { background: #FFD166; border-color: #FFD166; color: #575e68; }
-      .btn.btn-danger { background: #C05E31; border-color: #C05E31; color: #ffffff; }
-      .btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active, .show > .btn-info.dropdown-toggle { background: #E4AA06; border-color: #E4AA06 }
-      .title input { border-radius: 0; border: 1px solid #fff; padding-left: 0; }
-      .title input:focus, .title input:active { border-color: #fff; border-bottom: 1px solid #ced4da; box-shadow: none; background-color: #f5f5f5; }
-      .modal-backdrop.show { opacity: 0.9; }
-      .modal-backdrop { background-color: #26547C; }
-      .modal-content { border: none; border-radius: .3rem; box-shadow: 0px 0px 5px 2px #052A4866; }
-      .modal-header { padding: 2rem .75rem 1rem .75rem; background-color: transparent; border: none; border-top-left-radius: .3rem; border-top-right-radius: .3rem; font-size: 1.2rem; color: #555555; text-align: center; display: block; }
-      .modal-header img { height: 40px; display: block; margin-left: auto; margin-right: auto; margin-bottom: .75rem; }
-      .modal-header .close { margin: -1.5em -0.7rem -1rem auto; }
-      .modal-header span.title { clear:both; display:block; }
-      .modal-footer { padding: 0; margin: 0; border-top: none; }
-      .modal-footer .btn { padding: .75rem }
-      .modal-footer .btn.one { width: 100%; margin: 0; border-radius: 0; border-bottom-left-radius: .3rem; border-bottom-right-radius: .3rem; }
-      .modal-footer .btn.two { width: 50%; margin: 0; border-radius: 0; }
-      .modal-footer .btn:first-child { border-bottom-left-radius: .3rem; }
-      .modal-footer .btn:last-child { border-bottom-right-radius: .3rem; }
-      .modal .close { color: #555555; opacity: 1; }
-      .modal#confirm-delete-modal { text-align: center; }
-      .modal#confirm-delete-modal p.title { margin-bottom: 0px; }
-      .modal#confirm-delete-modal p.artist { margin-top: 0px; }
-      .modal#confirm-delete-modal .modal-body { margin-bottom: 20px; }
-      .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before { background-color: #FFD166; }
-      #hidden-file { display: none; }
-      .table { color: #777; }
-      .table th { border-top: none; }
-      .table .aside { cursor: pointer; }
-      .table .custom-control-label, .table .custom-control { display: inline; }
-      #title-menu { position: absolute; display:none; }
-      .title-menu-button { padding-left: .5rem; padding-right: .5rem; }
-      a.title-menu-button { color: #555555; }
-      .navbar { padding: .75rem; }
-      .navbar.toolbar { margin-top: 60px; padding: .5rem; background-color: #26547C !important; }
-      .navbar .btn { margin-right: 4px; border: none; }
-      .navbar .btn.btn-default { background-color: #26547C; }
-      .modal-body svg { display: block; margin-left: auto; margin-right: auto; }
-    </style>
+    <title>jukestudio</title>
+    <link rel="stylesheet" href="assets/juke.css">
+<style>
+.is-center { text-align: center; }
+#preview-strip { width: 25%; }
+.navbar-brand img { height: 35px; width: auto; }
+</style>
   </head>
   <body>
-    <div class="navbar navbar-expand-lg fixed-top bg-gray navbar-dark">
+    <!-- START NAV -->
+    <nav class="navbar is-danger">
       <div class="container">
-	      <a href="../" class="navbar-brand"><img src="/favicon.ico" /><strong>JUKE</strong>STUDIO</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item">
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="menu-export" href="#">Import/Export</a>
-            </li>
-          </ul>
+        <div class="navbar-brand">
+          <a class="navbar-item brand-text" href="#">
+            <img src="images/logo.svg">
+            <img src="images/brand.svg">
+          </a>
+          <div class="navbar-burger burger" data-target="navMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-start">
+            <a class="navbar-item add-record" href="#">
+              add record
+            </a>
+            <a class="navbar-item change-design" href="#">
+              design
+            </a>
+            <a class="navbar-item print-titles" href="#">
+              print
+            </a>
+            <a class="navbar-item import-export" href="#">
+              import/export
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <nav class="navbar navbar-light bg-light fixed-top toolbar">
-      <div class="container">
-      <form class="form-inline">
-        <div class="input-group">
-	<button type="button" class="btn btn-default open-add-modal"><img src="images/record.svg" style="height:21px"/></button>
-	<button type="button" class="btn btn-default" id="menu-options"><img src="images/design.svg" style="height:21px"/></button>
-	<button type="button" class="btn btn-default" id="write-document"><img src="images/print-white.svg" style="height:21px"/></button>
-        </div>
-      </form>
     </nav>
-
-    <div class="container main-content">
-      <div class="bs-docs-section clearfix">
-        <div class="row">
-          <div class="col-lg-12">
-            <table class="table table-hover" id="titles">
-              <thead>
-                <tr>
-                  <th>Print</th>
-                  <th>A Side</th>
-                  <th>B Side</th>
-                  <th colspan=2>Artist</th>
-                </tr>
-              </thead>
-              <tbody>
-	      </tbody>
-            </table>
+    <!-- END NAV -->
+    <!-- MAIN CONTENT -->
+    <section class="section">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-12">
+            <div class="card events-card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Records
+                </p>
+              </header>
+              <div class="card-table">
+                 <div class="content">
+                    <table class="table is-fullwidth is-striped" id="record-table">
+                      <thead>
+                        <tr>
+                          <th>Print</th>
+                          <th>Side A</th>
+                          <th>Side B</th>
+                          <th></th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+    <!-- END MAIN CONTENT -->
 
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="context-menu">
-        <a class="dropdown-item edit" href="#">Edit</a>
-        <a class="dropdown-item remove" href="#">Remove</a>
-      </div>
+    <!-- MODALS -->
 
-    <div class="modal fade" id="options-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <img src="images/design-dark.svg"/>
-            Design
-          </div>
-          <div class="modal-body">
-            <fieldset>
-              <div class="form-group">
-                <label for="option-paperType">Paper type</label>
-                <select class="form-control" id="option-paperType">
-                  <option value="letter">Plain paper (US Letter)</option>
-                  <option value="double10">Pre-printed 5x2 (HxW)</option>
-                  <option value="single12">Pre-printed 12x1 (HxW)</option>
-                </select>
-                <p id="paperType-message"></p>
-              </div>
-              <div class="form-group">
-                <label for="option-font">Font</label>
-                <select class="form-control" id="option-font">
-                </select>
-              </div>
-              <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-uppercase">
-                  <label class="custom-control-label" for="option-uppercase">Force uppercase</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="option-quotes">
-                  <label class="custom-control-label" for="option-quotes">Add quotes to titles</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="option-style">Style</label>
-                <select class="form-control onlyplain" id="option-style">
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="option-primaryColor">Color</label><br>
-                <select class="form-control onlyplain nocolor" id="option-primaryColor">
-                  <option value="#ff0000">Red</option>
-                  <option value="#00a0de">Blue</option>
-                  <option value="#5fae6f">Green</option>
-                  <option value="#80578f">Purple</option>
-                  <option value="#EE6B3F">Orange</option>
-                </select>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input onlyplain nocolor" id="option-artistFillColor" checked="">
-                  <label class="custom-control-label" for="option-artistFillColor">Colored background for artist</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input onlyplain nocolor" id="option-titleFillColor" checked="">
-                  <label class="custom-control-label" for="option-titleFillColor">Colored background for titles</label>
-                </div>
-              </div>
-            </fieldset>
-	    <p style="align:center:">
-	      <img src="images/designs/arrows.svg" style="width: 25%;" id="design-preview" class="svg" />
+    <!-- WELCOME MODAL -->
+    <div class="modal" id="welcome-modal">
+      <div class="modal-background close-modal"></div>
+        <div class="modal-card modal-small is-center">
+          <header class="modal-card-head">
+            <p class="modal-card-title">
+              welcome to jukestudio
             </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default two" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success two save-options">Save</button>
-          </div>
+          </header>
+          <section class="modal-card-body">
+            <img src="images/logo.svg" id="preview-strip">
+            <p>to get started, click 'add record' menu to add your first record, then set some design options and click 'print'!</p>
+          </section>
+          <footer class="modal-card-foot columns">
+            <button class="button column is-light close-modal">ok, i'm ready!</button>
+          </footer>
         </div>
       </div>
     </div>
+    <!-- END WELCOME MODAL -->
 
-    <div class="modal fade" id="add-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <img src="images/record-dark.svg"/>
-	    <span class="title">Add record</span> 
-          </div>
-          <div class="modal-body">
-            <fieldset>
-              <div class="form-group">
-                <input type="text" class="form-control" id="add-side-a" placeholder="Side A"/>
-                <div class="invalid-feedback"></div>
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" id="add-side-b" placeholder="Side B"/>
-                <div class="invalid-feedback"></div>
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" id="add-artist" placeholder="Artist"/>
-                <div class="invalid-feedback"></div>
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" id="add-artist-b" placeholder="Side B artist (if different)"/>
-              </div>
-            </fieldset>
-	    <p class="text-center">
-	      <img src="" style="width: 25%;" id="title-preview" class="svg" />
-	      <a data-toggle="collapse" href="#collapseExample"><img src="images/chevron.svg" style="height:15px;"></a>
-              <div class="collapse" id="collapseExample">
-                <div class="card card-body">
-                  <fieldset>
-                    <div class="form-group">
-                      <label for="title-style">Style</label>
-                      <select class="form-control onlyplain" id="title-style"></select>
-                    </div>
-                    <div class="form-group">
-                      <label for="title-primaryColor">Color</label><br>
-                      <select class="form-control onlyplain nocolor" id="title-primaryColor">
-                        <option value="#ff0000">Red</option>
-                        <option value="#00a0de">Blue</option>
-                        <option value="#5fae6f">Green</option>
-                        <option value="#80578f">Purple</option>
-                        <option value="#EE6B3F">Orange</option>
-                      </select>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input onlyplain nocolor" id="title-artistFillColor" checked="">
-                        <label class="custom-control-label" for="title-artistFillColor">Colored background for artist</label>
-                      </div>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input onlyplain nocolor" id="title-titleFillColor" checked="">
-                        <label class="custom-control-label" for="title-titleFillColor">Colored background for titles</label>
-                      </div>
-                    </div>
-                  </fieldset>
-                </div>
-              </div>
+    <!-- DESIGN MODAL -->
+    <div class="modal" id="design-modal">
+      <div class="modal-background close-modal"></div>
+        <div class="modal-card modal-small">
+          <header class="modal-card-head is-center">
+            <p class="modal-card-title">
+              <img class="modal-card-head-img" src="images/design-dark.svg"/>
+              <br>
+              <span class="title-text">design</span>
             </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default two" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success two  save">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="modal fade" id="confirm-delete-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <img src="images/record-dark.svg"/>
-	    <span class="title">Delete record</span> 
-          </div>
-          <div class="modal-body">
-            <p class="title"></p>
-	    <p class="artist"></p>
-            Are you sure you want to delete this record?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default two" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger two delete">Delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="welcome-screen">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close clearfix" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-	    <span class="title">Welcome to <strong>JUKE</strong>STUDIO</span> 
-            <img src="images/designs/arrows.svg" style="height:auto; width: 225px; clear:both; margin-top: 15px;">
-          </div>
-          <div class="modal-body text-center">
-            <p>To get started, click the <img src="images/record-dark.svg" style="height:20px;"> icon in the title bar to add your first record.</p>
-	    <p>Set some style options using <img src="images/design-dark.svg" style="height:20px;"></p>
-            <p>Finally, click <img src="images/print.svg" style="height:20px"> to print your title cards!</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default one" data-dismiss="modal">Get started</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="modal fade" id="export-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            Library
-          </div>
-          <div class="modal-body">
-            <fieldset>
-              <div class="form-group">
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="export-all" name="customRadio" class="custom-control-input" checked="">
-                  <label class="custom-control-label" for="export-all">Export library and settings</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="export-titles" name="customRadio" class="custom-control-input">
-                  <label class="custom-control-label" for="export-titles">Export library only (CSV)</label>
+          </header>
+          <section class="modal-card-body">
+            <p class="is-center">
+            <img src="" style="width: 25%;" id="design-preview" class="svg" />
+            </p>
+            <div class="field">
+              <label class="label">paper type</label>
+              <div class="control">
+                <div class="select">
+                  <select id="design-paper-type">
+                    <option value="letter">plain paper (US LETTER)</option>
+                    <option value="double10">pre-printed 5x2 (HxW)</option>
+                    <option value="single12">pre-printed 12x1 (HxW)</option>
+                  </select>
                 </div>
               </div>
-              <button type="button" class="btn btn-primary" id="export">Export</button>
-            </fieldset>
-            <hr/>
-            <fieldset>
-              <input id="hidden-file" type="file" accept=".json,.csv" />
-              <p><small><strong>Note</strong>: To import a library in CSV format, your file must be arranged with exactly three columns as follows: Side A, Side B, Artist</small></p>
-              <button type="button" class="btn btn-primary" id="import" onclick="document.getElementById('hidden-file').click();">Import</button>
-            </fieldset>
-            <hr/>
-            <fieldset>
-              <button type="button" class="btn btn-danger" id="options-clear">Clear library</button>
-            </fieldset>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default one" data-dismiss="modal">Close</button>
-          </div>
+              <p id="paperType-message"></p>
+            </div>
+            <div class="field">
+              <label class="label">font</label>
+              <div class="control">
+                <div class="select">
+                  <select id="design-font">
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <input class="is-checkradio" id="design-uppercase" type="checkbox" name="">
+              <label for="design-uppercase">force uppercase</label>
+            </div>
+            <div class="field">
+              <input class="is-checkradio" id="design-quotes" type="checkbox" name="">
+              <label for="design-quotes">put quotes around titles</label>
+            </div>
+            <div class="field">
+              <label class="label">style</label>
+              <div class="control">
+                <div class="select">
+                  <select class="onlyplain" id="design-style">
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">color</label>
+              <div class="control">
+                <div class="select">
+                  <select class="onlyplain" id="design-primary-color">
+                    <option value="#ff0000">red</option>
+                    <option value="#00a0de">blue</option>
+                    <option value="#5fae6f">green</option>
+                    <option value="#80578f">purple</option>
+                    <option value="#EE6B3F">orange</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <input class="is-checkradio" id="design-artist-fill" type="checkbox" name="">
+              <label for="design-artist-fill">colored background for artist</label>
+            </div>
+            <div class="field">
+              <input class="is-checkradio" id="design-title-fill" type="checkbox" name="">
+              <label for="design-title-fill">colored background for title</label>
+            </div>
+          </section>
+          <footer class="modal-card-foot columns">
+            <button class="button column is-light close-modal">cancel</button>
+            <button class="button column is-success save">save</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <!-- END DESIGN MODAL -->
+
+    <!-- ADD RECORD MODAL -->
+    <div class="modal" id="add-record-modal">
+      <div class="modal-background close-modal"></div>
+        <div class="modal-card modal-small is-center">
+          <header class="modal-card-head">
+            <p class="modal-card-title">
+              <img class="modal-card-head-img" src="images/record-dark.svg"/>
+              <br>
+              <span class="title-text">add record</span>
+            </p>
+          </header>
+          <section class="modal-card-body">
+            <p class="is-center">
+              <img src="" id="add-record-preview" class="preview-strip" />
+            </p>
+            <div class="field">
+              <div class="control">
+                <input class="input" type="text" id="add-side-a" placeholder="side a">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input class="input" type="text" id="add-side-b" placeholder="side b">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input class="input" type="text" id="add-artist" placeholder="artist">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input class="input" type="text" id="add-artist-b" placeholder="side b artist (if different)">
+              </div>
+            </div>
+            <div class="box" id="style-override">
+              <div class="field">
+                <input class="is-checkradio" id="title-style-override" type="checkbox" name="">
+                <label for="title-style-override">alter style for this record</label>
+              </div>
+              <div class="field">
+                <label class="label">style</label>
+                <div class="control">
+                  <div class="select">
+                    <select id="title-style">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">color</label>
+                <div class="control">
+                  <div class="select">
+                    <select id="title-primary-color">
+                      <option value="#ff0000">red</option>
+                      <option value="#00a0de">blue</option>
+                      <option value="#5fae6f">green</option>
+                      <option value="#80578f">purple</option>
+                      <option value="#EE6B3F">orange</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <input class="is-checkradio" id="title-artist-fill" type="checkbox" name="">
+                <label for="title-artist-fill">colored background for artist</label>
+              </div>
+              <div class="field">
+                <input class="is-checkradio" id="title-title-fill" type="checkbox" name="">
+                <label for="title-title-fill">colored background for title</label>
+              </div>
+            </div>
+          </section>
+          <footer class="modal-card-foot columns">
+            <button class="button column is-light close-modal">cancel</button>
+            <button class="button column is-success save">save</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <!-- END ADD RECORD MODAL -->
+
+    <!-- DELETE MODAL -->
+    <div class="modal" id="delete-modal">
+      <div class="modal-background close-modal"></div>
+        <div class="modal-card modal-small is-center">
+          <header class="modal-card-head">
+            <p class="modal-card-title">
+              <img class="modal-card-head-img" src="images/record-dark.svg"/>
+              <br>
+              delete record
+            </p>
+          </header>
+          <section class="modal-card-body">
+            <p class="is-compact record-detail"></p>
+            <br>
+            <p>are you sure you want to delete this record?</p>
+            <br>
+          </section>
+          <footer class="modal-card-foot columns">
+            <button class="button column is-light close-modal">cancel</button>
+            <button class="button column is-danger" id="delete-record">delete</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <!-- END DELETE MODAL -->
+
+    <!-- IMPORT/EXPORT MODAL -->
+    <div class="modal" id="import-export-modal">
+      <div class="modal-background close-modal"></div>
+        <div class="modal-card modal-small">
+          <header class="modal-card-head is-center">
+            <p class="modal-card-title">
+              <img class="modal-card-head-img" src="images/record-dark.svg"/>
+              <br>
+              import/export
+            </p>
+          </header>
+          <section class="modal-card-body">
+            <div class="field">
+              <input class="is-checkradio" id="export-json" type="radio" name="export-type" checked>
+              <label for="export-json">export library and settings</label>
+            </div>
+            <div class="field">
+              <input class="is-checkradio" id="export-csv" type="radio" name="export-type">
+              <label for="export-csv">export library only (CSV)</label>
+            </div>
+            <button class="button is-primary" id="export-library">export</button>
+            <hr>
+            <button class="button is-primary" id="import-library">import</button>
+            <input id="hidden-file" type="file" accept=".json,.csv" />
+            <br>
+            <small><strong>Note</strong> To import a library in CSV format, your file must be arranged with exactly three columns as follows: Side A, Side B, Artist</small>
+          </section>
+          <footer class="modal-card-foot columns">
+            <button class="button column is-light close-modal">close</button>
+          </footer>
         </div>
       </div>
     </div>
 
+
+    <!-- END MODALS -->
   </body>
+  <script src="assets/crel.min.js"></script>
+  <script src="assets/lokijs.min.js"></script>
   <script src='assets/pdfmake.min.js'></script>
-  <script src='assets/vfs_fonts.js'></script>
-  <script src="assets/titlecreator.js?ver=1.15"></script>
-  <script src="jukestudio.js?ver=1.15"></script>
+  <script src='assets/vfs_fonts.js?ver=2.00'></script>
+  <script src="assets/titlecreator.js?ver=2.00"></script>
+<script>
+
+//----- HELPER FUNCTIONS
+function startApp() {
+  //add vfs fonts to the main page
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  var frag=document.createDocumentFragment();
+  for(var key in pdfMake.vfs) {
+    if(pdfMake.vfs.hasOwnProperty(key) && key.indexOf('.ttf')>0) {
+      style.append('@font-face {font-family: '+key.substr(0,key.length-4)+';src: url(data:font/ttf;base64,'+pdfMake.vfs[key]+');}');
+       frag.appendChild(crel('option',{'value':key.substr(0,key.length-4),'style':'font-family:'+key.substr(0,key.length-4)},key.substr(0,key.length-4)));
+    }
+  }
+  document.getElementById('design-font').appendChild(frag);
+  document.getElementsByTagName('head')[0].appendChild(style);
+
+  //populate the list of styles from titleCreator
+  var f1=document.createDocumentFragment(),f2=document.createDocumentFragment();
+  var keys=Object.keys(titleCreator.styles);
+  keys.forEach(function(key){
+    f1.appendChild(crel('option',{'value':key},titleCreator.styles[key].name))
+    f2.appendChild(crel('option',{'value':key},titleCreator.styles[key].name))
+  });
+  document.getElementById('design-style').appendChild(f1);
+  document.getElementById('title-style').appendChild(f2);
+
+  //load the titles into the app
+  var titles=titleCreator.getTitles();
+  if(titles.length>0)
+    addRow(titles);
+  else
+    document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},crel('td',{'colspan':'4','class':'is-center'},'no records! add a record to get started')));
+
+  //only show the welcome screen the first time you visit
+  if(!localStorage.getItem('welcome-hidden'))
+    document.getElementById('welcome-modal').classList.add('is-active');
+}
+
+function toggleModal(id,dataID=null) {
+  var m=document.getElementById(id);
+  if(m.classList.contains('is-active')) {
+    m.classList.remove('is-active');
+    m.removeAttribute('data-id')
+  } else {
+    m.classList.add('is-active');
+    if(dataID!==null)
+      m.setAttribute('data-id',dataID)
+  }
+}
+
+function addRow(content=null){
+  if(content==null) return;
+
+  var row;
+  var fragment=document.createDocumentFragment();
+
+  if(content.constructor!==Array)
+    content=[content];
+
+  var i;
+  for(i=0;i<content.length;i++) {
+    row=crel('tr',{'class':'is-compact','data-id':content[i].id},
+      crel('td',{'class':'is-middle'},
+        crel('div',{'class':'field'},
+          crel('input',{'class':'is-checkradio print-check','data-id':content[i].id,'id':'printcheck'+content[i].id,'type':'checkbox'}),
+          crel('label',{'for':'printcheck'+content[i].id})
+        )
+      ), //td
+      crel('td',{'class':'aside'},
+        crel('p',
+          crel('strong',content[i].aside)
+        ),
+        crel('p',
+          crel('small',content[i].artist)
+        )
+      ), //td
+      crel('td',{'class':'bside'},
+        crel('p',
+          crel('strong',content[i].bside)
+        ),
+        crel('p',
+          crel('small',((content[i].artistb=='')?content[i].artist:content[i].artistb))
+        )
+      ), //td
+      crel('td',{'class':'is-middle'},
+        crel('a',{'class':'button is-small is-danger delete-button','href':'#','data-modal':'open','data-target':'delete-modal'},'delete')
+      ) //td
+    ); //tr
+    fragment.appendChild(row);
+  }
+
+  var nr=document.querySelector('#record-table #no-records');
+  if(nr!==null) nr.remove();
+
+  document.querySelector('#record-table tbody').appendChild(fragment);
+}
+
+function removeRow(id) {
+  var row=document.querySelector('#record-table tr[data-id="'+id+'"]');
+  row.parentNode.removeChild(row);
+  if(document.querySelector('#record-table tbody tr')==null)
+    document.querySelector('#record-table tbody').innerHTML='<tr id="no-records"><td colspan=4 class="is-center">no records! add a record to get started</td></tr>';
+}
+
+function addSVGText(g,text,options) {
+  var newText = document.createElementNS('http://www.w3.org/2000/svg',"text");
+  if(Array.isArray(text)) {
+    text.forEach(function(t,i){
+       var tsp = document.createElementNS('http://www.w3.org/2000/svg',"tspan");
+       tsp.setAttributeNS(null,'x',options["x"]);
+       if(i>0)
+        tsp.setAttributeNS(null,'dy','10px');
+      var tn=document.createTextNode(t);
+      tsp.appendChild(tn);
+      newText.appendChild(tsp);
+    });
+    options["y"]=options["y"]-7;
+  } else {
+    var textNode = document.createTextNode(text);
+    newText.appendChild(textNode);
+
+    var k=Object.keys(options);
+     k.forEach(function(key) {
+       newText.setAttributeNS(null,key,options[key]);
+     });
+     g.append(newText);
+   }
+}
+
+function stringBreaker(str,style) {
+  var ts=document.body.appendChild(crel('span',{'style':'font-family:'+style.font.name+';font-size:'+style.font.titleSize+'px;font-weight:bold;position:absolute;left:0;top:0','id':'text-sizer'}));
+  ts.innerText=str;
+  if(ts.offsetWidth>(225-(style.margins*2))) {
+    var x=str.split(" ");
+    ts.innerText='';
+    var i=0;
+    for(i=0;i<x.length;i++) {
+      ts.innerText=ts.innerText+(((i>0)?' ':'')+x[i]);
+      if(ts.offsetWidth>(225-(style.margins*2))) {
+        i=i-1;
+        break;
+      }
+    }
+    tt=[x.splice(i).join(" ")];
+    x=x.join(" ");
+    tt.unshift(x);
+    str=tt;
+    delete tt;
+  }
+  //ts.remove();
+  return str;
+}
+function alterSVGText(img,text) {
+  document.querySelector('#'+img+' .aside').textContent=text.sidea;
+  document.querySelector('#'+img+' .bside').textContent=text.sideb;
+  document.querySelector('#'+img+' .artist').textContent=text.artist;
+}
+function buildPreview(img,o) {
+  img=document.getElementById(img);
+  var imgID = img.id;
+  var imgClass = img.classList;
+  parser = new DOMParser();
+  data=parser.parseFromString(atob(pdfMake.vfs[o.style.style+'.svg']),"text/xml");
+  var svg = data.querySelector('svg');
+  if(typeof imgID !== 'undefined') {
+    svg.id=imgID;
+  }
+  for(var i=0;i<imgClass.length;i++) svg.classList.add(imgClass[i]);
+  svg.classList.add('replaced-svg');
+  svg.removeAttribute('xmlns:a');
+  if(!svg.getAttribute('viewBox') && svg.getAttribute('height') && svg.getAttribute('width')) {
+    svg.setAttribute('viewBox', '0 0 ' + svg.getAttribute('height') + ' ' + svg.getAttribute('width'))
+  }
+
+  if(!o.artistTint) {
+    o.style.artistTint=((o.style.artistFillColor)?shadeColor2(o.style.primaryColor,0.8):'#ffffff');
+    o.style.titleTint=((o.style.titleFillColor)?shadeColor2(o.style.primaryColor,0.8):'#ffffff');
+  }
+  var des=svg.querySelector('#design');
+  if(des!==null) {
+    des.style.fill=o.style.primaryColor;
+    if(o.style.artistFillColor) svg.querySelector('#artist_fill').style.fill=o.style.artistTint;
+    if(o.style.titleFillColor) svg.querySelector('#title_fill').style.fill=o.style.titleTint;
+  }
+
+  var g=svg.querySelector('g');
+  var options={"x":112.5,"y":19,"text-anchor":"middle","font-size":o.style.font.titleSize+"px","font-family":o.style.font.name,"class":"aside"};
+  addSVGText(g,stringBreaker(o.aside,o.style),options);
+
+  options["y"]=61;
+  options["class"]="bside"
+  addSVGText(g,stringBreaker(o.bside,o.style),options);
+
+  options["y"]=37;
+  options["alignment-baseline"]="central";
+  options["font-size"]=o.style.font.artistSize+"px";
+  options["class"]="artist"
+  addSVGText(g,o.artist+((o.artistb=='')?'':' / '+o.artistb),options);
+
+  img.replaceWith(svg);
+
+  
+};
+
+//----- END HELPER FUNCTIONS
+
+//----- EVENT HANDLERS
+
+//-- GENERIC CLOSE MODAL HANDLER --//
+document.querySelectorAll('.close-modal').forEach(function(e){
+  e.addEventListener('click', function (event) {
+    var modal=event.target.closest('.modal');
+    toggleModal(modal.id);
+    if(modal.id=='welcome-modal')
+      localStorage.setItem('welcome-hidden',true);
+    else if(modal.id=="add-record-modal")
+      document.querySelectorAll('#add-record-modal input').forEach(function(e){e.value=''});
+  });
+});
+
+//-- DESIGN MODAL OPENER --//
+document.querySelector('.navbar .change-design').addEventListener('click', function(event) {
+  event.preventDefault();
+  var o=titleCreator.getOptions();
+  document.getElementById('design-paper-type').value=o.paperType;
+  document.getElementById('design-font').value=o.font;
+  document.getElementById('design-uppercase').checked=o.allCaps;
+  document.getElementById('design-quotes').checked=o.quotes;
+  document.getElementById('design-style').value=o.style;
+  document.getElementById('design-primary-color').value=o.primaryColor;
+  document.getElementById('design-artist-fill').checked=o.artistFillColor;
+  document.getElementById('design-title-fill').checked=o.titleFillColor;
+  buildPreview('design-preview',titleCreator.getTitle(false,true));
+  toggleModal('design-modal');
+});
+//-- DESIGN MODAL UPDATE SVG --//
+document.querySelectorAll('#design-paper-type,#design-font,#design-uppercase,#design-quotes,#design-style,#design-primary-color,#design-artist-fill,#design-title-fill').forEach(function(e){
+  e.addEventListener('change', function(event) {
+    s=titleCreator.getTitle(false,true);
+    s.style.allCaps=document.getElementById('design-uppercase').checked;
+    s.style.artistFillColor=document.getElementById('design-artist-fill').checked;
+    s.style.font.name=document.getElementById('design-font').value;
+    s.style.primaryColor=document.getElementById('design-primary-color').value;
+    s.style.style=document.getElementById('design-style').value;
+    s.style.quotes=document.getElementById('design-quotes').checked;
+    s.style.titleFillColor=document.getElementById('design-title-fill').checked;
+    s.aside=((s.style.quotes)?'"':'')+((s.style.allCaps)?'SIDE A':'Side A')+((s.style.quotes)?'"':'');
+    s.bside=((s.style.quotes)?'"':'')+((s.style.allCaps)?'SIDE B':'Side B')+((s.style.quotes)?'"':'');
+    s.artist=((s.style.allCaps)?'ARTIST':'Artist');
+    buildPreview('design-preview',s);
+  });
+});
+//-- DESIGN MODAL SAVE --//
+document.querySelector('#design-modal .save').addEventListener('click', function(event) {
+  titleCreator.setOption('paperType',document.getElementById('design-paper-type').value);
+  titleCreator.setOption('font',document.getElementById('design-font').value);
+  titleCreator.setOption('allCaps',document.getElementById('design-uppercase').checked);
+  titleCreator.setOption('quotes',document.getElementById('design-quotes').checked);
+  titleCreator.setOption('style',document.getElementById('design-style').value);
+  titleCreator.setOption('primaryColor',document.getElementById('design-primary-color').value);
+  titleCreator.setOption('artistFillColor',document.getElementById('design-artist-fill').checked);
+  titleCreator.setOption('titleFillColor',document.getElementById('design-title-fill').checked);
+  toggleModal('design-modal');
+});
+
+//-- ADD RECORD OPENER --//
+document.querySelector('.navbar .add-record').addEventListener('click', function(event) {
+  event.preventDefault();
+  document.querySelector('#add-record-modal .title-text').innerText='add record';
+  var s=titleCreator.getStyle();
+  document.getElementById('title-style').value=s.style;
+  document.getElementById('title-primary-color').value=s.primaryColor;
+  document.getElementById('title-artist-fill').checked=s.artistFillColor;
+  document.getElementById('title-title-fill').checked=s.titleFillColor;
+  document.getElementById('title-style-override').checked=false;
+  document.querySelectorAll('#add-record-modal .box input,#add-record-modal .box select').forEach(function(e){
+    if(e.id!=='title-style-override')
+      e.disabled=true;
+  });
+
+  //clear the existing fields
+  var mand=['add-side-a','add-side-b','add-artist'];
+  mand.forEach(function(v){ document.getElementById(v).value='' });
+
+  var t=titleCreator.getTitle(false,true);
+  t.aside='';
+  t.bside='';
+  t.artist='';
+  buildPreview('add-record-preview',t);
+  toggleModal('add-record-modal');
+  document.querySelector("#add-side-a").focus();
+});
+function buildAddPreview() {
+    s=titleCreator.getTitle(false,true);
+    var art=document.getElementById('add-artist').value+((document.getElementById('add-artist-b').value=='')?'':' / '+document.getElementById('add-artist-b').value);
+    s.aside=((s.style.quotes)?'"':'')+((s.style.allCaps)?document.getElementById('add-side-a').value.toUpperCase():document.getElementById('add-side-a').value)+((s.style.quotes)?'"':''),
+    s.bside=((s.style.quotes)?'"':'')+((s.style.allCaps)?document.getElementById('add-side-b').value.toUpperCase():document.getElementById('add-side-b').value)+((s.style.quotes)?'"':''),
+    s.artist=((s.style.allCaps)?art.toUpperCase():art)
+    if(document.getElementById('title-style-override').checked) {
+      s.style.primaryColor=document.getElementById('title-primary-color').value;
+      s.style.style=document.getElementById('title-style').value;
+      s.style.artistFillColor=document.getElementById('title-artist-fill').checked;
+      s.style.titleFillColor=document.getElementById('title-title-fill').checked;
+    }
+    buildPreview('add-record-preview',s);
+}
+//-- UPDATE SVG TEXT WHEN ADD INPUTS CHANGE --//
+document.querySelectorAll('#add-side-a,#add-side-b,#add-artist,#add-artist-b').forEach(function(e){
+  e.addEventListener('keyup', function(event) {
+    buildAddPreview();
+  });
+});
+document.querySelectorAll('#title-style,#title-primary-color,#title-artist-fill,#title-title-fill,#title-style-override').forEach(function(e){
+  e.addEventListener('change', function(event) {
+    buildAddPreview();
+  });
+});
+//-- STYLE OVERRRIDE (ADD RECORD) --//
+document.getElementById('title-style-override').addEventListener('click',function(e){
+  document.querySelectorAll('#add-record-modal .box input,#add-record-modal .box select').forEach(function(e){
+    if(e.id!=='title-style-override')
+      e.disabled=!document.getElementById('title-style-override').checked;
+  });
+});
+document.querySelector('#add-record-modal .save').addEventListener('click',function(event) {
+  var mand=['add-side-a','add-side-b','add-artist'],
+      cancel=false;
+  mand.forEach(function(v){
+    var input=document.getElementById(v);
+    if(input.value=='') {
+      input.classList.add('is-danger');//.parent().addClass('has-danger').find('.invalid-feedback').text('Please enter a value');
+      if(input.parentNode.querySelector('.help')==null)
+        input.parentNode.appendChild(crel('p',{'class':'help is-danger'},'This field is required'));
+      cancel=true;
+    } else {
+      input.classList.remove('is-danger');
+      var h=input.parentNode.querySelector('.help');
+      if(h!==null)
+        h.remove();
+    }
+  });
+
+  if(cancel) return false;
+
+  var t={
+    aside:document.getElementById('add-side-a').value,
+    bside:document.getElementById('add-side-b').value,
+    artist:document.getElementById('add-artist').value,
+    artistb:document.getElementById('add-artist-b').value
+  };
+
+  if(document.getElementById('title-style-override').checked) {
+    //correct formatting
+    var o=titleCreator.getOptions();
+    var x=document.getElementById('title-primary-color').value;
+    if(x!=o.primaryColor) 
+      t.primaryColor=x;
+    else
+      delete(t['primaryColor']);
+
+    x=document.getElementById('title-style').value;
+    if(x!=o.style) 
+      t.style=x;
+    else
+      delete(t['style']);
+
+    x=document.getElementById('title-artist-fill').checked;
+    if(x!=o.artistFillColor) 
+      t.artistFillColor=x;
+    else
+      delete(t['artistFillColor']);
+
+    x=document.getElementById('title-title-fill').checked;
+    if(x!=o.titleFillColor)
+      t.titleFillColor=x;
+    else
+      delete(t['titleFillColor']);
+  }
+
+  var dl=document.getElementById('add-record-modal').dataset;
+  if(dl.hasOwnProperty('id')) {
+    t.id=dl['id'];
+    titleCreator.updateTitle(t);
+    var c=document.querySelector('#record-table tr[data-id="'+t.id+'"]');
+    c.querySelector('.aside strong').innerText=t.aside;
+    c.querySelector('.aside small').innerText=t.artist;
+    c.querySelector('.bside strong').innerText=t.bside;
+    c.querySelector('.bside small').innerText=((t.artistb!='')?t.artistb:t.artist);
+  } else {
+    t=titleCreator.addTitles([t]);
+    addRow(t[0]);
+  }
+  toggleModal('add-record-modal');
+});
+
+
+document.querySelectorAll('#record-table tbody').forEach(function(e){
+  e.addEventListener('click', function (event) {
+    var id=event.target.closest('tr').dataset.id;
+    var classList=event.target.classList;
+    if(event.target.classList.contains('delete-button')) {
+      event.preventDefault();
+      var rd=document.querySelector('#delete-modal .record-detail');
+      while(rd.firstChild) { rd.removeChild(rd.firstChild) }
+      var td=event.target.parentNode.parentNode.childNodes[1].cloneNode(true);
+      while(td.childNodes.length)
+        rd.appendChild(td.childNodes[0]);
+      toggleModal('delete-modal',id);
+    } else {
+      //edit the record
+      document.querySelector('#add-record-modal .title-text').innerText='edit record';
+      var t=titleCreator.getTitle(id);
+      var s=titleCreator.getStyle();
+      document.getElementById('add-side-a').value=t.aside;
+      document.getElementById('add-side-b').value=t.bside;
+      document.getElementById('add-artist').value=t.artist;
+      document.getElementById('add-artist-b').value=t.artistb;
+      var override=false;
+      ['style','primaryColor','artistFillColor','titleFillColor'].forEach(function(e) {
+        if(t.hasOwnProperty(e)) {
+          override=true;
+          switch(e) {
+            case 'style': document.getElementById('title-style').value=t.style; break;
+            case 'primaryColor': document.getElementById('title-primary-color').value=t.primaryColor; break;
+            case 'artistFillColor': document.getElementById('title-artist-fill').checked=t.artistFillColor; break;
+            case 'titleFillColor': document.getElementById('title-title-fill').checked=t.titleFillColor; break;
+          }
+        }
+      });
+      document.querySelectorAll('#style-override input, #style-override select').forEach(function(e){
+        if(e.id!=='title-style-override')
+          e.disabled=!override;
+      });
+      document.getElementById('title-style-override').checked=override;
+      buildPreview('add-record-preview',titleCreator.getTitle(id,true));
+      toggleModal('add-record-modal',id);
+
+    }
+  });
+});
+
+
+//-- DELETE RECORD --//
+document.getElementById('delete-record').addEventListener('click',function(e){
+  var id=document.getElementById('delete-modal').dataset.id;
+  if(id!==undefined) {
+    titleCreator.removeTitle(id);
+    removeRow(id);
+    document.getElementById('delete-modal').classList.remove('is-active'); 
+  }
+});
+
+
+//-- PRINT --//
+document.querySelector('.navbar .print-titles').addEventListener('click', function(event) {
+  event.preventDefault();
+  var selected=[];
+  document.querySelectorAll('.print-check:checked').forEach(function(e){
+    selected.push(parseInt(e.dataset.id)); 
+  });
+  titleCreator.start([]);
+});
+
+//-- IMPORT/EXPORT --//
+document.querySelector('.navbar .import-export').addEventListener('click', function(event) {
+  event.preventDefault();
+  toggleModal('import-export-modal');
+});
+
+//-- EXPORT --//
+document.querySelector('#export-library').addEventListener('click', function(event) {
+  titleCreator.exportDB(((document.getElementById('export-csv').checked)?true:false));
+});
+
+//-- IMPORT --//
+document.querySelector('#export-library').addEventListener('click', function(event) {
+  document.getElementById('#hidden-file').click();
+});
+
+document.getElementById('hidden-file').addEventListener('change', function(evt){
+  var file = evt.target.files[0];
+  if(file.name.indexOf('.csv')==-1 && file.type!="application/json") return false;
+
+  readFile = function (file) {
+    var reader = new FileReader();
+    reader.onload = function (){
+      var type='json';
+      if(file.name.indexOf('.csv')>-1)
+        type='csv'
+
+      titleCreator.importDB(reader.result,type);
+    };
+    reader.readAsBinaryString(file);
+  }(file);
+});
+
+//----- END EVENT HANDLERS
+
+
+//----- DETECT WHEN DOM IS LOADED AND START APP
+/*
+if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+  startApp();
+} else {
+  document.addEventListener("DOMContentLoaded", startApp);
+}
+*/
+</script>
 </html>
