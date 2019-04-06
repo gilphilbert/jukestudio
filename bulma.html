@@ -49,6 +49,9 @@
             <a class="navbar-item print-titles" href="#">
               print
             </a>
+            <a class="navbar-item import-export" href="#">
+              import/export
+            </a>
           </div>
         </div>
       </div>
@@ -303,6 +306,42 @@
         </div>
       </div>
     </div>
+    <!-- END DELETE MODAL -->
+
+    <!-- IMPORT/EXPORT MODAL -->
+    <div class="modal" id="import-export-modal">
+      <div class="modal-background close-modal"></div>
+        <div class="modal-card modal-small">
+          <header class="modal-card-head is-center">
+            <p class="modal-card-title">
+              <img class="modal-card-head-img" src="images/record-dark.svg"/>
+              <br>
+              import/export
+            </p>
+          </header>
+          <section class="modal-card-body">
+            <div class="field">
+              <input class="is-checkradio" id="export-json" type="radio" name="export-type" checked>
+              <label for="export-json">export library and settings</label>
+            </div>
+            <div class="field">
+              <input class="is-checkradio" id="export-csv" type="radio" name="export-type">
+              <label for="export-csv">export library only (CSV)</label>
+            </div>
+            <button class="button is-primary" id="export-library">export</button>
+            <hr>
+            <button class="button is-primary" id="import-library">import</button>
+            <input id="hidden-file" type="file" accept=".json,.csv" />
+            <br>
+            <small><strong>Note</strong> To import a library in CSV format, your file must be arranged with exactly three columns as follows: Side A, Side B, Artist</small>
+          </section>
+          <footer class="modal-card-foot columns">
+            <button class="button column is-light close-modal">close</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+
 
     <!-- END MODALS -->
   </body>
@@ -774,6 +813,40 @@ document.querySelector('.navbar .print-titles').addEventListener('click', functi
   });
   titleCreator.start([]);
 });
+
+//-- IMPORT/EXPORT --//
+document.querySelector('.navbar .import-export').addEventListener('click', function(event) {
+  event.preventDefault();
+  toggleModal('import-export-modal');
+});
+
+//-- EXPORT --//
+document.querySelector('#export-library').addEventListener('click', function(event) {
+  titleCreator.exportDB(((document.getElementById('export-csv').checked)?true:false));
+});
+
+//-- IMPORT --//
+document.querySelector('#export-library').addEventListener('click', function(event) {
+  document.getElementById('#hidden-file').click();
+});
+
+document.getElementById('hidden-file').addEventListener('change', function(evt){
+  var file = evt.target.files[0];
+  if(file.name.indexOf('.csv')==-1 && file.type!="application/json") return false;
+
+  readFile = function (file) {
+    var reader = new FileReader();
+    reader.onload = function (){
+      var type='json';
+      if(file.name.indexOf('.csv')>-1)
+        type='csv'
+
+      titleCreator.importDB(reader.result,type);
+    };
+    reader.readAsBinaryString(file);
+  }(file);
+});
+
 //----- END EVENT HANDLERS
 
 

@@ -561,11 +561,12 @@ window.titleCreator={
   },
   addTitles:function(i){
     var titles=titleCreator.db.getCollection('titles');
+    var o=[];
     i.forEach(function(v){
-      titles.insert(v);
+      o.push(titles.insert(v));
     });
     titleCreator.db.saveDatabase();
-    return i;
+    return o;
   },
   removeTitle:function(id){
     id=parseInt(id);
@@ -593,13 +594,13 @@ window.titleCreator={
       data="data:text/csv;charset=utf-8,";
       var titles=this.getTitles();
       titles.forEach(function(t){
-        data+=t.aside+','+t.bside+','+t.artist+','+t.artistb+"\n";
+        data+=t.aside+','+t.bside+','+t.artist+','+t.artistb+"\r\n";
       });
       ext='csv';
     } else {
       //export JSON
-      //data='data:text/json;charset=utf-8,'
-      data=this.db.serialize();
+      data="data:text/json;charset=utf-8,";
+      data+=encodeURIComponent(this.db.serialize());
       ext='json';
     }
 
@@ -609,6 +610,29 @@ window.titleCreator={
     document.body.appendChild(a);
     a.click();
     a.remove();
+  },
+  importDB:function(data,type) {
+    var out=[];
+    if(type=='csv') {
+      var lines=data.split('\r\n');
+      var inTitles=[];
+      lines.reverse;
+      lines.forEach(function(line){
+        var fields=line.split(',');
+        if(fields.length>=3) {
+          inTitles.push({aside:fields[0],bside:fields[1],artist:fields[2],artistb:((fields.length==4)?fields[3]:'')});
+        }
+      });
+      if(inTitles!=[])
+        out=this.addTitles(inTitles);
+
+    } else {
+      var ob=JSON.parse(data);
+      if(ob.filename=='jukestudio.db')
+        titleCreator.loadJSONObject(ob);
+      out=ob.collections[0];
+    }
+    return out;
   }
 }
 
