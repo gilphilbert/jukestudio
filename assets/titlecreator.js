@@ -575,15 +575,25 @@ window.titleCreator={
     titles.remove(r);
     titleCreator.db.saveDatabase();
   },
-  updateTitle:function(item){
+  updateTitle:function(inItem){
     var titles=titleCreator.db.getCollection('titles');
-    var r=titles.findOne({'id':parseInt(item.id)});
-    var k=Object.keys(item);
+    var dbItem=titles.findOne({'id':parseInt(inItem.id)});
+    var k=Object.keys(inItem);
     k.forEach(function(key){
       if(key!=='id')
-        r[key]=item[key]
+        dbItem[key]=inItem[key]
     });
-    titles.update(r);
+    var k=Object.keys(dbItem);
+    k.forEach(function(key){
+       if(key!='$loki' && key!='meta') {
+        if(!inItem.hasOwnProperty(key)) {
+          delete(dbItem[key]);
+//console.log(key);
+console.log(dbItem[key]);
+        }
+      }
+    });
+    titles.update(dbItem);
     titleCreator.db.saveDatabase();
   },
   exportDB:function(csv=false) {
