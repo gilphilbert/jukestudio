@@ -633,14 +633,17 @@ console.log(dbItem[key]);
           inTitles.push({aside:fields[0],bside:fields[1],artist:fields[2],artistb:((fields.length==4)?fields[3]:'')});
         }
       });
+	    console.log(inTitles);
       if(inTitles!=[])
         out=this.addTitles(inTitles);
 
     } else {
       var ob=JSON.parse(data);
-      if(ob.filename=='jukestudio.db')
-        titleCreator.loadJSONObject(ob);
-      out=ob.collections[0];
+      if(ob.filename=='jukestudio.db') {
+        titleCreator.db.loadJSONObject(ob);
+        titleCreator.db.saveDatabase();
+        out=titleCreator.db.getCollection("titles").data;
+      }
     }
     return out;
   }

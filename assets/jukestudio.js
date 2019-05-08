@@ -489,11 +489,11 @@ document.querySelector('#export-library').addEventListener('click', function(eve
 });
 
 //-- IMPORT --//
-document.querySelector('#export-library').addEventListener('click', function(event) {
-  document.getElementById('#hidden-file').click();
+document.querySelector('#import-library').addEventListener('click', function(event) {
+  document.getElementById('file-import').click();
 });
 
-document.getElementById('hidden-file').addEventListener('change', function(evt){
+document.getElementById('file-import').addEventListener('change', function(evt){
   var file = evt.target.files[0];
   if(file.name.indexOf('.csv')==-1 && file.type!="application/json") return false;
 
@@ -504,7 +504,11 @@ document.getElementById('hidden-file').addEventListener('change', function(evt){
       if(file.name.indexOf('.csv')>-1)
         type='csv'
 
-      titleCreator.importDB(reader.result,type);
+      var rows=titleCreator.importDB(reader.result,type);
+      if(rows.length) { 
+        for(i=0;i<rows.length;i++)
+          addRow(rows[i]);
+      }
     };
     reader.readAsBinaryString(file);
   }(file);
