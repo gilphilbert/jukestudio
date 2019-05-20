@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,7 @@
     <meta name="application-name" content="Juke Studio">
     <meta name="msapplication-TileColor" content="#2d89ef">
     <meta name="theme-color" content="#ffffff">
+    <meta name="Description" content="A web app for creating title strips for jukeboxes">
 
     <title>jukestudio</title>
     <link rel="stylesheet" href="assets/juke.css">
@@ -29,8 +30,8 @@
       <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item brand-text" href="#">
-            <img src="images/logo.svg">
-            <img src="images/brand.svg">
+            <img src="images/logo.svg" alt="jukestudio logo">
+            <img src="images/brand.svg" alt="jukestudio name">
           </a>
           <div class="navbar-burger burger" data-target="navMenu">
             <span></span>
@@ -57,6 +58,7 @@
       </div>
     </nav>
     <!-- END NAV -->
+    <main>
     <!-- MAIN CONTENT -->
     <section class="section">
       <div class="container">
@@ -90,7 +92,7 @@
       </div>
     </section>
     <!-- END MAIN CONTENT -->
-
+    </main>
     <!-- MODALS -->
 
     <!-- WELCOME MODAL -->
@@ -103,7 +105,7 @@
             </p>
           </header>
           <section class="modal-card-body">
-            <img src="images/logo.svg" id="preview-strip">
+            <img src="images/logo.svg" id="preview-strip" alt="jukestudio logo">
             <p>to get started, click 'add record' menu to add your first record, then set some design options and click 'print'!</p>
           </section>
           <footer class="modal-card-foot columns">
@@ -120,14 +122,14 @@
         <div class="modal-card modal-small">
           <header class="modal-card-head is-center">
             <p class="modal-card-title">
-              <img class="modal-card-head-img" src="images/design-dark.svg"/>
+              <img class="modal-card-head-img" src="images/design-dark.svg" alt="Icon for designer"/>
               <br>
               <span class="title-text">design</span>
             </p>
           </header>
           <section class="modal-card-body">
             <p class="is-center">
-            <img src="" style="width: 25%;" id="design-preview" class="svg" />
+            <img src="" style="width: 25%;" id="design-preview" class="svg" alt="Preview of title strip" />
             </p>
             <div class="field">
               <label class="label">paper type</label>
@@ -206,14 +208,14 @@
         <div class="modal-card modal-small is-center">
           <header class="modal-card-head">
             <p class="modal-card-title">
-              <img class="modal-card-head-img" src="images/record-dark.svg"/>
+              <img class="modal-card-head-img" src="images/record-dark.svg" alt="Icon of record"/>
               <br>
               <span class="title-text">add record</span>
             </p>
           </header>
           <section class="modal-card-body">
             <p class="is-center">
-              <img src="" id="add-record-preview" class="preview-strip" />
+              <img src="" id="add-record-preview" class="preview-strip" alt="Preview of title strip" />
             </p>
             <div class="field">
               <div class="control">
@@ -288,7 +290,7 @@
         <div class="modal-card modal-small is-center">
           <header class="modal-card-head">
             <p class="modal-card-title">
-              <img class="modal-card-head-img" src="images/record-dark.svg"/>
+              <img class="modal-card-head-img" src="images/record-dark.svg" alt="Icon of record"/>
               <br>
               delete record
             </p>
@@ -314,7 +316,7 @@
         <div class="modal-card modal-small">
           <header class="modal-card-head is-center">
             <p class="modal-card-title">
-              <img class="modal-card-head-img" src="images/record-dark.svg"/>
+              <img class="modal-card-head-img" src="images/record-dark.svg" alt="Icon of record"/>
               <br>
               import/export
             </p>
@@ -365,7 +367,18 @@
         '/assets/juke.css',
 	'/images/brand.svg',
 	'/images/design-dark.svg',
-	'/images/record-dark.svg'
+	'/images/record-dark.svg',
+	'android-chrome-192x192.png',
+	'android-chrome-384x384.png',
+	'android-chrome-512x512.png',
+	'apple-touch-icon.png',
+	'browserconfig.xml',
+	'favicon-16x16.png',
+	'favicon-32x32.png',
+	'favicon.ico',
+	'mstile-150x150.png',
+	'safari-pinned-tab.svg',
+	'site-webmanifest.xml',
       ]
     });
   </script>
