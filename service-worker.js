@@ -11,6 +11,11 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
+  'site.webmanifest',
+  new workbox.strategies.NetworkFirst()
+);
+
+workbox.routing.registerRoute(
   new RegExp('.*\.js'),
   new workbox.strategies.NetworkFirst()
 );
@@ -23,7 +28,7 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-  /\.(?:png|jpg|svg)$/,
+  /\.(?:png|jpg|svg|ico)$/,
   new workbox.strategies.CacheFirst({
     cacheName: 'image-cache',
     plugins: [
