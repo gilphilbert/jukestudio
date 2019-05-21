@@ -217,6 +217,12 @@ document.querySelectorAll('.close-modal').forEach(function(e){
   });
 });
 
+document.querySelector('.navbar-burger').addEventListener('click', function(event) {
+  event.target.classList.toggle('is-active');
+  document.getElementById(event.target.dataset['target']).classList.toggle('is-active');
+  console.log(event.target.dataset['target']);
+});
+
 //-- DESIGN MODAL OPENER --//
 document.querySelector('.navbar .change-design').addEventListener('click', function(event) {
   event.preventDefault();
