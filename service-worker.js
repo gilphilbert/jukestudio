@@ -17,7 +17,9 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
   new RegExp('.*\.js'),
-  new workbox.strategies.NetworkFirst()
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: 'js-cache',
+  })
 );
 
 workbox.routing.registerRoute(
