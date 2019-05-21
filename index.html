@@ -355,8 +355,15 @@
   <script src="assets/jukestudio.js?ver=2.00"></script>
   <script src="upup.min.js"></script>
   <script>
-document.addEventListener("DOMContentLoaded", function() {
-	  // code...
+    // Check that service workers are registered
+    if ('serviceWorker' in navigator) {
+      // Use the window load event to keep the page load performant
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+  //document.addEventListener("DOMContentLoaded", function() {
+	/*
     UpUp.start({
       'content-url': 'index.html',
       'assets': [
@@ -383,6 +390,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	'/safari-pinned-tab.svg',
       ]
     });
-});
+    */
+  //});
   </script>
 </html>
