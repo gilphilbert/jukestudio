@@ -646,25 +646,14 @@ console.log(dbItem[key]);
       }
     }
     return out;
+  },
+  loadDB:function(){
+    titleCreator.db=new loki("jukestudio.db",{
+      autoload: true,
+      autoloadCallback : databaseInitialize
+    });
   }
 }
-
-pdfMake.fonts = {
-  Retro: {
-    bold: 'Retro.ttf'
-  },
-  RetroCondensed: {
-    bold: 'RetroCondensed.ttf'
-  },
-  ATypewriter: {
-    bold: 'ATypewriter.ttf'
-  }
-}
-
-titleCreator.db=new loki("jukestudio.db",{
-  autoload: true,
-  autoloadCallback : databaseInitialize
-});
 
 function databaseInitialize() {
 ///if creating, trigger the import action

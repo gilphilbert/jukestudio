@@ -22,6 +22,7 @@
 .is-center { text-align: center; }
 #preview-strip { width: 25%; }
 .navbar-brand img { height: 35px; width: auto; }
+td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
 </style>
   </head>
   <body>
@@ -40,7 +41,7 @@
           </div>
         </div>
         <div id="navMenu" class="navbar-menu">
-          <div class="navbar-start">
+          <div class="navbar-end">
             <a class="navbar-item add-record" href="#">
               add record
             </a>
@@ -65,20 +66,15 @@
         <div class="columns">
           <div class="column is-12">
             <div class="card events-card">
-              <header class="card-header">
-                <p class="card-header-title">
-                  Records
-                </p>
-              </header>
               <div class="card-table">
                  <div class="content">
                     <table class="table is-fullwidth is-striped" id="record-table">
                       <thead>
                         <tr>
-                          <th>Print</th>
+                          <th><!--Print--></th>
                           <th>Side A</th>
                           <th>Side B</th>
-                          <th></th>
+			  <!--<th></th>-->
                       </thead>
                       <tbody>
                       </tbody>
@@ -347,12 +343,14 @@
 
     <!-- END MODALS -->
   </body>
+<!--
   <script src="assets/crel.min.js"></script>
   <script src="assets/lokijs.min.js"></script>
   <script src='assets/pdfmake.min.js'></script>
   <script src='assets/vfs_fonts.js?ver=2.00'></script>
   <script src="assets/titlecreator.js?ver=2.00"></script>
   <script src="assets/jukestudio.js?ver=2.00"></script>
+-->
   <script>
     // Check that service workers are registered
     if ('serviceWorker' in navigator) {
@@ -361,5 +359,32 @@
         navigator.serviceWorker.register('/service-worker.js');
       });
     }
+
+    function loadScript(u, c) {
+      var h = document.getElementsByTagName('head')[0], s = document.createElement('script');
+      s.async = true; s.src = u;
+      s.onload = s.onreadystatechange = function () {
+        if (!s.readyState || /loaded|complete/.test(s.readyState)) {
+          s.onload = s.onreadystatechange = null; if (h && s.parentNode) { h.removeChild(s) } s = undefined;
+          if (c) { c() }
+        }
+      };
+      h.insertBefore(s, h.firstChild);
+    }
+
+    loadScript("assets/crel.min.js",function(){
+      loadScript("assets/lokijs.min.js",function(){
+        loadScript("assets/jukestudio.js",function(){
+          loadScript("assets/titlecreator.js",function(){
+            titleCreator.loadDB();
+            loadScript("assets/pdfmake.min.js",function(){
+              loadScript("assets/vfs_fonts.js",function(){
+                loadVFS();
+              })
+            })
+          })
+        })
+      })
+    });
   </script>
 </html>

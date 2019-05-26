@@ -1,5 +1,17 @@
 //----- HELPER FUNCTIONS
-function startApp() {
+function loadScript(u, c) {
+  var h = document.getElementsByTagName('head')[0], s = document.createElement('script');
+  s.async = true; s.src = u;
+  s.onload = s.onreadystatechange = function () {
+    if (!s.readyState || /loaded|complete/.test(s.readyState)) {
+      s.onload = s.onreadystatechange = null; if (h && s.parentNode) { h.removeChild(s) } s = undefined;
+      if (c) { c() }
+    }
+  };
+  h.insertBefore(s, h.firstChild);
+}
+
+function loadVFS() {
   //add vfs fonts to the main page
   var style = document.createElement('style');
   style.type = 'text/css';
@@ -7,11 +19,23 @@ function startApp() {
   for(var key in pdfMake.vfs) {
     if(pdfMake.vfs.hasOwnProperty(key) && key.indexOf('.ttf')>0) {
       style.append('@font-face {font-family: '+key.substr(0,key.length-4)+';src: url(data:font/ttf;base64,'+pdfMake.vfs[key]+');}');
-       frag.appendChild(crel('option',{'value':key.substr(0,key.length-4),'style':'font-family:'+key.substr(0,key.length-4)},key.substr(0,key.length-4)));
+      frag.appendChild(crel('option',{'value':key.substr(0,key.length-4),'style':'font-family:'+key.substr(0,key.length-4)},key.substr(0,key.length-4)));
     }
   }
   document.getElementById('design-font').appendChild(frag);
   document.getElementsByTagName('head')[0].appendChild(style);
+
+  pdfMake.fonts = {
+    Retro: {
+      bold: 'Retro.ttf'
+    },
+    RetroCondensed: {
+      bold: 'RetroCondensed.ttf'
+    },
+    ATypewriter: {
+      bold: 'ATypewriter.ttf'
+    }
+  }
 
   //populate the list of styles from titleCreator
   var f1=document.createDocumentFragment(),f2=document.createDocumentFragment();
@@ -22,7 +46,9 @@ function startApp() {
   });
   document.getElementById('design-style').appendChild(f1);
   document.getElementById('title-style').appendChild(f2);
+}
 
+function startApp() {
   //load the titles into the app
   var titles=titleCreator.getTitles();
   if(titles.length>0)
@@ -80,10 +106,10 @@ function addRow(content=null){
         crel('p',
           crel('small',((content[i].artistb=='')?content[i].artist:content[i].artistb))
         )
-      ), //td
-      crel('td',{'class':'is-middle'},
-        crel('a',{'class':'button is-small is-danger delete-button','href':'#','data-modal':'open','data-target':'delete-modal'},'delete')
-      ) //td
+      )//, //td
+      //crel('td',{'class':'is-middle'},
+      //  crel('a',{'class':'button is-small is-danger delete-button','href':'#','data-modal':'open','data-target':'delete-modal'},'delete')
+      //) //td
     ); //tr
     fragment.appendChild(row);
   }
