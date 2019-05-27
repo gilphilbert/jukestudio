@@ -23,16 +23,6 @@ function loadVFS() {
       bold: 'ATypewriter.ttf'
     }
   }
-
-  //populate the list of styles from titleCreator
-  var f1=document.createDocumentFragment(),f2=document.createDocumentFragment();
-  var keys=Object.keys(titleCreator.styles);
-  keys.forEach(function(key){
-    f1.appendChild(crel('option',{'value':key},titleCreator.styles[key].name))
-    f2.appendChild(crel('option',{'value':key},titleCreator.styles[key].name))
-  });
-  document.getElementById('design-style').appendChild(f1);
-  document.getElementById('title-style').appendChild(f2);
 }
 
 function startApp() {
@@ -46,6 +36,16 @@ function startApp() {
     if(titles.length>0)
       addRow(titles);
   }
+
+  //populate the list of styles from titleCreator
+  var f1=document.createDocumentFragment(),f2=document.createDocumentFragment();
+  var keys=Object.keys(titleCreator.styles);
+  keys.forEach(function(key){
+    f1.appendChild(crel('option',{'value':key},titleCreator.styles[key].name))
+    f2.appendChild(crel('option',{'value':key},titleCreator.styles[key].name))
+  });
+  document.getElementById('design-style').appendChild(f1);
+  document.getElementById('title-style').appendChild(f2);
 }
 
 function toggleModal(id,dataID=null) {
