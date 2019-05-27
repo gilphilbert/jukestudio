@@ -343,14 +343,6 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
 
     <!-- END MODALS -->
   </body>
-<!--
-  <script src="assets/crel.min.js"></script>
-  <script src="assets/lokijs.min.js"></script>
-  <script src='assets/pdfmake.min.js'></script>
-  <script src='assets/vfs_fonts.js?ver=2.00'></script>
-  <script src="assets/titlecreator.js?ver=2.00"></script>
-  <script src="assets/jukestudio.js?ver=2.00"></script>
--->
   <script>
     // Check that service workers are registered
     if ('serviceWorker' in navigator) {
@@ -377,13 +369,14 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
         loadScript("assets/jukestudio.js",function(){
           loadScript("assets/titlecreator.js",function(){
             titleCreator.loadDB();
-            loadScript("assets/pdfmake.min.js",function(){
-              loadScript("assets/vfs_fonts.js",function(){
-                loadVFS();
-              })
-            })
           })
         })
+      })
+    });
+
+    loadScript("assets/pdfmake.min.js",function(){
+      loadScript("assets/vfs_fonts.js",function(){
+        loadVFS();
       })
     });
   </script>

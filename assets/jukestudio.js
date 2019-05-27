@@ -1,18 +1,5 @@
 //----- HELPER FUNCTIONS
-function loadScript(u, c) {
-  var h = document.getElementsByTagName('head')[0], s = document.createElement('script');
-  s.async = true; s.src = u;
-  s.onload = s.onreadystatechange = function () {
-    if (!s.readyState || /loaded|complete/.test(s.readyState)) {
-      s.onload = s.onreadystatechange = null; if (h && s.parentNode) { h.removeChild(s) } s = undefined;
-      if (c) { c() }
-    }
-  };
-  h.insertBefore(s, h.firstChild);
-}
-
 function loadVFS() {
-  //add vfs fonts to the main page
   var style = document.createElement('style');
   style.type = 'text/css';
   var frag=document.createDocumentFragment();
@@ -49,16 +36,17 @@ function loadVFS() {
 }
 
 function startApp() {
-  //load the titles into the app
-  var titles=titleCreator.getTitles();
-  if(titles.length>0)
-    addRow(titles);
-  else
-    document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},crel('td',{'colspan':'4','class':'is-center'},'no records! add a record to get started')));
-
   //only show the welcome screen the first time you visit
-  if(!localStorage.getItem('welcome-hidden'))
+  if(!localStorage.getItem('welcome-hidden')) {
     document.getElementById('welcome-modal').classList.add('is-active');
+  } else {
+    //load the titles into the app
+    var titles=titleCreator.getTitles();
+    if(titles.length>0)
+      addRow(titles);
+    else
+      document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},crel('td',{'colspan':'4','class':'is-center'},'no records! add a record to get started')));
+  }
 }
 
 function toggleModal(id,dataID=null) {
