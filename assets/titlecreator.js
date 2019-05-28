@@ -680,19 +680,6 @@ function databaseInitialize() {
   startApp();
 }
 
-function loadVFS() {
-  var style = document.createElement('style');
-  style.type = 'text/css';
-  var frag=document.createDocumentFragment();
-  for(var key in pdfMake.vfs) {
-    if(pdfMake.vfs.hasOwnProperty(key) && key.indexOf('.ttf')>0) {
-      style.append('@font-face {font-family: '+key.substr(0,key.length-4)+';src: url(data:font/ttf;base64,'+pdfMake.vfs[key]+');}');
-      frag.appendChild(crel('option',{'value':key.substr(0,key.length-4),'style':'font-family:'+key.substr(0,key.length-4)},key.substr(0,key.length-4)));
-    }
-  }
-  document.getElementById('design-font').appendChild(frag);
-  document.getElementsByTagName('head')[0].appendChild(style);
-}
 
 function importLocalStorage(titles,options) {
   //import the old titles
