@@ -9,6 +9,8 @@ function startApp() {
     var titles=titleCreator.getTitles();
     if(titles.length>0)
       addRow(titles);
+    else
+      document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},crel('td',{'colspan':'4','class':'is-center'},'no records! add a record to get started')));
   }
 
   //populate the list of styles from titleCreator
