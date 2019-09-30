@@ -82,8 +82,8 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
                         <tr>
                           <th><!--Print--></th>
                           <th>Side A</th>
-                          <th>Side B</th>
-			  <!--<th></th>-->
+                          <th colspan=2>Side B</th>
+                        </tr>
                       </thead>
                       <tbody>
                       </tbody>
@@ -159,11 +159,11 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
               </div>
             </div>
             <div class="field">
-              <input class="is-checkradio" id="design-uppercase" type="checkbox" name="">
+              <input class="is-checkradio is-success is-circle" id="design-uppercase" type="checkbox" name="">
               <label for="design-uppercase">force uppercase</label>
             </div>
             <div class="field">
-              <input class="is-checkradio" id="design-quotes" type="checkbox" name="">
+              <input class="is-checkradio is-success is-circle" id="design-quotes" type="checkbox" name="">
               <label for="design-quotes">put quotes around titles</label>
             </div>
             <div class="field">
@@ -190,11 +190,11 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
               </div>
             </div>
             <div class="field">
-              <input class="is-checkradio" id="design-artist-fill" type="checkbox" name="">
+              <input class="is-checkradio is-success is-circle" id="design-artist-fill" type="checkbox" name="">
               <label for="design-artist-fill">colored background for artist</label>
             </div>
             <div class="field">
-              <input class="is-checkradio" id="design-title-fill" type="checkbox" name="">
+              <input class="is-checkradio is-success is-circle" id="design-title-fill" type="checkbox" name="">
               <label for="design-title-fill">colored background for title</label>
             </div>
           </section>
@@ -244,7 +244,7 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
             </div>
             <div class="box" id="style-override">
               <div class="field">
-                <input class="is-checkradio" id="title-style-override" type="checkbox" name="">
+                <input class="is-checkradio is-success is-circle" id="title-style-override" type="checkbox" name="">
                 <label for="title-style-override">alter style for this record</label>
               </div>
               <div class="field">
@@ -271,11 +271,11 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
                 </div>
               </div>
               <div class="field">
-                <input class="is-checkradio" id="title-artist-fill" type="checkbox" name="">
+                <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="">
                 <label for="title-artist-fill">colored background for artist</label>
               </div>
               <div class="field">
-                <input class="is-checkradio" id="title-title-fill" type="checkbox" name="">
+                <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="">
                 <label for="title-title-fill">colored background for title</label>
               </div>
             </div>
@@ -328,16 +328,16 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
           </header>
           <section class="modal-card-body">
             <div class="field">
-              <input class="is-checkradio" id="export-json" type="radio" name="export-type" checked>
+              <input class="is-checkradio is-warning" id="export-json" type="radio" name="export-type" checked>
               <label for="export-json">export library and settings</label>
             </div>
             <div class="field">
-              <input class="is-checkradio" id="export-csv" type="radio" name="export-type">
+              <input class="is-checkradio is-warning" id="export-csv" type="radio" name="export-type">
               <label for="export-csv">export library only (CSV)</label>
             </div>
-            <button class="button is-primary" id="export-library">export</button>
+            <button class="button is-warning" id="export-library">export</button>
             <hr>
-            <button class="button is-primary" id="import-library">import</button>
+            <button class="button is-warning" id="import-library">import</button>
             <input id="file-import" class="is-invisible" type="file" accept=".json,.csv" />
             <br>
             <small><strong>Note</strong> To import a library in CSV format, your file must be arranged with exactly three columns as follows: Side A, Side B, Artist</small>

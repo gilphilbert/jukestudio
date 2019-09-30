@@ -3,22 +3,22 @@ function startApp() {
   //only show the welcome screen the first time you visit
   if(!localStorage.getItem('welcome-hidden')) {
     document.getElementById('welcome-modal').classList.add('is-active');
-    document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},crel('td',{'colspan':'4','class':'is-center'},'no records! add a record to get started')));
+    document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},cr.td({'colspan':'4','class':'is-center'},'no records! add a record to get started')));
   } else {
     //load the titles into the app
     var titles=titleCreator.getTitles();
     if(titles.length>0)
       addRow(titles);
     else
-      document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},crel('td',{'colspan':'4','class':'is-center'},'no records! add a record to get started')));
+      document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},cr.td({'colspan':'4','class':'is-center'},'no records! add a record to get started')));
   }
 
   //populate the list of styles from titleCreator
   var f1=document.createDocumentFragment(),f2=document.createDocumentFragment();
   var keys=Object.keys(titleCreator.styles);
   keys.forEach(function(key){
-    f1.appendChild(crel('option',{'value':key},titleCreator.styles[key].name))
-    f2.appendChild(crel('option',{'value':key},titleCreator.styles[key].name))
+    f1.appendChild(cr.option({'value':key},titleCreator.styles[key].name))
+    f2.appendChild(cr.option({'value':key},titleCreator.styles[key].name))
   });
   document.getElementById('design-style').appendChild(f1);
   document.getElementById('title-style').appendChild(f2);
@@ -37,7 +37,7 @@ function toggleModal(id,dataID=null) {
 }
 
 function addRow(content=null){
-  if(content==null) return;
+  if(content===null) return;
 
   var row;
   var fragment=document.createDocumentFragment();
@@ -47,32 +47,32 @@ function addRow(content=null){
 
   var i;
   for(i=0;i<content.length;i++) {
-    row=crel('tr',{'class':'is-compact','data-id':content[i].id},
-      crel('td',{'class':'is-middle'},
-        crel('div',{'class':'field'},
-          crel('input',{'class':'is-checkradio print-check','data-id':content[i].id,'id':'printcheck'+content[i].id,'type':'checkbox'}),
-          crel('label',{'for':'printcheck'+content[i].id})
+    row=cr.tr({'class':'is-compact','data-id':content[i].id},
+      cr.td({'class':'is-middle'},
+        cr.div({'class':'field'},
+          cr.input({'class':'is-checkradio print-check','data-id':content[i].id,'id':'printcheck'+content[i].id,'type':'checkbox'}),
+          cr.label({'for':'printcheck'+content[i].id})
         )
       ), //td
-      crel('td',{'class':'aside'},
-        crel('p',
-          crel('strong',content[i].aside)
+      cr.td({'class':'aside'},
+        cr.p(
+          cr.strong(content[i].aside)
         ),
-        crel('p',
-          crel('small',content[i].artist)
+        cr.p(
+          cr.small(content[i].artist)
         )
       ), //td
-      crel('td',{'class':'bside'},
-        crel('p',
-          crel('strong',content[i].bside)
+      cr.td({'class':'bside'},
+        cr.p(
+          cr.strong(content[i].bside)
         ),
-        crel('p',
-          crel('small',((content[i].artistb=='')?content[i].artist:content[i].artistb))
+        cr.p(
+          crel('small',((content[i].artistb==='')?content[i].artist:content[i].artistb))
         )
-      )//, //td
-      //crel('td',{'class':'is-middle'},
-      //  crel('a',{'class':'button is-small is-danger delete-button','href':'#','data-modal':'open','data-target':'delete-modal'},'delete')
-      //) //td
+      ), //td
+      cr.td({'class':''},
+        crel('a',{'class':'delete','href':'#','data-modal':'open','data-target':'delete-modal'},'delete')
+      ) //td
     ); //tr
     fragment.appendChild(row);
   }
@@ -86,7 +86,7 @@ function addRow(content=null){
 function removeRow(id) {
   var row=document.querySelector('#record-table tr[data-id="'+id+'"]');
   row.parentNode.removeChild(row);
-  if(document.querySelector('#record-table tbody tr')==null)
+  if(document.querySelector('#record-table tbody tr')===null)
     document.querySelector('#record-table tbody').innerHTML='<tr id="no-records"><td colspan=4 class="is-center">no records! add a record to get started</td></tr>';
 }
 
@@ -116,7 +116,7 @@ function addSVGText(g,text,options) {
 }
 
 function stringBreaker(str,style) {
-  var ts=document.body.appendChild(crel('span',{'style':'font-family:'+style.font.name+';font-size:'+style.font.titleSize+'px;font-weight:bold;position:absolute;left:0;top:0','id':'text-sizer'}));
+  var ts=document.body.appendChild(cr.span({'style':'font-family:'+style.font.name+';font-size:'+style.font.titleSize+'px;font-weight:bold;position:absolute;left:0;top:0','id':'text-sizer'}));
   ts.innerText=str;
   if(ts.offsetWidth>(225-(style.margins*2))) {
     var x=str.split(" ");
@@ -133,7 +133,6 @@ function stringBreaker(str,style) {
     x=x.join(" ");
     tt.unshift(x);
     str=tt;
-    delete tt;
   }
   //ts.remove();
   return str;
@@ -325,7 +324,7 @@ document.querySelector('#add-record-modal .save').addEventListener('click',funct
     if(input.value=='') {
       input.classList.add('is-danger');//.parent().addClass('has-danger').find('.invalid-feedback').text('Please enter a value');
       if(input.parentNode.querySelector('.help')==null)
-        input.parentNode.appendChild(crel('p',{'class':'help is-danger'},'This field is required'));
+        input.parentNode.appendChild(cr.p({'class':'help is-danger'},'This field is required'));
       cancel=true;
     } else {
       input.classList.remove('is-danger');
@@ -401,7 +400,7 @@ document.querySelectorAll('#record-table tbody').forEach(function(e){
   e.addEventListener('click', function (event) {
     var id=event.target.closest('tr').dataset.id;
     var classList=event.target.classList;
-    if(event.target.classList.contains('delete-button')) {
+    if(event.target.classList.contains('delete')) {
       event.preventDefault();
       var rd=document.querySelector('#delete-modal .record-detail');
       while(rd.firstChild) { rd.removeChild(rd.firstChild) }
@@ -508,3 +507,5 @@ document.getElementById('file-import').addEventListener('change', function(evt){
   }(file);
 });
 //----- END EVENT HANDLERS
+
+const cr = crel.proxy;
