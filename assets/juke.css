@@ -7518,16 +7518,40 @@ label.panel-block {
 
 .table tr.is-compact {
   cursor: pointer; }
-  .table tr.is-compact td .is-checkradio[type="checkbox"] + label {
-    padding-left: 0; }
-  .table tr.is-compact td p {
-    line-height: 1.2;
-    margin-bottom: 0 !important; }
+  .table tr.is-compact td {
+    vertical-align: middle; }
+    .table tr.is-compact td .is-checkradio[type="checkbox"] + label {
+      padding-left: 0; }
+    .table tr.is-compact td p {
+      line-height: 1.2;
+      margin-bottom: 0 !important; }
 .table td:last-child {
   width: 50px; }
 
-.modal-small {
-  width: 500px; }
+.mobile-add {
+  border: none;
+  border-radius: 100%;
+  background-color: #b15339;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  height: 50px;
+  width: 50px; }
+  .mobile-add svg {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 15px;
+    left: 15px; }
+    .mobile-add svg polygon {
+      fill: #fff; }
+
+@media screen and (max-width: 1023px) {
+  .modal-small {
+    width: 100%; } }
+@media screen and (min-width: 769px) {
+  .modal-small {
+    width: 500px; } }
 
 .modal-card-head {
   border-bottom: white;

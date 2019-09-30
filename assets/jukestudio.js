@@ -24,20 +24,20 @@ function startApp() {
   document.getElementById('title-style').appendChild(f2);
 }
 
-function toggleModal(id,dataID=null) {
+function toggleModal(id,dataID) {
   var m=document.getElementById(id);
   if(m.classList.contains('is-active')) {
     m.classList.remove('is-active');
     m.removeAttribute('data-id')
   } else {
     m.classList.add('is-active');
-    if(dataID!==null)
+    if(dataID!==undefined)
       m.setAttribute('data-id',dataID)
   }
 }
 
-function addRow(content=null){
-  if(content===null) return;
+function addRow(content){
+  if(content===undefined) return;
 
   var row;
   var fragment=document.createDocumentFragment();
@@ -205,9 +205,10 @@ document.querySelectorAll('.close-modal').forEach(function(e){
   });
 });
 
-document.querySelector('.navbar-burger').addEventListener('click', function(event) {
-  event.target.classList.toggle('is-active');
-  document.getElementById(event.target.dataset['target']).classList.toggle('is-active');
+document.querySelector('.navbar-burger').addEventListener('click', function(e) {
+  var burger=e.target.closest('.burger');
+  burger.classList.toggle('is-active');
+  document.getElementById(burger.dataset['target']).classList.toggle('is-active');
 });
 
 //-- DESIGN MODAL OPENER --//
@@ -255,9 +256,7 @@ document.querySelector('#design-modal .save').addEventListener('click', function
   toggleModal('design-modal');
 });
 
-//-- ADD RECORD OPENER --//
-document.querySelector('.navbar .add-record').addEventListener('click', function(event) {
-  event.preventDefault();
+function addRecord(event) {
   document.querySelector('#add-record-modal .title-text').innerText='add record';
   var s=titleCreator.getStyle();
   document.getElementById('title-style').value=s.style;
@@ -281,7 +280,14 @@ document.querySelector('.navbar .add-record').addEventListener('click', function
   buildPreview('add-record-preview',t);
   toggleModal('add-record-modal');
   document.querySelector("#add-side-a").focus();
+}
+
+//-- ADD RECORD OPENER --//
+document.querySelector('.navbar .add-record, .mobile-add').addEventListener('click', function(event) {
+  event.preventDefault();
+  addRecord();
 });
+
 function buildAddPreview() {
     s=titleCreator.getTitle(false,true);
     var art=document.getElementById('add-artist').value+((document.getElementById('add-artist-b').value=='')?'':' / '+document.getElementById('add-artist-b').value);
@@ -508,4 +514,4 @@ document.getElementById('file-import').addEventListener('change', function(evt){
 });
 //----- END EVENT HANDLERS
 
-const cr = crel.proxy;
+var cr = crel.proxy;
