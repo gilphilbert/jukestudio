@@ -17,22 +17,16 @@
     <meta name="Description" content="A web app for creating title strips for jukeboxes">
 
     <title>jukestudio</title>
-    <link rel="stylesheet" href="assets/juke.css?ver=1.5">
-<style>
-.is-center { text-align: center; }
-#preview-strip { width: 25%; }
-.navbar-brand img { height: 35px; width: auto; }
-td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
-</style>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144817532-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-        gtag('config', 'UA-144817532-1');
-</script>
+    <link rel="stylesheet" href="assets/juke.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144817532-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+    
+            gtag('config', 'UA-144817532-1');
+    </script>
   </head>
   <body>
     <!-- START NAV -->
@@ -76,8 +70,8 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
           <div class="column is-12">
             <div class="card events-card">
               <div class="card-table">
-                 <div class="content">
-                    <table class="table is-fullwidth is-striped" id="record-table">
+                <div class="content">
+                  <table class="table is-fullwidth is-striped" id="record-table">
                       <thead>
                         <tr>
                           <th><!--Print--></th>
@@ -88,7 +82,6 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
                       <tbody>
                       </tbody>
                     </table>
-                  </div>
                 </div>
               </div>
             </div>
@@ -117,7 +110,6 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
             <button class="button column is-light close-modal">ok, i'm ready!</button>
           </footer>
         </div>
-      </div>
     </div>
     <!-- END WELCOME MODAL -->
 
@@ -203,7 +195,6 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
             <button class="button column is-success save">save</button>
           </footer>
         </div>
-      </div>
     </div>
     <!-- END DESIGN MODAL -->
 
@@ -285,7 +276,6 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
             <button class="button column is-success save">save</button>
           </footer>
         </div>
-      </div>
     </div>
     <!-- END ADD RECORD MODAL -->
 
@@ -311,7 +301,6 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
             <button class="button column is-danger" id="delete-record">delete</button>
           </footer>
         </div>
-      </div>
     </div>
     <!-- END DELETE MODAL -->
 
@@ -346,12 +335,10 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
             <button class="button column is-light close-modal">close</button>
           </footer>
         </div>
-      </div>
     </div>
 
 
     <!-- END MODALS -->
-  </body>
   <script>
     // Check that service workers are registered
     if ('serviceWorker' in navigator) {
@@ -377,7 +364,7 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
 
     loadScript("assets/crel.min.js",function(){
       loadScript("assets/lokijs.min.js",function(){
-        loadScript("assets/jukestudio.js?ver=1.5",function(){
+        loadScript("assets/jukestudio.js",function(){
           loadScript("assets/titlecreator.js",function(){
             titleCreator.loadDB();
           })
@@ -401,4 +388,5 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
       })
     });
   </script>
+  </body>
 </html>
