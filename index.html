@@ -17,7 +17,7 @@
     <meta name="Description" content="A web app for creating title strips for jukeboxes">
 
     <title>jukestudio</title>
-    <link rel="stylesheet" href="assets/juke.css">
+    <link rel="stylesheet" href="assets/juke.css?ver=1.5">
 <style>
 .is-center { text-align: center; }
 #preview-strip { width: 25%; }
@@ -377,7 +377,7 @@ td .is-checkradio[type="checkbox"]+label { padding-left: 0; }
 
     loadScript("assets/crel.min.js",function(){
       loadScript("assets/lokijs.min.js",function(){
-        loadScript("assets/jukestudio.js",function(){
+        loadScript("assets/jukestudio.js?ver=1.5",function(){
           loadScript("assets/titlecreator.js",function(){
             titleCreator.loadDB();
           })
