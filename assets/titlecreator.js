@@ -14,6 +14,13 @@ window.titleCreator={
       margins:8,
       mergeArtist: true
     },
+    multiple:{
+      name:'Split Artist',
+      style:'multiple',
+      maxwidth:265,
+      margins:8,
+      mergeArtist: false
+    },
     holly:{
       name:'Holly',
       style:'holly',
@@ -213,16 +220,29 @@ window.titleCreator={
             ],
             absolutePosition: {x: x, y: y}
           });
-        }
-	      /*
-	if(true){
+        } else if(style.style=="multiple") {
           b.push({
-            image: 'data:image/png;base64,'+pdfMake.vfs['star.png'],
-            width: 12,
-            absolutePosition: { x:x, y:y+30 }
+            canvas:[
+              {
+                type: 'rect',
+                x: 0,
+                y: 0,
+                w: 224,
+                h: 72,
+                lineColor: style.primaryColor,
+                lineWidth: 1
+              },
+              {
+                type: 'line',
+                x1: 30, y1: 36,
+                x2: 194, y2: 36,
+                lineWidth: 2,
+                lineColor: style.primaryColor,
+              }
+            ],
+            absolutePosition: {x: x, y: y}
           });
-	}
-	*/
+        }
       }
       return b;
     },
@@ -239,15 +259,28 @@ window.titleCreator={
           fontSize:t.style.font.titleSize,
           bold:true
         }];
-        var y=[{
-          text: ((titles.length>i) ? t.artist+((t.artistb!='' && t.style.mergeArtist)?' / '+t.artistb:'') : ''),
-          margin:[t.style.margins,((t)?t.style.font.margins.artist:0),t.style.margins,0],
-          border: [false, false, false, false],
-          fillColor:t.style.titleTint,
-          font:t.style.font.name,
-          fontSize:t.style.font.artistSize,
-          bold:true
-        }];
+        if(t.style.mergeArtist===true) {
+          var y=[{
+            text: ((titles.length>i) ? t.artist+((t.artistb!='')?' / '+t.artistb:''):''),
+            margin:[t.style.margins,((t)?t.style.font.margins.artist:0),t.style.margins,0],
+            border: [false, false, false, false],
+            fillColor:t.style.titleTint,
+            font:t.style.font.name,
+            fontSize:t.style.font.artistSize,
+            bold:true
+          }];
+        } else {
+          x[0].margin[3]=-10;
+          var y=[{
+            text: ((titles.length>i) ? t.artist+'\n\n'+((t.artistb==='')?t.artist:t.artistb) : ''),
+            margin:[t.style.margins,((t)?-7:0),t.style.margins,-7],
+            border: [false, false, false, false],
+            fillColor:t.style.titleTint,
+            font:t.style.font.name,
+            fontSize:t.style.font.artistSize,
+            bold:true
+          }];
+        }
         var z=[{
           text: ((titles.length>i) ? t.bside : ''),
           margin:[t.style.margins,((t)?t.style.font.margins.bside:0),t.style.margins,0],
@@ -269,14 +302,14 @@ window.titleCreator={
             bold:true
           });
           y.push({
-            text: ((t) ? t.artist : ''),
+            text: ((t) ? t.artist+((t.artistb!='' && t.style.mergeArtist===true)?' / '+t.artistb:'') : ''),
             margin:((t)?[t.style.margins,t.style.font.margins.artist,t.style.margins,0]:[0,0,0,0]),
             border: [false, false, false, false],
             fillColor:((t)?t.style.titleTint:false),
             font:((t)?t.style.font.name:false),
             fontSize:((t)?t.style.font.artistSize:0),
             bold:true
-	  });
+	        });
           z.push({
             text: ((t) ? t.bside : ''),
             margin:((t)?[t.style.margins,t.style.font.margins.bside,t.style.margins,0]:[0,0,0,0]),
@@ -285,7 +318,7 @@ window.titleCreator={
             font:((t)?t.style.font.name:false),
             fontSize:((t)?t.style.font.titleSize:0),
             bold:true
-	  });
+	        });
         }
 
         b.push(x);
@@ -347,7 +380,7 @@ window.titleCreator={
       return c; 
     },
     formatTitles: function(titles) {
-      var textSizer=document.body.appendChild(crel('span',{'style':'font-family:Arial;font-size:10.5pt;font-weight:bold;display:none','id':'text-sizer'}));
+      var textSizer=document.body.appendChild(crel('span'));//,{'style':'font-family:Arial;font-size:10.5pt;font-weight:bold','id':'text-sizer'}));
       var toArray=false;
       if(!Array.isArray(titles)) {
         titles=[titles];
@@ -386,39 +419,45 @@ window.titleCreator={
 
         var sq=((e.quotes || (e.quotes==null && e.style.quotes))?true:false);
 
+        //if there's no "/" and there are parethases that are not at the start and end of the entire string
         if(e.aside.indexOf('/')==-1 && (e.aside.indexOf('(')>=0 || e.aside.indexOf(')')>=0) && !(e.aside.indexOf('(')==0 && e.aside.indexOf(')')==e.aside.length-1)) {
+          //split based on the parenthases
           var x;
           if(e.aside.indexOf(')')==e.aside.length-1) {
             x=trimArray(e.aside.split("("));
             if(sq)
               x[0]='"'+x[0]+'"';
             x=x.join("\n(");
-	  } else {
+	        } else {
             x=trimArray(e.aside.split(")"));
             if(sq)
               x[1]='"'+x[1]+'"';
             x=x.join(")\n");
           }
           textSizer.innerHTML=x.replace('\n','<br>');
-          w=textSizer.style.maxwidth;
+          w=textSizer.offsetWidth;
           if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
             e.aside=x;
           awrap=true;
         } else {
+          //if there's a "/""
           if(e.aside.indexOf('/')>=1) {
             //e.aside=e.aside.replace('/',"\n");
             var x=trimArray(e.aside.split('/'));
             if(sq)
               for(i=0;i<x.length;i++) x[i]='"'+x[i]+'"';
-	    e.aside=x.join("\n");
-	    awrap=true;
+	          e.aside=x.join("\n");
+	          awrap=true;
           } else {
+            //just a single line of text
+            
             textSizer.innerHTML=e.aside;
-            w=textSizer.style.maxwidth;
+            w=textSizer.offsetWidth;
+                        console.log(w + " of "+e.style.maxwidth);
             if(w>e.style.maxwidth) awrap=true;
             if(sq) e.aside='"'+e.aside+'"';
           }
-	}
+	      }
 
         if(e.bside.indexOf('/')==-1 && (e.bside.indexOf('(')>=0 || e.bside.indexOf(')')>=0) && !(e.bside.indexOf('(')==0 && e.bside.indexOf(')')==e.bside.length-1)) {
           var x;
@@ -427,39 +466,36 @@ window.titleCreator={
             if(sq)
               x[0]='"'+x[0]+'"';
             x=x.join("\n(");
-	  } else {
+	        } else {
             x=trimArray(e.bside.split(")"));
             if(sq)
               x[1]='"'+x[1]+'"';
             x=x.join(")\n");
           }
           textSizer.innerHTML=x.replace('\n','<br>');
-          w=textSizer.style.maxwidth;
+          w=textSizer.offsetWidth;
           if(w<=e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
             e.bside=x;
           bwrap=true;
         } else {
           if(e.bside.indexOf('/')>=1) {
-            //e.bside=e.bside.replace('/',"\n");
             var x=trimArray(e.bside.split('/'));
             if(sq)
               for(i=0;i<x.length;i++) x[i]='"'+x[i]+'"';
-	    e.bside=x.join("\n");
-	    bwrap=true;
+	          e.bside=x.join("\n");
+	          bwrap=true;
           } else {
             textSizer.innerText=e.bside;
-            w=textSizer.style.maxwidth;
+            w=textSizer.offsetWidth;
             if(w>e.style.maxwidth) bwrap=true;
             if(sq) e.bside='"'+e.bside+'"';
           }
-	}
-
+	      }
         e.style.font.margins={
-	  aside:e.style.font.margins.aside[((awrap)?0:1)],
-	  artist:e.style.font.margins.artist[0],
-	  bside:e.style.font.margins.bside[((bwrap)?0:1)]
+	        aside:e.style.font.margins.aside[((awrap)?0:1)],
+	        artist:e.style.font.margins.artist[0],
+	        bside:e.style.font.margins.bside[((bwrap)?0:1)]
         }
-
       });
       textSizer.parentNode.removeChild(textSizer);
 
@@ -588,8 +624,6 @@ window.titleCreator={
        if(key!='$loki' && key!='meta') {
         if(!inItem.hasOwnProperty(key)) {
           delete(dbItem[key]);
-//console.log(key);
-console.log(dbItem[key]);
         }
       }
     });
@@ -633,7 +667,6 @@ console.log(dbItem[key]);
           inTitles.push({aside:fields[0],bside:fields[1],artist:fields[2],artistb:((fields.length==4)?fields[3]:'')});
         }
       });
-	    console.log(inTitles);
       if(inTitles!=[])
         out=this.addTitles(inTitles);
 
@@ -656,7 +689,7 @@ console.log(dbItem[key]);
 }
 
 function databaseInitialize() {
-///if creating, trigger the import action
+  //if creating, trigger the import action
   var titles=titleCreator.db.getCollection("titles");
   if (titles===null) {
     titles=titleCreator.db.addCollection("titles",{'clone':true});

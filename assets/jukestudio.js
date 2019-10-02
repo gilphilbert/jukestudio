@@ -182,11 +182,16 @@ function buildPreview(img,o) {
   options["alignment-baseline"]="central";
   options["font-size"]=o.style.font.artistSize+"px";
   options["class"]="artist"
-  addSVGText(g,o.artist+((o.artistb=='')?'':' / '+o.artistb),options);
+  if(o.style.mergeArtist) {
+    addSVGText(g,o.artist+((o.artistb=='')?'':' / '+o.artistb),options);
+  } else {
+    options["y"]=28;
+    addSVGText(g,o.artist,options);
+    options["y"]=45;
+    addSVGText(g,((o.artistb!=="")?o.artistb:o.artist),options);
+  }
 
   img.replaceWith(svg);
-
-  
 };
 
 //----- END HELPER FUNCTIONS
