@@ -1,17 +1,17 @@
 //----- HELPER FUNCTIONS
 function startApp() {
   //only show the welcome screen the first time you visit
-  if(!localStorage.getItem('welcome-hidden')) {
-    document.getElementById('welcome-modal').classList.add('is-active');
-    document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},cr.td({'colspan':'4','class':'is-center'},'no records! add a record to get started')));
-  } else {
+  //if(!localStorage.getItem('welcome-hidden')) {
+    //document.getElementById('welcome-modal').classList.add('is-active');
+  //  document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},cr.td({'colspan':'4','class':'is-center'},'no records! add a record to get started')));
+  //} else {
     //load the titles into the app
     var titles=titleCreator.getTitles();
     if(titles.length>0)
       addRow(titles);
     else
       document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},cr.td({'colspan':'4','class':'is-center'},'no records! add a record to get started')));
-  }
+  //}
 
   //populate the list of styles from titleCreator
   var f1=document.createDocumentFragment(),f2=document.createDocumentFragment();
