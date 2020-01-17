@@ -461,7 +461,6 @@ window.titleCreator={
             
             textSizer.innerHTML=e.aside;
             w=textSizer.offsetWidth;
-                        console.log(w + " of "+e.style.maxwidth);
             if(w>e.style.maxwidth) awrap=true;
             if(sq) e.aside='"'+e.aside+'"';
           }
