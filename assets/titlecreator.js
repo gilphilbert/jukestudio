@@ -343,7 +343,7 @@ window.titleCreator={
       while(titles.length>0) {
         var page=titles.splice(0,rows*columns);
         if(titles.length==0) last=true;
-        if(titleCreator.getOptions('paperType')=="letter")
+        if(titleCreator.getOptions('paperType')=='letter' || titleCreator.getOptions('paperType')=='a4')
           p.push(this.buildCanvases(page));
         p.push(this.buildTable(page,last,columns,rows));
       }
@@ -357,6 +357,14 @@ window.titleCreator={
       }
       return c;
     },
+    getA4Document: function(titles) {
+      var c = {
+        content: this.buildPages(titles),
+        pageSize:'A4',
+        pageMargins: [ 81, 22.5, 0, 0 ]
+      }
+      return c;
+    }, 
     single12:function(titles){
       var columns=1,
           rows=12;
@@ -509,9 +517,12 @@ window.titleCreator={
       case 'single12':
         dd=this.functions.single12(titles);
         break;
-        case 'double10':
-          dd=this.functions.double10(titles);
-          break;
+      case 'double10':
+        dd=this.functions.double10(titles);
+        break;
+      case 'a4':
+        dd=this.functions.getA4Document(titles);
+        break;
       default:
         dd=this.functions.getDocument(titles);
         break;
@@ -531,7 +542,7 @@ window.titleCreator={
   getStyle:function(t){
     var o=titleCreator.db.getCollection('options').findOne();
     var s=JSON.parse(JSON.stringify(this.styles[((t)?t:o.style)]));
-    if(o.paperType!='letter') {
+    if(o.paperType != 'letter' && o.paperType != 'a4') {
       s.artistTint='#ffffff';
       s.titleTint='#ffffff';
       s.primaryColor='#ffffff';
