@@ -50,12 +50,16 @@ window.titleCreator={
   titles: {},
   functions:{
     buildCanvases: function(titles) {
+      const spaced = titleCreator.getOptions('spacing')
+      const xPos = { normal: { left: 81.5, right: 305.5 }, wide: { left: 80.5, right: 306.5 } }
+      const pageTopMargin = { normal: 22.5, wide: 16.5 }
+      const tileYSpacing = { normal: 0, wide: 4 }
       var b=[];
       for(i=0;i<titles.length;i++) {
         var style=titles[i].style;
-        var j=((i<10) ? i : i - 10);
-        var x=((i<10) ? 81.5 : 305.5 );
-        var y=(j*72)+22.5;
+        var j=((i<10) ? i : i - 10); // counts 0..9 twice
+        var x=((i<10) ? xPos[spaced].left : xPos[spaced].right ); // set the x-axis offset (left or right). Spaced will need to set 80.5 and 306.5 (2mm space)
+        var y=(j*72 + (j * tileYSpacing[spaced]))+pageTopMargin[spaced]; // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
         if(style.style=="holly") {
           b.push({
             image: 'data:image/png;base64,'+pdfMake.vfs['holly.png'],
@@ -325,10 +329,16 @@ window.titleCreator={
         b.push(y);
         b.push(z);
       };
+      const spaced = titleCreator.getOptions('spacing')
+      const _h = { normal: [21.5,14,21.5], wide: [21.5,14,25.5] }
+      let _heights = []
+      for (let i = 0; i < 10; i++) {
+        _heights = _heights.concat(_h[spaced])
+      }
       return {
         'alignment': 'center',
         table: {
-          heights: [21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5,21.5,14,21.5],
+          heights: _heights,
           widths: ((columns==2) ? [215,215] : [215]),
           body: b
         },
@@ -353,7 +363,8 @@ window.titleCreator={
       var c = {
         content: this.buildPages(titles),
         pageSize:'LETTER',
-        pageMargins: [ 81, 22.5, 0, 0 ]
+        pageMargins: [ 81, ((titleCreator.getOptions('spacing') === 'normal') ? 22.5 : 16.5), 0, 0 ]
+        // pageMargins: [ 81, 16.5, 0, 0 ]
       }
       return c;
     },
@@ -564,8 +575,7 @@ window.titleCreator={
   setOption:function(option,value){
     var o=titleCreator.db.getCollection('options');
     var oo=o.findOne();
-    if(oo.hasOwnProperty(option))
-      oo[option]=value;
+    oo[option]=value;
     o.update(oo);
     titleCreator.db.saveDatabase();
   },
@@ -704,9 +714,13 @@ function databaseInitialize() {
   if (titles===null) {
     titles=titleCreator.db.addCollection("titles",{'clone':true});
     options=titleCreator.db.addCollection("options",{'clone':true});
-    importLocalStorage(titles,options);
+    importLocalStorage(titles, options);
   }
   titles.addListener('insert',function(input){ input.id=input.$loki; titleCreator.db.getCollection('titles').update(input); });
+  // set any new options below...
+  if ('spacing' in titleCreator.getOptions() === false) {
+    titleCreator.setOption('spacing', 'normal')
+  }
 
   pdfMake.fonts = {
     Retro: {
@@ -748,7 +762,8 @@ function importLocalStorage(titles,options) {
       titleFillColor:false,
       font:'Retro',
       style:'arrows',
-      paperType:'letter'
+      paperType:'letter',
+      spacing: 'normal'
     });
   }
   localStorage.removeItem('options')

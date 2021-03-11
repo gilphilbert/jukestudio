@@ -10,7 +10,7 @@ function startApp() {
     if(titles.length>0)
       addRow(titles);
     else
-      document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},cr.td({'colspan':'4','class':'is-center'},'no records! add a record to get started')));
+      document.querySelector('#record-table tbody').append(crel('tr',{'id':'no-records'},cr.td({'colspan':'4','class':'is-center'},'No records! Add a record to get started')));
   //}
 
   //populate the list of styles from titleCreator
@@ -221,6 +221,7 @@ document.querySelector('.navbar .change-design').addEventListener('click', funct
   event.preventDefault();
   var o=titleCreator.getOptions();
   document.getElementById('design-paper-type').value=o.paperType;
+  document.getElementById('design-spacing').checked=((o.spacing === 'normal') ? false : true);
   document.getElementById('design-font').value=o.font;
   document.getElementById('design-uppercase').checked=o.allCaps;
   document.getElementById('design-quotes').checked=o.quotes;
@@ -251,6 +252,7 @@ document.querySelectorAll('#design-paper-type,#design-font,#design-uppercase,#de
 //-- DESIGN MODAL SAVE --//
 document.querySelector('#design-modal .save').addEventListener('click', function(event) {
   titleCreator.setOption('paperType',document.getElementById('design-paper-type').value);
+  titleCreator.setOption('spacing',((document.getElementById('design-spacing').checked) ? 'wide' : 'normal'));
   titleCreator.setOption('font',document.getElementById('design-font').value);
   titleCreator.setOption('allCaps',document.getElementById('design-uppercase').checked);
   titleCreator.setOption('quotes',document.getElementById('design-quotes').checked);
@@ -262,7 +264,7 @@ document.querySelector('#design-modal .save').addEventListener('click', function
 });
 
 function addRecord(event) {
-  document.querySelector('#add-record-modal .title-text').innerText='add record';
+  document.querySelector('#add-record-modal .title-text').innerText='Add record';
   var s=titleCreator.getStyle();
   document.getElementById('title-style').value=s.style;
   document.getElementById('title-primary-color').value=s.primaryColor;
@@ -421,7 +423,7 @@ document.querySelectorAll('#record-table tbody').forEach(function(e){
       toggleModal('delete-modal',id);
     } else {
       //edit the record
-      document.querySelector('#add-record-modal .title-text').innerText='edit record';
+      document.querySelector('#add-record-modal .title-text').innerText='Edit record';
       var t=titleCreator.getTitle(id);
       var s=titleCreator.getStyle();
       document.getElementById('add-side-a').value=t.aside;
