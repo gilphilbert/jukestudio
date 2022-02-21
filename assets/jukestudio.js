@@ -377,16 +377,10 @@ document.querySelector('#add-record-modal .save').addEventListener('click',funct
       delete(t['style']);
 
     x=document.getElementById('title-artist-fill').checked;
-    if(x!=o.artistFillColor) 
-      t.artistFillColor=x;
-    else
-      delete(t['artistFillColor']);
+    t.artistFillColor=x;
 
     x=document.getElementById('title-title-fill').checked;
-    if(x!=o.titleFillColor)
-      t.titleFillColor=x;
-    else
-      delete(t['titleFillColor']);
+    t.titleFillColor=x;
   } else {
     delete(t['primaryColor']);
     delete(t['style']);

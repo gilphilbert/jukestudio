@@ -412,20 +412,22 @@ window.titleCreator={
         k.forEach(function(key){
           if(e.hasOwnProperty(key)) {
             e.style[key]=e[key];
-            if(key=='titleFillColor')
-              if(e.titleFillColor)
-                e.style.titleTint=shadeColor2(e.style.primaryColor,0.8);
-              else
-                e.style.titleTint='#ffffff';
-            if(key=='artistFillColor')
-              if(e.artistFillColor)
-                e.style.artistTint=shadeColor2(e.style.primaryColor,0.8);
-              else
-                e.style.artistTint='#ffffff';
           }
           delete(e[key]);
         });
         e.style.font=titleCreator.getFont(((e.font)?e.font:titleCreator.getOptions('font')));
+
+        if (e.style.titleFillColor === true) {
+          e.style.titleTint=shadeColor2(e.style.primaryColor, 0.8)
+        } else {
+          e.style.titleTint='#ffffff'
+        }
+
+        if (e.style.artistFillColor === true) {
+          e.style.artistTint=shadeColor2(e.style.primaryColor, 0.8)
+        } else {
+          e.style.artistTint='#ffffff'
+        }
 
         var awrap=false,bwrap=false;
         if(e.allCaps || (e.allCaps==null && e.style.allCaps)) {
@@ -551,18 +553,13 @@ window.titleCreator={
   },
   getStyle:function(t){
     var o=titleCreator.db.getCollection('options').findOne();
-    var s=JSON.parse(JSON.stringify(this.styles[((t)?t:o.style)]));
+    const tileStyle = this.styles[((t)?t:o.style)]
+    let s = JSON.parse(JSON.stringify(tileStyle))
+
     if(o.paperType != 'letter' && o.paperType != 'a4') {
       s.artistTint='#ffffff';
       s.titleTint='#ffffff';
       s.primaryColor='#ffffff';
-    } else {
-      if(!s.hasOwnProperty('artistTint'))
-        s.artistTint=((o.artistFillColor) ? shadeColor2(o.primaryColor,0.8) : '#ffffff');
-      if(!s.hasOwnProperty('titleTint'))
-        s.titleTint=((o.titleFillColor) ? shadeColor2(o.primaryColor,0.8) : '#ffffff');
-      if(!s.hasOwnProperty('primaryColor'))
-        s.primaryColor=o.primaryColor;
     }
     var k=Object.keys(o);
     k.forEach(function(key){
