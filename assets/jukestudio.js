@@ -365,16 +365,10 @@ document.querySelector('#add-record-modal .save').addEventListener('click',funct
     //correct formatting
     var o=titleCreator.getOptions();
     var x=document.getElementById('title-primary-color').value;
-    if(x!=o.primaryColor) 
-      t.primaryColor=x;
-    else
-      delete(t['primaryColor']);
+    t.primaryColor=x;
 
     x=document.getElementById('title-style').value;
-    if(x!=o.style) 
-      t.style=x;
-    else
-      delete(t['style']);
+    t.style=x;
 
     x=document.getElementById('title-artist-fill').checked;
     t.artistFillColor=x;
