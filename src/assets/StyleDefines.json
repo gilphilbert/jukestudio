@@ -1,0 +1,75 @@
+{
+    "styles": {
+        "arrows": {
+            "name": "Arrows",
+            "style": "arrows",
+            "maxwidth": 265,
+            "margins": 8,
+            "mergeArtist": true
+        },
+        "diamond": {
+            "name": "Diamond",
+            "style": "diamond",
+            "maxwidth": 265,
+            "margins": 8,
+            "mergeArtist": true
+        },
+        "multiple": {
+            "name": "Split Artist",
+            "style": "multiple",
+            "maxwidth": 265,
+            "margins": 8,
+            "mergeArtist": false
+        },
+        "holly":{
+            "name":"Holly",
+            "style":"holly",
+            "artistTint":"#ffffff",
+            "titleTint":"#ffffff",
+            "primaryColor":"#ff0000",
+            "maxwidth":242,
+            "margins":22,
+            "mergeArtist": true
+        },
+        "candycane":{
+            "name":"Candy Cane",
+            "style":"candycane",
+            "artistTint":"#ffffff",
+            "titleTint":"#ABDCA8",
+            "primaryColor":"#D3444A",
+            "maxwidth":242,
+            "margins":22,
+            "mergeArtist": true
+        }
+    },
+    "fonts": {
+        "Retro": {
+            "name": "Retro",
+            "titleSize": 10,
+            "artistSize": 9,
+            "margins":{
+                "aside": [1,7.5],
+                "artist": [2.5],
+                "bside": [0.1,4]
+            }
+        },
+        "RetroCondensed": {
+            "name": "RetroCondensed",
+            "titleSize": 10,
+            "artistSize": 9,
+            "margins": {
+                "aside": [1,7.5],
+                "artist": [2.5],
+                "bside": [0.1,4]}
+        },
+        "ATypewriter":{
+            "name":"ATypewriter",
+            "titleSize":8.7,
+            "artistSize":8,
+            "margins":{
+                "aside":[0,7.5],
+                "artist":[2.5],
+                "bside":[0,4]
+            }
+        }
+    }}
