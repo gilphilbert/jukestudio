@@ -1,4 +1,5 @@
 <template>
+<!---->
   <nav class="navbar is-danger">
     <div class="container">
       <div class="navbar-brand">
@@ -14,12 +15,12 @@
       </div>
       <div id="navMenu" class="navbar-menu">
         <div class="navbar-end">
-          <a class="navbar-item add-record" href="#">
+          <router-link class="navbar-item" to="/">
             Records
-          </a>
-          <a class="navbar-item change-design" href="#">
+          </router-link>
+          <router-link class="navbar-item" to="/design">
             Design
-          </a>
+          </router-link>
           <a class="navbar-item print-titles" href="#">
             Print
           </a>

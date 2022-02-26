@@ -1,22 +1,17 @@
 <template>
   <NavBar/>
-  <RecordView :records="records" @new="this.addModalVisible = true" />
-  <RecordModal :show="addModalVisible" @hide="this.addModalVisible = false" />
+  <router-view :records="records"/>
 </template>
 
 <script>
 import NavBar from './components/NavBar.vue'
-import RecordView from './components/RecordView.vue'
-import RecordModal from './components/RecordModal.vue'
 
 import StyleDefines from './assets/StyleDefines.json'
 
 export default {
   name: 'App',
   components: {
-    NavBar,
-    RecordView,
-    RecordModal
+    NavBar
   },
   data: () => {
     return {
@@ -40,4 +35,7 @@ export default {
   methods: {
   }
 }
+  
+
+
 </script>
