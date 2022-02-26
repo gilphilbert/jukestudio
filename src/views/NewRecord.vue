@@ -45,11 +45,11 @@
         <div class="control">
           <div class="select">
             <select v-model="color">
-              <option value="#ff0000">Red</option>
-              <option value="#00a0de">Blue</option>
-              <option value="#5fae6f">Green</option>
-              <option value="#80578f">Purple</option>
-              <option value="#EE6B3F">Orange</option>
+              <option value="red">Red</option>
+              <option value="blue">Blue</option>
+              <option value="green">Green</option>
+              <option value="purple">Purple</option>
+              <option value="orange">Orange</option>
             </select>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default {
       artist: '',
       artistb: '',
       styleOverride: false,
-      color: '#ff0000',
+      color: 'red',
       style: 'arrows',
       fillartist: false,
       filltitle: false

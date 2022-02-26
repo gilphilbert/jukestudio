@@ -72,4 +72,27 @@
                 "bside":[0,4]
             }
         }
-    }}
+    },
+    "colors" : {
+        "green": {
+            "primary": "#5fae6f",
+            "fill": "#dfefe2"
+        },
+        "red": {
+            "primary" : "#ff0000",
+            "fill": "#ffcccc"
+        },
+        "blue": {
+            "primary": "#00a0de",
+            "fill": "#ccecf8"
+        },
+        "purple": {
+            "primary": "#80578f",
+            "fill": "#e6dde9"
+        },
+        "orange": {
+            "primary": "#ee6b3f",
+            "fill": "#fce1d9"
+        }
+    }
+}

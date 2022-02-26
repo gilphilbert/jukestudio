@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import StyleDefines from '@/assets/StyleDefines.json'
+
 export default {
   name: 'LabelPreview',
   props: [ 'sidea', 'sideb', 'artist', 'artistb', 'style', 'font', 'color', 'fillartist', 'filltitle', 'quotes' ],
@@ -17,38 +19,37 @@ export default {
       switch (this.style) {
         case 'arrows':
           this.paintArrows()
+          break
+        case 'diamond':
+          this.paintDiamond()
+          break
       }
       this.paintText()
     },
     paintBox: function () {
       //background
-      this.context.fillStyle = 'white'
-      if (this.filltitle === true) {
-        this.context.fillStyle = this.adjust(200)
-      }
+      this.context.fillStyle = this.titleFillColor
       this.context.fillRect(0, 0, 225, 72)
 
       //border
       this.context.lineWidth = '1'
-      this.context.strokeStyle = this.color
+      this.context.strokeStyle = this.primaryColor
       this.context.strokeRect(0, 0, 225, 72)
     },
     paintArrows: function () {
       //wide red stripe
-      this.context.fillStyle = this.color
+      this.context.fillStyle = this.primaryColor
       this.context.fillRect(0, 32, 225, 8)
 
-      this.context.fillStyle = 'white'
-      if (this.fillartist === true) {
-        this.context.fillStyle = this.adjust(200)
-      }
+      //artist box
+      this.context.fillStyle = this.artistFillColor
       this.context.lineWidth = '1'
-      this.context.strokeStyle = this.color
+      this.context.strokeStyle = this.primaryColor
       this.context.fillRect(32.5, 28, 160, 16)
       this.context.strokeRect(32.5, 28, 160, 16)
 
       //left triangle
-      this.context.fillStyle = this.color
+      this.context.fillStyle = this.primaryColor
       this.context.beginPath()
       this.context.moveTo(32.5, 29)
       this.context.lineTo(32.5, 43)
@@ -64,6 +65,26 @@ export default {
       this.context.closePath()
       this.context.fill()
     },
+    paintDiamond() {
+      //wide red stripe
+      this.context.fillStyle = this.primaryColor
+      this.context.fillRect(0, 32, 225, 8)
+      
+      //diamond shape (artist box)
+      this.context.fillStyle = this.artistFillColor
+      this.context.lineWidth = '1'
+      this.context.strokeStyle = this.primaryColor
+      this.context.beginPath()
+      this.context.moveTo(22, 36)
+      this.context.lineTo(31, 27)
+      this.context.lineTo(194, 27)
+      this.context.lineTo(203, 36)
+      this.context.lineTo(194, 45)
+      this.context.lineTo(31, 45)
+      this.context.closePath()
+      this.context.fill()
+      this.context.stroke()
+    },
     paintText () {
       this.context.fillStyle = 'black'
       this.context.font = '11px Retro'
@@ -74,10 +95,6 @@ export default {
       this.context.fillText('RAY PARKER JR.', 112.5, 36)
 
       this.context.fillText('"GHOSTBUSTERS (INSTRUMENTAL)"', 112.5, 58)
-    },
-    adjust(amount) {
-      let color = this.color
-      return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
     }
   },
   watch: {
@@ -97,6 +114,25 @@ export default {
   mounted: function () {
     this.context = this.$refs['label'].getContext('2d')
     this.paintLabel()
+  },
+  computed: {
+    primaryColor () {
+      return StyleDefines.colors[this.color].primary
+    },
+    artistFillColor () {
+      let _color = '#ffffff'
+      if (this.fillartist) {
+        _color = StyleDefines.colors[this.color].fill
+      }
+      return _color    },
+    titleFillColor () {
+      let _color = '#ffffff'
+      if (this.filltitle) {
+        console.log(StyleDefines.colors[this.color].fill)
+        _color = StyleDefines.colors[this.color].fill
+      }
+      return _color
+    }
   }
 }
 
