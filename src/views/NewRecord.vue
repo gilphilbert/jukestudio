@@ -36,6 +36,9 @@
             <select v-model="style">
               <option value="arrows">Arrows</option>
               <option value="diamond">Diamond</option>
+              <option value="split">Split Artist</option>
+              <option value="candycane">Candy Cane</option>
+              <option value="holly">Holly</option>
             </select>
           </div>
         </div>
