@@ -7,13 +7,38 @@ import StyleDefines from '@/assets/StyleDefines.json'
 
 export default {
   name: 'LabelPreview',
-  props: [ 'sidea', 'sideb', 'artist', 'artistb', 'style', 'font', 'color', 'fillartist', 'filltitle', 'quotes' ],
+  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'font', 'color', 'fillartist', 'filltitle', 'quotes' ],
+  inject:['StyleDefines'],
   data: () => {
     return {
       context: null
     }
   },
   methods: {
+    stringBreaker: function (txt) {
+      /*
+      let _width = this.context.measureText(txt).width
+      if (_width > (225 - (style.margins * 2))) {
+        var x = str.split(" ");
+        ts.innerText = '';
+        var i = 0;
+        for (i = 0; i < x.length; i++) {
+          ts.innerText=ts.innerText+(((i>0)?' ':'')+x[i]);
+          if(ts.offsetWidth>(225-(style.margins*2))) {
+            i=i-1;
+            break;
+          }
+        }
+        tt=[x.splice(i).join(" ")];
+        x=x.join(" ");
+        tt.unshift(x);
+        str=tt;
+      }
+      //ts.remove();
+      return str;
+      */
+      console.log(txt)
+    },
     paintLabel: function () {
       this.context.clearRect(0, 0, this.$refs['label'].width, this.$refs['label'].height)
       this.paintBox()
@@ -35,6 +60,7 @@ export default {
           break
       }
       this.paintText()
+      console.log(this.StyleDefines.styles[this.style])
     },
     paintBox: function () {
       //background
@@ -189,11 +215,32 @@ export default {
       this.context.font = '10px Retro'
       this.context.textAlign = 'center'
       this.context.textBaseline = 'middle';
-      this.context.fillText('"GHOSTBUSTERS"', 112.5, 15)
 
-      this.context.fillText('RAY PARKER JR.', 112.5, 36)
+      let _aside = this.aside
+      let _bside = this.bside
+      let _artist = this.artist
+      let _artistb = this.artistb
 
-      this.context.fillText('"GHOSTBUSTERS (INSTRUMENTAL)"', 112.5, 58)
+      let _t = true
+      if (_t === true) {
+        _aside = _aside.toUpperCase()
+        _bside = _bside.toUpperCase()
+        _artist = _artist.toUpperCase()
+        _artistb = _artistb.toUpperCase()
+      }
+      if (_t === true) {
+        _aside = '"' + _aside + '"'
+        _bside = '"' + _bside + '"'
+      }
+      if (_artistb !== '') {
+        _artist += ' / ' + _artistb
+      }
+
+      this.context.fillText(_aside, 112.5, 15)
+
+      this.context.fillText(_artist, 112.5, 36)
+
+      this.context.fillText(_bside, 112.5, 58)
     }
   },
   watch: {
@@ -207,6 +254,18 @@ export default {
       this.paintLabel()
     },
     filltitle() { 
+      this.paintLabel()
+    },
+    aside() { 
+      this.paintLabel()
+    },
+    bside() { 
+      this.paintLabel()
+    },
+    artist() { 
+      this.paintLabel()
+    },
+    artistb() { 
       this.paintLabel()
     }
   },

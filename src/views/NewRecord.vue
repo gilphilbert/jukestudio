@@ -2,26 +2,26 @@
   <section class="section">
     <span class="title-text">Add record</span>
     <p class="is-center">
-      <LabelPreview :style="style" :color="color" :fillartist="fillartist" :filltitle="filltitle" />
+      <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :color="color" :fillartist="fillartist" :filltitle="filltitle" />
     </p>
     <div class="field">
       <div class="control">
-        <input class="input" type="text" placeholder="Side A" v-bind="aside">
+        <input class="input" type="text" placeholder="Side A" v-model="aside">
       </div>
     </div>
     <div class="field">
       <div class="control">
-        <input class="input" type="text" placeholder="Side B" v-bind="bside">
+        <input class="input" type="text" placeholder="Side B" v-model="bside">
       </div>
     </div>
     <div class="field">
       <div class="control">
-        <input class="input" type="text" placeholder="Artist" v-bind="artist">
+        <input class="input" type="text" placeholder="Artist" v-model="artist">
       </div>
     </div>
     <div class="field">
       <div class="control">
-        <input class="input" type="text" placeholder="Side B artist (if different)" v-bind="artistb">
+        <input class="input" type="text" placeholder="Side B artist (if different)" v-model="artistb">
       </div>
     </div>
     <div class="box" id="style-override">

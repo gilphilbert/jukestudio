@@ -1,6 +1,5 @@
 # Preview
 * Text-breaker
-* Actual text
 
 # New record
 * Alter style for record needs to turn on/off
