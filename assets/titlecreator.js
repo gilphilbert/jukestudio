@@ -74,6 +74,7 @@ window.titleCreator={
                 y: 0,
                 w: 224,
                 h: 72,
+                color: '#ffffff',
                 lineColor: titleCreator.styles.holly.primaryColor,
                 lineWidth: 1
               },
@@ -114,6 +115,7 @@ window.titleCreator={
                 w: 224,
                 h: 72,
                 lineColor: titleCreator.styles.candycane.primaryColor,
+                color: titleCreator.styles.candycane.titleTint,
                 lineWidth: 1
               },
               {
