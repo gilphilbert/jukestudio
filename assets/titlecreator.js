@@ -102,11 +102,6 @@ window.titleCreator={
           })
         } else if(style.style=='candycane') {
           b.push({
-            image: 'data:image/png;base64,'+pdfMake.vfs['candycane.png'],
-            width: 22,
-            absolutePosition: {x: x+5, y: y+8}
-          });
-          b.push({
             canvas: [
               {
                 type: 'rect',
@@ -144,6 +139,11 @@ window.titleCreator={
               }
             ],
             absolutePosition: {x: x, y: y}
+          });
+          b.push({
+            image: 'data:image/png;base64,'+pdfMake.vfs['candycane.png'],
+            width: 22,
+            absolutePosition: {x: x+5, y: y+8}
           });
           b.push({
             image: 'data:image/png;base64,'+pdfMake.vfs['candycane.png'],
