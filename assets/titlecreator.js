@@ -74,7 +74,7 @@ window.titleCreator={
                 y: 0,
                 w: 224,
                 h: 72,
-                lineColor: style.primaryColor,
+                lineColor: titleCreator.styles.holly.primaryColor,
                 lineWidth: 1
               },
               {
@@ -82,14 +82,14 @@ window.titleCreator={
                 x1: 30, y1: 26,
                 x2: 194, y2: 26,
                 lineWidth: 1.5,
-                lineColor: style.primaryColor
+                lineColor: titleCreator.styles.holly.primaryColor
               },
               {
                 type: 'line',
                 x1: 30, y1: 46,
                 x2: 194, y2: 46,
                 lineWidth: 1.5,
-                lineColor: style.primaryColor
+                lineColor: titleCreator.styles.holly.primaryColor
               }
             ],
             absolutePosition: {x: x, y: y}
@@ -113,7 +113,7 @@ window.titleCreator={
                 y: 0,
                 w: 224,
                 h: 72,
-                lineColor: style.primaryColor,
+                lineColor: titleCreator.styles.candycane.primaryColor,
                 lineWidth: 1
               },
               {
@@ -122,8 +122,8 @@ window.titleCreator={
                 y: 27,
                 w: 160,
                 h: 18,
-                color: style.artistTint,
-                lineColor: style.primaryColor,
+                color: titleCreator.styles.candycane.artistTint,
+                lineColor: titleCreator.styles.candycane.primaryColor,
                 lineWidth: 1.5
               },
               {
@@ -131,14 +131,14 @@ window.titleCreator={
                 lineWidth: 3,
                 closePath: true,
                 points: [{x: 32, y: 27}, {x: 32, y: 45}, {x: 40, y: 36}],
-                color: style.primaryColor 
+                color: titleCreator.styles.candycane.primaryColor 
               },
               {
                 type: 'polyline',
                 lineWidth: 3,
                 closePath: true,
                 points: [{x: 193, y: 27}, {x: 193, y: 45}, {x: 184, y: 36}],
-                color: style.primaryColor
+                color: titleCreator.styles.candycane.primaryColor
               }
             ],
             absolutePosition: {x: x, y: y}
