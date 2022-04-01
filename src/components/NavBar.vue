@@ -3,10 +3,10 @@
   <nav class="navbar is-danger">
     <div class="container">
       <div class="navbar-brand">
-        <a class="navbar-item brand-text" href="#">
+        <router-link class="navbar-item brand-text" to="/">
           <img src="../assets/logo.svg" alt="jukestudio logo">
           <img src="../assets/brand.svg" alt="jukestudio name">
-        </a>
+        </router-link>
         <div class="navbar-burger burger" data-target="navMenu">
           <span></span>
           <span></span>

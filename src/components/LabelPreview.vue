@@ -3,41 +3,40 @@
 </template>
 
 <script>
-import StyleDefines from '@/assets/StyleDefines.json'
 
 export default {
   name: 'LabelPreview',
-  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'font', 'color', 'fillartist', 'filltitle', 'quotes' ],
-  inject:['StyleDefines'],
+  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'font', 'color', 'fillartist', 'filltitle', 'quotes', 'uppercase' ],
+  inject:[ '$styles' ],
   data: () => {
     return {
       context: null
     }
   },
   methods: {
-    stringBreaker: function (txt) {
-      /*
-      let _width = this.context.measureText(txt).width
-      if (_width > (225 - (style.margins * 2))) {
-        var x = str.split(" ");
-        ts.innerText = '';
-        var i = 0;
-        for (i = 0; i < x.length; i++) {
-          ts.innerText=ts.innerText+(((i>0)?' ':'')+x[i]);
-          if(ts.offsetWidth>(225-(style.margins*2))) {
-            i=i-1;
-            break;
+    stringBreaker: function (str) {
+      console.log(this.$styles.styles)
+      let _style = this.$styles.styles[this.style]
+      let _width = this.context.measureText(str).width
+      if (_width > (225 - (_style.margins * 2))) {
+        let _x = str.split(" ")
+        let _w = ''
+        var i = 0
+        for (i = 0; i < _x.length; i++) {
+          _w += (((i > 0) ? ' ' : '') + _x[i])
+          if (this.context.measureText(_w).width > (225 - (_style.margins * 2))) {
+            i = i - 1
+            break
           }
         }
-        tt=[x.splice(i).join(" ")];
-        x=x.join(" ");
-        tt.unshift(x);
-        str=tt;
+        let tt=[_x.splice(i).join(" ")]
+        _x = _x.join(" ")
+        tt.unshift(_x)
+        str = tt
+      } else {
+        str = [ str ]
       }
-      //ts.remove();
       return str;
-      */
-      console.log(txt)
     },
     paintLabel: function () {
       this.context.clearRect(0, 0, this.$refs['label'].width, this.$refs['label'].height)
@@ -49,7 +48,7 @@ export default {
         case 'diamond':
           this.paintDiamond()
           break
-        case 'split':
+        case 'multiple':
           this.paintSplitArtist()
           break
         case 'candycane':
@@ -60,7 +59,6 @@ export default {
           break
       }
       this.paintText()
-      console.log(this.StyleDefines.styles[this.style])
     },
     paintBox: function () {
       //background
@@ -221,26 +219,44 @@ export default {
       let _artist = this.artist
       let _artistb = this.artistb
 
-      let _t = true
-      if (_t === true) {
+      if (this.uppercase === true) {
         _aside = _aside.toUpperCase()
         _bside = _bside.toUpperCase()
         _artist = _artist.toUpperCase()
         _artistb = _artistb.toUpperCase()
       }
-      if (_t === true) {
-        _aside = '"' + _aside + '"'
-        _bside = '"' + _bside + '"'
-      }
-      if (_artistb !== '') {
-        _artist += ' / ' + _artistb
+      if (this.quotes === true) {
+        _aside = (_aside !== '') ? '"' + _aside + '"' : _aside
+        _bside = (_bside !== '') ? '"' + _bside + '"' : _bside
       }
 
-      this.context.fillText(_aside, 112.5, 15)
+      const _sa = this.stringBreaker(_aside)
+      if (_sa.length === 1) {
+        this.context.fillText(_sa[0], 112.5, 15)
+      } else {
+        this.context.fillText(_sa[0], 112.5, 9)
+        this.context.fillText(_sa[1], 112.5, 20)
+      }
 
-      this.context.fillText(_artist, 112.5, 36)
+      // should be for non-split artist only
+      if (this.style !== 'multiple') {
+        let _a = _artist
+        if (_artistb !== '') {
+          _a += ' / ' + _artistb
+        }
+        this.context.fillText(_a, 112.5, 36)
+      } else {
+        this.context.fillText(_artist, 112.5, 29)
+        this.context.fillText(_artistb, 112.5, 44)
+      }
 
-      this.context.fillText(_bside, 112.5, 58)
+      const _sb = this.stringBreaker(_bside)
+      if (_sb.length === 1) {
+        this.context.fillText(_sb, 112.5, 58)
+      } else {
+        this.context.fillText(_sb[0], 112.5, 53)
+        this.context.fillText(_sb[1], 112.5, 64)
+      }
     }
   },
   watch: {
@@ -275,19 +291,18 @@ export default {
   },
   computed: {
     primaryColor () {
-      return StyleDefines.colors[this.color].primary
+      return this.$styles.colors[this.color].primary
     },
     artistFillColor () {
       let _color = '#ffffff'
       if (this.fillartist) {
-        _color = StyleDefines.colors[this.color].fill
+        _color = this.$styles.colors[this.color].fill
       }
       return _color    },
     titleFillColor () {
       let _color = '#ffffff'
       if (this.filltitle) {
-        console.log(StyleDefines.colors[this.color].fill)
-        _color = StyleDefines.colors[this.color].fill
+        _color = this.$styles.colors[this.color].fill
       }
       return _color
     }

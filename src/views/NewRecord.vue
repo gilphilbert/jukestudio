@@ -26,19 +26,15 @@
     </div>
     <div class="box" id="style-override">
       <div class="field">
-        <input class="is-checkradio is-success is-circle" type="checkbox" name="" v-bind="styleOverride">
+        <input class="is-checkradio is-success is-circle" type="checkbox" id="title-style-override" name="" v-model="styleOverride">
         <label for="title-style-override">Alter style for this record</label>
       </div>
       <div class="field">
         <label class="label">Style</label>
         <div class="control">
           <div class="select">
-            <select v-model="style">
-              <option value="arrows">Arrows</option>
-              <option value="diamond">Diamond</option>
-              <option value="split">Split Artist</option>
-              <option value="candycane">Candy Cane</option>
-              <option value="holly">Holly</option>
+            <select v-model="style" :disabled="styleOverride == false">
+              <option v-for="style in $styles.styles" v-bind:key="style.style" :value="style.style">{{ style.name }}</option>
             </select>
           </div>
         </div>
@@ -47,22 +43,18 @@
         <label class="label">Color</label>
         <div class="control">
           <div class="select">
-            <select v-model="color">
-              <option value="red">Red</option>
-              <option value="blue">Blue</option>
-              <option value="green">Green</option>
-              <option value="purple">Purple</option>
-              <option value="orange">Orange</option>
+            <select v-model="color" :disabled="styleOverride == false">
+              <option v-for="color in $styles.colors" v-bind:key="color.name" :value="color.color">{{ color.name }}</option>
             </select>
           </div>
         </div>
       </div>
       <div class="field">
-        <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="fillartist">
+        <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="fillartist" :disabled="styleOverride == false">
         <label for="title-artist-fill">Colored background for artist</label>
       </div>
       <div class="field">
-        <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="filltitle">
+        <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="filltitle" :disabled="styleOverride == false">
         <label for="title-title-fill">Colored background for title</label>
       </div>
     </div>
@@ -79,6 +71,7 @@ export default {
   components: {
     LabelPreview
   },
+  inject: [ '$styles' ],
   props: [ 'id' ],
   data: () => {
     return {
