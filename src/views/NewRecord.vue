@@ -2,7 +2,7 @@
   <section class="section">
     <span class="title-text">Add record</span>
     <p class="is-center">
-      <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :color="color" :fillartist="fillartist" :filltitle="filltitle" />
+      <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :color="color" :fillartist="fillartist" :filltitle="filltitle" />
     </p>
     <div class="field">
       <div class="control">
@@ -71,7 +71,7 @@ export default {
   components: {
     LabelPreview
   },
-  inject: [ '$styles' ],
+  inject: [ '$styles', '$database' ],
   props: [ 'id' ],
   data: () => {
     return {
@@ -81,12 +81,18 @@ export default {
       artistb: '',
       styleOverride: false,
       color: 'red',
+      font: 'retro',
       style: 'arrows',
       fillartist: false,
-      filltitle: false
+      filltitle: false,
     }
   },
   created: function () {
+    this.style = this.$database.options.get('style')
+    this.color = this.$database.options.get('primaryColor')
+    this.fillartist = this.$database.options.get('artistFillColor')
+    this.filltitle = this.$database.options.get('titleFillColor')
+    this.font = this.$database.options.get('font')
   }
 }
 </script>

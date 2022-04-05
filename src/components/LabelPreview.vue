@@ -15,7 +15,6 @@ export default {
   },
   methods: {
     stringBreaker: function (str) {
-      console.log(this.$styles.styles)
       let _style = this.$styles.styles[this.style]
       let _width = this.context.measureText(str).width
       if (_width > (225 - (_style.margins * 2))) {
@@ -210,7 +209,9 @@ export default {
     },
     paintText () {
       this.context.fillStyle = 'black'
-      this.context.font = '10px Retro'
+
+      const font = this.$styles.fonts[this.font]
+      this.context.font = font.titleSize + 'px ' + font.name
       this.context.textAlign = 'center'
       this.context.textBaseline = 'middle';
 

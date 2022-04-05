@@ -6,8 +6,6 @@
 <script>
 import NavBar from './components/NavBar.vue'
 
-import StyleDefines from './assets/StyleDefines.json'
-
 //needs to load the default style from the database (if it exists)
 
 export default {
@@ -31,9 +29,6 @@ export default {
     }
   },
   created: function() {
-    //console.log(this.styles)
-    //this.printRecord()
-    //console.log(this)
   },
   methods: {
   }
