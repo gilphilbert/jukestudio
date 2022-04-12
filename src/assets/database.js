@@ -1,9 +1,9 @@
-var _db = 'test',
-    _titles = 'jue',
-    _options = 'jeff'
+var _db = null,
+    _titles = null,
+    _options = null
 
 let Database = {
-  init: async () => {
+  init: () => {
       return new Promise((resolve) => {
         _db = new window.loki('jukestudio.db', {
             autoload: true,
@@ -37,12 +37,9 @@ let Database = {
       })
     })
   },
-  save: function () {
-    _db.saveDatabase()
-  },
   options: {
-    get: (key = false) => {
-        let options = _options.findOne()
+    get: function (key = false) {
+        const options = _options.findOne()
         if (key in options) {
             return options[key]
         } else {
@@ -54,11 +51,21 @@ let Database = {
             let options = _options.findOne()
             options[key] = value
             _options.update(options)
-            Database.save()
+            _db.saveDatabase()
         }
     } 
+  },
+  titles: {
+      add: title => {
+        return _titles.insert(title)
+      },
+      remove: id => {
+        id = parseInt(id)
+        const title = _titles.findOne({ 'id': id });
+        _titles.remove(title)
+        _db.saveDatabase()
+      },
   }
 }
-//Database.init()
 
 export default Database
