@@ -62,11 +62,6 @@ window.titleCreator={
         var y=(j*72 + (j * tileYSpacing[spaced]))+pageTopMargin[spaced]; // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
         if(style.style=="holly") {
           b.push({
-            image: 'data:image/png;base64,'+pdfMake.vfs['holly.png'],
-            width: 200,
-            absolutePosition: {x: x+10, y: y+20}
-          });
-          b.push({
             canvas: [
               {
                 type: 'rect',
@@ -94,6 +89,11 @@ window.titleCreator={
               }
             ],
             absolutePosition: {x: x, y: y}
+          });
+          b.push({
+            image: 'data:image/png;base64,'+pdfMake.vfs['holly.png'],
+            width: 200,
+            absolutePosition: {x: x+10, y: y+20}
           });
           b.push({
             image: 'data:image/png;base64,'+pdfMake.vfs['holly.png'],

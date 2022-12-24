@@ -468,7 +468,7 @@ document.querySelector('.navbar .print-titles').addEventListener('click', functi
   document.querySelectorAll('.print-check:checked').forEach(function(e){
     selected.push(parseInt(e.dataset.id)); 
   });
-  titleCreator.start([]);
+  titleCreator.start(selected);
 });
 
 //-- IMPORT/EXPORT --//
