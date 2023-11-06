@@ -3,10 +3,10 @@
   <nav class="navbar is-danger">
     <div class="container">
       <div class="navbar-brand">
-        <router-link class="navbar-item brand-text" to="/">
+        <div class="navbar-item brand-text">
           <img src="../assets/logo.svg" alt="jukestudio logo">
           <img src="../assets/brand.svg" alt="jukestudio name">
-        </router-link>
+        </div>
         <div class="navbar-burger burger" data-target="navMenu">
           <span></span>
           <span></span>
@@ -15,13 +15,10 @@
       </div>
       <div id="navMenu" class="navbar-menu">
         <div class="navbar-end">
-          <router-link class="navbar-item" to="/">
-            Records
-          </router-link>
-          <router-link class="navbar-item" to="/design">
+          <a class="navbar-item">
             Design
-          </router-link>
-          <a class="navbar-item print-titles" href="#">
+          </a>
+          <a class="navbar-item print-titles" href="#" @click="print">
             Print
           </a>
           <a class="navbar-item import-export" href="#">
@@ -38,6 +35,11 @@
 
 <script>
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  methods: {
+    print: function() {
+      this.$emit('print')
+    }
+  }
 }
 </script>

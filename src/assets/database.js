@@ -56,15 +56,43 @@ let Database = {
     } 
   },
   titles: {
+      get: id => {
+        const title = _titles.get(id)
+        return title
+      },
       add: title => {
-        return _titles.insert(title)
+        const retVal = _titles.insert(title)
+        _db.saveDatabase()
+        return retVal
+      },
+      update: (id, title) => {
+        let dbTitle = _titles.get(id)
+        const keys = Object.keys(title)
+        keys.forEach(key => {
+          dbTitle[key] = title[key]
+        })
+        if (Object.keys(dbTitle).includes('styleOverride') && !keys.includes('styleOverride')) {
+          delete(dbTitle.styleOverride)
+        }
+        _titles.update(dbTitle)
+        _db.saveDatabase()
       },
       remove: id => {
         id = parseInt(id)
-        const title = _titles.findOne({ 'id': id });
+        const title = _titles.findOne({ 'id': id })
         _titles.remove(title)
         _db.saveDatabase()
       },
+      list: () => {
+        const titles = _titles.find()/*.map(title => {
+          return {
+            title: title.sidea,
+            sideb: title.sideb,
+            artist: title.artist
+          }
+        })*/
+        return titles
+      }
   }
 }
 

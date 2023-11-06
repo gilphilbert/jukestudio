@@ -18,19 +18,38 @@ export default {
       let _style = this.$styles.styles[this.style]
       let _width = this.context.measureText(str).width
       if (_width > (225 - (_style.margins * 2))) {
-        let _x = str.split(" ")
-        let _w = ''
-        var i = 0
-        for (i = 0; i < _x.length; i++) {
-          _w += (((i > 0) ? ' ' : '') + _x[i])
-          if (this.context.measureText(_w).width > (225 - (_style.margins * 2))) {
-            i = i - 1
-            break
+        var _splitPoint = 0
+        let _words = str.split(" ")
+
+        // if we're breaking strings, look for a natural breaking point
+        if (str.indexOf('(') > -1) {
+          const chrToLookFor = (str.startsWith('(') ? ')' : '(')
+          for (let i = 0; i < _words.length; i++) {
+            if (_words[i].indexOf(chrToLookFor) > -1) {
+              _splitPoint = i
+              if (chrToLookFor === ')') {
+                _splitPoint++
+              }
+              break
+            }
           }
         }
-        let tt=[_x.splice(i).join(" ")]
-        _x = _x.join(" ")
-        tt.unshift(_x)
+
+        //otherwise let's find the widest first line and split there
+        if (_splitPoint === 0) {
+          let _w = ''
+          for (_splitPoint = 0; _splitPoint < _words.length; _splitPoint++) {
+            _w += (((_splitPoint > 0) ? ' ' : '') + _words[_splitPoint])
+            if (this.context.measureText(_w).width > (225 - (_style.margins * 2))) {
+              _splitPoint = _splitPoint - 1
+              break
+            }
+          }
+        }
+
+        let tt=[_words.splice(_splitPoint).join(" ")]
+        _words = _words.join(" ")
+        tt.unshift(_words)
         str = tt
       } else {
         str = [ str ]
@@ -299,7 +318,8 @@ export default {
       if (this.fillartist) {
         _color = this.$styles.colors[this.color].fill
       }
-      return _color    },
+      return _color
+    },
     titleFillColor () {
       let _color = '#ffffff'
       if (this.filltitle) {

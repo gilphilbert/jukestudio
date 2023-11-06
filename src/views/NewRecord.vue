@@ -1,66 +1,78 @@
 <template>
-  <section class="section">
-    <span class="title-text">Add record</span>
-    <p class="is-center">
-      <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :color="color" :fillartist="fillartist" :filltitle="filltitle" />
-    </p>
-    <div class="field">
-      <div class="control">
-        <input class="input" type="text" placeholder="Side A" v-model="aside">
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <input class="input" type="text" placeholder="Side B" v-model="bside">
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <input class="input" type="text" placeholder="Artist" v-model="artist">
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <input class="input" type="text" placeholder="Side B artist (if different)" v-model="artistb">
-      </div>
-    </div>
-    <div class="box" id="style-override">
-      <div class="field">
-        <input class="is-checkradio is-success is-circle" type="checkbox" id="title-style-override" name="" v-model="styleOverride">
-        <label for="title-style-override">Alter style for this record</label>
-      </div>
-      <div class="field">
-        <label class="label">Style</label>
-        <div class="control">
-          <div class="select">
-            <select v-model="style" :disabled="styleOverride == false">
-              <option v-for="style in $styles.styles" v-bind:key="style.style" :value="style.style">{{ style.name }}</option>
-            </select>
+  <div class="modal" :class="{ 'is-active': visible }">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="modal-card">
+        <div class="modal-card-head">
+          Add record
+        </div>
+        <div class="modal-card-body">
+          <p class="is-center">
+            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :color="color" :fillArtist="fillArtist" :fillTitle="fillTitle" />
+          </p>
+          <div class="field">
+            <div class="control">
+              <input class="input" type="text" placeholder="Side A" v-model="aside">
+            </div>
           </div>
+          <div class="field">
+            <div class="control">
+              <input class="input" type="text" placeholder="Side B" v-model="bside">
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input" type="text" placeholder="Artist" v-model="artist">
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input" type="text" placeholder="Side B artist (if different)" v-model="artistb">
+            </div>
+          </div>
+          <div class="box" id="style-override">
+            <div class="field">
+              <input class="is-checkradio is-success is-circle" type="checkbox" id="title-style-override" name="" v-model="styleOverride">
+              <label for="title-style-override">Alter style for this record</label>
+            </div>
+            <div class="field">
+              <label class="label">Style</label>
+              <div class="control">
+                <div class="select">
+                  <select v-model="style" :disabled="styleOverride == false">
+                    <option v-for="style in $styles.styles" v-bind:key="style.style" :value="style.style">{{ style.name }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Color</label>
+              <div class="control">
+                <div class="select">
+                  <select v-model="color" :disabled="styleOverride == false">
+                    <option v-for="color in $styles.colors" v-bind:key="color.name" :value="color.color">{{ color.name }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="fillArtist" :disabled="styleOverride == false">
+              <label for="title-artist-fill">Colored background for artist</label>
+            </div>
+            <div class="field">
+              <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="fillTitle" :disabled="styleOverride == false">
+              <label for="title-title-fill">Colored background for title</label>
+            </div>
+          </div>
+          </div>
+        <div class="modal-card-foot">
+          <button class="button is-light" @click="resetAndClose">Cancel</button>
+          <button class="button is-primary" @click="saveRecord">Save</button>
         </div>
       </div>
-      <div class="field">
-        <label class="label">Color</label>
-        <div class="control">
-          <div class="select">
-            <select v-model="color" :disabled="styleOverride == false">
-              <option v-for="color in $styles.colors" v-bind:key="color.name" :value="color.color">{{ color.name }}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="field">
-        <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="fillartist" :disabled="styleOverride == false">
-        <label for="title-artist-fill">Colored background for artist</label>
-      </div>
-      <div class="field">
-        <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="filltitle" :disabled="styleOverride == false">
-        <label for="title-title-fill">Colored background for title</label>
-      </div>
     </div>
-    <router-link class="button is-light" to="/">Cancel</router-link>
-    <button class="button is-primary">Save</button>
-  </section>
+  </div>
+
 </template>
 
 <script>
@@ -72,7 +84,7 @@ export default {
     LabelPreview
   },
   inject: [ '$styles', '$database' ],
-  props: [ 'id' ],
+  props: [ 'editId', 'visible' ],
   data: () => {
     return {
       aside: '',
@@ -83,16 +95,84 @@ export default {
       color: 'red',
       font: 'retro',
       style: 'arrows',
-      fillartist: false,
-      filltitle: false,
+      fillArtist: false,
+      fillTitle: false,
     }
   },
   created: function () {
-    this.style = this.$database.options.get('style')
-    this.color = this.$database.options.get('primaryColor')
-    this.fillartist = this.$database.options.get('artistFillColor')
-    this.filltitle = this.$database.options.get('titleFillColor')
-    this.font = this.$database.options.get('font')
+  },
+  methods: {
+    resetValues: function() {
+      this.style = this.$database.options.get('style')
+      this.color = this.$database.options.get('primaryColor')
+      this.fillArtist = this.$database.options.get('artistFillColor')
+      this.fillTitle = this.$database.options.get('titleFillColor')
+      this.font = this.$database.options.get('font')
+      this.styleOverride = false
+      this.aside = ''
+      this.bside = ''
+      this.artist = ''
+      this.artistb = ''
+
+    },
+    saveRecord: function () {
+      let obj = {
+        aside: this.aside,
+        bside: this.bside,
+        artist: this.artist,
+        artistb: this.artistb
+      }
+      if (this.styleOverride === true) {
+        obj['styleOverride'] = {
+          color: this.color,
+          font: this.font,
+          style: this.style,
+          fillArtist: this.fillArtist,
+          fillTitle: this.fillTitle
+        }
+      }
+      if (this.editId !== null && this.editId !== undefined) {
+        this.$database.titles.update(this.editId, obj)
+      } else {
+        this.$database.titles.add(obj)
+      }
+      this.resetAndClose()
+    },
+    resetAndClose: function () {
+      this.resetValues()
+      this.$emit('close')
+    }
+  },
+  watch: { //how to do this?
+    //watch for editId to change then update the values on the form
+    editId() {
+      if (this.editId !== undefined && this.editId !== null) {
+        console.log(this.editId)
+        const title = this.$database.titles.get(this.editId)
+        console.log(title)
+        this.aside = title.aside
+        this.bside = title.bside
+        this.artist = title.artist
+        this.artistb = title.artistb
+        if (Object.keys(title).includes('styleOverride')) {
+          this.styleOverride = true
+          this.color = title.styleOverride.color
+          this.fillArtist = title.styleOverride.fillArtist
+          this.fillTitle = title.styleOverride.fillTitle
+          this.style = title.styleOverride.style
+          this.font = title.styleOverride.font
+        }
+      }
+    },
+    styleOverride() {
+      if (this.styleOverride === false) {
+        this.style = this.$database.options.get('style')
+        this.color = this.$database.options.get('primaryColor')
+        this.fillArtist = this.$database.options.get('artistFillColor')
+        this.fillTitle = this.$database.options.get('titleFillColor')
+        this.font = this.$database.options.get('font')
+      }
+    }
   }
 }
 </script>

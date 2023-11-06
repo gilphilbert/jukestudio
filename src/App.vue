@@ -1,39 +1,125 @@
 <template>
-  <NavBar/>
-  <router-view :records="records"/>
+  <NavBar @print="print"/>
+  <section class="section">
+    <div class="container">
+      <!--<router-link to="new" class="button is-primary">+ Add Record</router-link>-->
+      <button @click="showNewRecord" class="button is-primary">+ Add Record</button>
+      <table class="table is-fullwidth is-striped" id="record-table">
+        <thead>
+          <tr>
+            <th><!--Print--></th>
+            <th>Side A</th>
+            <th colspan=2>Side B</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="!titles.length" @click="$emit('new')">
+            <td colspan=4 class="has-text-centered">No records! Add a record to get started</td>
+          </tr>
+          <tr v-for="title in titles" v-bind:key="title" class="is-compact">
+            <td class="is-middle">
+              <div class="field">
+                <input class="is-checkradio print-check" v-model="title.checked" :id="'printcheck-' + title.id" type="checkbox" />
+                <label :for="'printcheck-' + title.id"></label>
+              </div>
+            </td>
+            <td @click="editRecord(title.id)">
+              <p><strong>{{ title.aside }}</strong></p>
+              <p><small>{{ title.artist }}</small></p>
+            </td>
+            <td @click="editRecord(title.id)">
+              <p><strong>{{ title.bside }}</strong></p>
+              <p><small>{{ title.artistb || title.artist }}</small></p>
+            </td>
+            <td>
+              <a class="delete" @click="showDeleteRecord(title.id)">delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <NewRecord :visible="newVisible" @close="closeNewRecord" :editId="recordToEdit"></NewRecord>
+  <DeleteRecord :visible="deleteVisible" :recordid="recordToDelete" @close="closeDeleteRecord"></DeleteRecord>
 </template>
 
 <script>
 import NavBar from './components/NavBar.vue'
-
-//needs to load the default style from the database (if it exists)
+import NewRecord from './views/NewRecord.vue'
+import DeleteRecord from './views/DeleteRecord.vue'
 
 export default {
   name: 'App',
   components: {
-    NavBar
+    NavBar,
+    NewRecord,
+    DeleteRecord
   },
-  inject: [ '$database', '$styles' ],
+  inject: [ '$styles', '$database' ],
   data: () => {
     return {
-      records: [ ],
-      addModalVisible: false,
-      default: {
-        style: 'arrows',
-        color: 'red',
-        font: 'retro',
-        titleTint: false,
-        artistTint: false,
-        forceQuotes: true
-      }
+      titles: [],
+      newVisible: false,
+      deleteVisible: false,
+      recordToDelete: null,
+      recordToEdit: null,
     }
   },
-  created: function() {
+  created: function () {
+    this.getRecords()
   },
   methods: {
+    getRecords: function () {
+      this.titles = this.$database.titles.list().map(item => {
+        item.checked = false
+        return item
+      })
+    },
+    showNewRecord: function() {
+      this.newVisible = true
+    },
+    closeNewRecord: function() {
+      this.getRecords()
+      this.recordToEdit = null
+      this.newVisible = false
+    },
+    editRecord: function (id) {
+      this.recordToEdit = id
+      this.newVisible = true
+    },
+    showDeleteRecord: function(id) {
+      this.recordToDelete = id
+      this.deleteVisible = true
+    },
+    closeDeleteRecord: function() {
+      this.getRecords()
+      this.recordToDelete = null
+      this.deleteVisible = false
+    },
+    print: function() {
+      let ttp = []
+      this.titles.forEach(title => {
+        if (title.checked === true) {
+          ttp.push(title.id)
+        }
+      })
+      if (ttp.length === 0) {
+        this.titles.forEach(title => {
+          ttp.push(title.id)
+      })
+      }
+      console.log(ttp)
+    }
   }
 }
-  
 
 
 </script>
+
+<style style="css" scoped>
+table tr td:first-child,
+table tr td:last-child {
+  width:0.1%;
+  white-space: nowrap;
+}
+</style>

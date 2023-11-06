@@ -7764,9 +7764,6 @@ label.panel-block {
       line-height: 1.2;
       margin-bottom: 0 !important; }
 
-.table td:last-child {
-  width: 50px; }
-
 .mobile-add {
   border: none;
   border-radius: 100%;
