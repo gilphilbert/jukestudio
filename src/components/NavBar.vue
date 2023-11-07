@@ -15,10 +15,10 @@
       </div>
       <div id="navMenu" class="navbar-menu">
         <div class="navbar-end">
-          <a class="navbar-item">
+          <a class="navbar-item" @click="$emit('design')">
             Design
           </a>
-          <a class="navbar-item print-titles" href="#" @click="print">
+          <a class="navbar-item print-titles" href="#" @click="$emit('print')">
             Print
           </a>
           <a class="navbar-item import-export" href="#">
@@ -36,10 +36,5 @@
 <script>
 export default {
   name: 'NavBar',
-  methods: {
-    print: function() {
-      this.$emit('print')
-    }
-  }
 }
 </script>

@@ -8,7 +8,7 @@
         </div>
         <div class="modal-card-body">
           <p class="is-center">
-            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :primaryColor="primaryColor" :artistFillColor="artistFillColor" :titleFillColor="titleFillColor" />
+            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :primaryColor="primaryColor" :shadeArtist="shadeArtist" :shadeTitle="shadeTitle" />
           </p>
           <div class="field">
             <div class="control">
@@ -56,11 +56,11 @@
               </div>
             </div>
             <div class="field">
-              <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="artistFillColor" :disabled="styleOverride == false">
+              <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="shadeArtist" :disabled="styleOverride == false">
               <label for="title-artist-fill">Colored background for artist</label>
             </div>
             <div class="field">
-              <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="titleFillColor" :disabled="styleOverride == false">
+              <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="shadeTitle" :disabled="styleOverride == false">
               <label for="title-title-fill">Colored background for title</label>
             </div>
           </div>
@@ -95,8 +95,8 @@ export default {
       primaryColor: 'red',
       font: 'retro',
       style: 'arrows',
-      artistFillColor: false,
-      titleFillColor: false,
+      shadeArtist: false,
+      shadeTitle: false,
     }
   },
   created: function () {
@@ -105,8 +105,8 @@ export default {
     resetValues: function() {
       this.style = this.$database.options.get('style')
       this.primaryColor = this.$database.options.get('primaryColor')
-      this.artistFillColor = this.$database.options.get('artistFillColor')
-      this.titleFillColor = this.$database.options.get('titleFillColor')
+      this.shadeArtist = this.$database.options.get('shadeArtist')
+      this.shadeTitle = this.$database.options.get('shadeTitle')
       this.font = this.$database.options.get('font')
       this.styleOverride = false
       this.aside = ''
@@ -126,8 +126,8 @@ export default {
           primaryColor: this.primaryColor,
           font: this.font,
           style: this.style,
-          artistFillColor: this.artistFillColor,
-          titleFillColor: this.titleFillColor
+          shadeArtist: this.shadeArtist,
+          shadeTitle: this.shadeTitle
         }
       }
       if (this.editId !== null && this.editId !== undefined) {
@@ -154,8 +154,8 @@ export default {
         if (Object.keys(title).includes('styleOverride')) {
           this.styleOverride = true
           this.primaryColor = title.styleOverride.primaryColor
-          this.artistFillColor = title.styleOverride.artistFillColor
-          this.titleFillColor = title.styleOverride.titleFillColor
+          this.shadeArtist = title.styleOverride.shadeArtist
+          this.shadeTitle = title.styleOverride.shadeTitle
           this.style = title.styleOverride.style
           this.font = title.styleOverride.font
         }
@@ -165,8 +165,8 @@ export default {
       if (this.styleOverride === false) {
         this.style = this.$database.options.get('style')
         this.primaryColor = this.$database.options.get('primaryColor')
-        this.artistFillColor = this.$database.options.get('artistFillColor')
-        this.titleFillColor = this.$database.options.get('titleFillColor')
+        this.shadeArtist = this.$database.options.get('shadeArtist')
+        this.shadeTitle = this.$database.options.get('shadeTitle')
         this.font = this.$database.options.get('font')
       }
     }

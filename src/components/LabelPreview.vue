@@ -6,8 +6,8 @@
 
 export default {
   name: 'LabelPreview',
-  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'font', 'primaryColor', 'fillartist', 'filltitle', 'quotes', 'uppercase' ],
-  inject:[ '$styles' ],
+  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'font', 'primaryColor', 'shadeArtist', 'shadeTitle' ],
+  inject:[ '$styles', '$database' ],
   data: () => {
     return {
       context: null
@@ -23,7 +23,7 @@ export default {
 
         // if we're breaking strings, look for a natural breaking point
         if (str.indexOf('(') > -1) {
-          const chrToLookFor = (str.startsWith('(') ? ')' : '(')
+          const chrToLookFor = (str.startsWith('(') || str.slice(1, 2) === '(' ? ')' : '(')
           for (let i = 0; i < _words.length; i++) {
             if (_words[i].indexOf(chrToLookFor) > -1) {
               _splitPoint = i
@@ -80,7 +80,7 @@ export default {
     },
     paintBox: function () {
       //background
-      this.context.fillStyle = this.titleFillColor
+      this.context.fillStyle = this.shadeTitleColor
       this.context.fillRect(0, 0, 225, 72)
 
       //border
@@ -94,7 +94,7 @@ export default {
       this.context.fillRect(0, 32, 225, 8)
 
       //artist box
-      this.context.fillStyle = this.artistFillColor
+      this.context.fillStyle = this.shadeArtistColor
       this.context.lineWidth = '1'
       this.context.strokeStyle = this.primaryColorHex
       this.context.fillRect(32.5, 28, 160, 16)
@@ -123,7 +123,7 @@ export default {
       this.context.fillRect(0, 32, 225, 8)
       
       //diamond shape (artist box)
-      this.context.fillStyle = this.artistFillColor
+      this.context.fillStyle = this.shadeArtistColor
       this.context.lineWidth = '1'
       this.context.strokeStyle = this.primaryColorHex
       this.context.beginPath()
@@ -239,13 +239,13 @@ export default {
       let _artist = this.artist
       let _artistb = this.artistb
 
-      if (this.uppercase === true) {
+      if (this.$database.options.get('allCaps')) {
         _aside = _aside.toUpperCase()
         _bside = _bside.toUpperCase()
         _artist = _artist.toUpperCase()
         _artistb = _artistb.toUpperCase()
       }
-      if (this.quotes === true) {
+      if (this.$database.options.get('quotes')) {
         _aside = (_aside !== '') ? '"' + _aside + '"' : _aside
         _bside = (_bside !== '') ? '"' + _bside + '"' : _bside
       }
@@ -280,16 +280,16 @@ export default {
     }
   },
   watch: {
-    color() { 
+    primaryColor() { 
       this.paintLabel()
     },
     style() { 
       this.paintLabel()
     },
-    fillartist() { 
+    shadeArtist() { 
       this.paintLabel()
     },
-    filltitle() { 
+    shadeTitle() { 
       this.paintLabel()
     },
     aside() { 
@@ -313,16 +313,16 @@ export default {
     primaryColorHex () {
       return this.$styles.colors[this.primaryColor].primary
     },
-    artistFillColor () {
+    shadeArtistColor () {
       let _color = '#ffffff'
-      if (this.fillartist) {
+      if (this.shadeArtist) {
         _color = this.$styles.colors[this.primaryColor].fill
       }
       return _color
     },
-    titleFillColor () {
+    shadeTitleColor () {
       let _color = '#ffffff'
-      if (this.filltitle) {
+      if (this.shadeTitle) {
         _color = this.$styles.colors[this.primaryColor].fill
       }
       return _color

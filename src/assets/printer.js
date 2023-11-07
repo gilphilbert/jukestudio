@@ -20,12 +20,6 @@ function shadeColor2(color, percent) {
   return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
 }
 
-//function trimArray(arr) {
-//  for(let i=0; i < arr.length; i++)
-//    arr[i] = arr[i].trim();
-//  return arr;
-//}
-
 
 let Printer = {
   init: (db) => {
@@ -53,8 +47,6 @@ let Printer = {
     if (dd.jsmeta.options.paperType === 'a4' || dd.jsmeta.options.paperType === 'letter') {
       Printer.printBackgrounds(dd)
     }
-
-    console.log(dd)
 
     pdfMake.createPdf(dd).open()
 
@@ -445,7 +437,6 @@ let Printer = {
       context.textBaseline = 'middle';
 
       let _width = context.measureText(str).width
-      console.log(_width)
 
       if (_width > (225 - (style.margins * 2))) {
         var _splitPoint = 0
@@ -453,7 +444,7 @@ let Printer = {
 
         // if we're breaking strings, look for a natural breaking point
         if (str.indexOf('(') > -1) {
-          const chrToLookFor = (str.startsWith('(') ? ')' : '(')
+          const chrToLookFor = (str.startsWith('(') || str.slice(1, 2) === '(' ? ')' : '(')
           for (let i = 0; i < _words.length; i++) {
             if (_words[i].indexOf(chrToLookFor) > -1) {
               _splitPoint = i
@@ -516,13 +507,13 @@ let Printer = {
 
       //copy the style definitions from either the default or the override
       if (Object.keys(title).includes('styleOverride')) {
-        for (let key of ['style', 'primaryColor', 'titleFillColor', 'artistFillColor']) {
+        for (let key of ['style', 'primaryColor', 'shadeTitle', 'shadeArtist']) {
           formattedTitle[key] = title.styleOverride[key]
         }
         font = StyleDefines.fonts[title.styleOverride.font]
         style = StyleDefines.styles[title.styleOverride.style]
       } else {
-        for (let key of ['style', 'primaryColor', 'titleFillColor', 'artistFillColor']) {
+        for (let key of ['style', 'primaryColor', 'shadeTitle', 'shadeArtist']) {
           formattedTitle[key] = jsmeta.options[key]
         }
         font = StyleDefines.fonts[jsmeta.options.font]
@@ -541,13 +532,13 @@ let Printer = {
 
       //provide the correct shades for fills
   
-      if (formattedTitle.titleFillColor === true) {
+      if (formattedTitle.shadeTitle === true) {
         formattedTitle.titleTint=shadeColor2(StyleDefines.colors[formattedTitle.primaryColor].primary, 0.8)
       } else {
         formattedTitle.titleTint='#ffffff'
       }
 
-      if (formattedTitle.artistFillColor === true) {
+      if (formattedTitle.shadeArtist === true) {
         formattedTitle.artistTint=shadeColor2(StyleDefines.colors[formattedTitle.primaryColor].primary, 0.8)
       } else {
         formattedTitle.artistTint='#ffffff'
@@ -561,7 +552,6 @@ let Printer = {
         bside: font.margins.bside[((formattedTitle.bwrap)?0:1)]
       }
 
-      console.log(formattedTitle)
       //add the title to
       formattedTitles.push(formattedTitle)
     }
@@ -569,133 +559,6 @@ let Printer = {
     //return the formatted titles
     return formattedTitles
 
-      /*
-      'primaryColor','font','allCaps','quotes','titleFillColor','artistFillColor'
-      */
-
-    /*
-    var textSizer=document.body.appendChild(crel('span'));//,{'style':'font-family:Arial;font-size:10.5pt;font-weight:bold','id':'text-sizer'}));
-    var toArray=false;
-    if(!Array.isArray(titles)) {
-      titles=[titles];
-      toArray=true;
-    }
-    titles.forEach(function(e){
-      e.style=Printer.getStyle(((e.style)?e.style:false));
-
-      let k=['primaryColor','font','allCaps','quotes','titleFillColor','artistFillColor'];
-      let ek = Object.keys(e)
-      k.forEach(function(key){
-        if(ek.includes(key)) {
-          e.style[key]=e[key];
-        }
-        delete(e[key]);
-      });
-      e.style.font=titleCreator.getFont(((e.font)?e.font:database.options.get('font')));
-
-      if (e.style.titleFillColor === true) {
-        e.style.titleTint=shadeColor2(e.style.primaryColor, 0.8)
-      } else {
-        e.style.titleTint='#ffffff'
-      }
-
-      if (e.style.artistFillColor === true) {
-        e.style.artistTint=shadeColor2(e.style.primaryColor, 0.8)
-      } else {
-        e.style.artistTint='#ffffff'
-      }
-
-      var awrap=false,bwrap=false;
-      if(e.allCaps || (e.allCaps==null && e.style.allCaps)) {
-        e.aside=e.aside.toUpperCase();
-        e.bside=e.bside.toUpperCase();
-        e.artist=e.artist.toUpperCase();
-        e.artistb=e.artistb.toUpperCase();
-      }
-      textSizer.style.fontFamily=e.style.font.name;
-
-      var sq=((e.quotes || (e.quotes==null && e.style.quotes))?true:false);
-
-      //if there's no "/" and there are parethases that are not at the start and end of the entire string
-      if(e.aside.indexOf('/')==-1 && (e.aside.indexOf('(')>=0 || e.aside.indexOf(')')>=0) && !(e.aside.indexOf('(')==0 && e.aside.indexOf(')')==e.aside.length-1)) {
-        //split based on the parenthases
-        var x;
-        if(e.aside.indexOf(')')==e.aside.length-1) {
-          x=trimArray(e.aside.split("("));
-          if(sq)
-            x[0]='"'+x[0]+'"';
-          x=x.join("\n(");
-        } else {
-          x=trimArray(e.aside.split(")"));
-          if(sq)
-            x[1]='"'+x[1]+'"';
-          x=x.join(")\n");
-        }
-        textSizer.innerHTML=x.replace('\n','<br>');
-        let w = textSizer.offsetWidth;
-        if(w <= e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
-          e.aside = x;
-        awrap=true;
-      } else {
-        //if there's a "/""
-        if(e.aside.indexOf('/')>=1) {
-          var xa = trimArray(e.aside.split('/'));
-          if(sq)
-            for(let i=0; i < xa.length; i++) xa[i]='"'+xa[i]+'"';
-          e.aside=xa.join("\n");
-          awrap=true;
-        } else {
-          //just a single line of text
-          
-          textSizer.innerHTML=e.aside;
-          let w = textSizer.offsetWidth;
-          if(w > e.style.maxwidth) awrap = true;
-          if(sq) e.aside='"'+e.aside+'"';
-        }
-      }
-
-      if(e.bside.indexOf('/')==-1 && (e.bside.indexOf('(')>=0 || e.bside.indexOf(')')>=0) && !(e.bside.indexOf('(')==0 && e.bside.indexOf(')')==e.bside.length-1)) {
-        var xb;
-        if(e.bside.indexOf(')')==e.bside.length-1) {
-          xb = trimArray(e.bside.split("("));
-          if(sq)
-            xb[0]='"'+xb[0]+'"';
-          xb=xb.join("\n(");
-        } else {
-          xb=trimArray(e.bside.split(")"));
-          if(sq)
-            xb[1]='"'+xb[1]+'"';
-          xb=xb.join(")\n");
-        }
-        textSizer.innerHTML=xb.replace('\n','<br>');
-        let w = textSizer.offsetWidth;
-        if(w <= e.style.maxwidth) //if the name is too long (with the break around parenthases) then ignore the break (best chance of getting it in two lines)
-          e.bside = xb;
-        bwrap = true;
-      } else {
-        if(e.bside.indexOf('/')>=1) {
-          var xc = trimArray(e.bside.split('/'));
-          if(sq)
-            for(let i=0; i < xc.length; i++) xc[i]='"'+xc[i]+'"';
-          e.bside=xc.join("\n");
-          bwrap = true;
-        } else {
-          textSizer.innerText = e.bside;
-          let w = textSizer.offsetWidth;
-          if(w > e.style.maxwidth) bwrap = true;
-          if(sq) e.bside = '"' + e.bside + '"';
-        }
-      }
-      e.style.font.margins={
-        aside:e.style.font.margins.aside[((awrap)?0:1)],
-        artist:e.style.font.margins.artist[0],
-        bside:e.style.font.margins.bside[((bwrap)?0:1)]
-      }
-    });
-    textSizer.parentNode.removeChild(textSizer);
-
-    if(toArray) titles=titles[0];
-    */
   }
 }
 

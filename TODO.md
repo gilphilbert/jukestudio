@@ -1,16 +1,14 @@
 # Preview
-* Background colors
 * Fonts
-* Caps
-* Quotes
 
 # New record
 * Alter style for record needs to hide?
 * Shouldn't be able to change colors, etc. for christmas themes (won't do anything when printing)
-* Trim width and center
+* Headers and footers (correct buttons)
 
 # Design
-* Everything
+* Populate from database
+* Save to database
 
 # Inport/Export
 * Everything

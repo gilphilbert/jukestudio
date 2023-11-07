@@ -44,6 +44,7 @@
     },
     "fonts": {
         "retro": {
+            "font": "retro",
             "name": "Retro",
             "titleSize": 10,
             "artistSize": 9,
@@ -54,6 +55,7 @@
             }
         },
         "retrocondensed": {
+            "font": "retrocondensed",
             "name": "RetroCondensed",
             "titleSize": 10,
             "artistSize": 9,
@@ -63,6 +65,7 @@
                 "bside": [0.1,4]}
         },
         "atypewriter":{
+            "font": "atypewriter",
             "name":"ATypewriter",
             "titleSize":8.7,
             "artistSize":8,

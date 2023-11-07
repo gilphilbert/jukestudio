@@ -1,5 +1,5 @@
 <template>
-  <NavBar @print="print"/>
+  <NavBar @print="print" @design="this.designVisible = true" />
   <section class="section">
     <div class="container">
       <!--<router-link to="new" class="button is-primary">+ Add Record</router-link>-->
@@ -41,19 +41,22 @@
   </section>
   <NewRecord :visible="newVisible" @close="closeNewRecord" :editId="recordToEdit"></NewRecord>
   <DeleteRecord :visible="deleteVisible" :recordid="recordToDelete" @close="closeDeleteRecord"></DeleteRecord>
+  <DesignSettings :visible="designVisible" @close="closeDesignSettings"></DesignSettings>
 </template>
 
 <script>
 import NavBar from './components/NavBar.vue'
 import NewRecord from './views/NewRecord.vue'
 import DeleteRecord from './views/DeleteRecord.vue'
+import DesignSettings from './views/DesignSettings.vue'
 
 export default {
   name: 'App',
   components: {
     NavBar,
     NewRecord,
-    DeleteRecord
+    DeleteRecord,
+    DesignSettings
   },
   inject: [ '$styles', '$database', '$printer' ],
   data: () => {
@@ -63,6 +66,7 @@ export default {
       deleteVisible: false,
       recordToDelete: null,
       recordToEdit: null,
+      designVisible: false
     }
   },
   created: function () {
@@ -95,6 +99,9 @@ export default {
       this.getRecords()
       this.recordToDelete = null
       this.deleteVisible = false
+    },
+    closeDesignSettings: function () {
+      this.designVisible = false
     },
     print: function() {
       let ttp = []
