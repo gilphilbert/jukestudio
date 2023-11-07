@@ -55,7 +55,7 @@ export default {
     NewRecord,
     DeleteRecord
   },
-  inject: [ '$styles', '$database' ],
+  inject: [ '$styles', '$database', '$printer' ],
   data: () => {
     return {
       titles: [],
@@ -98,17 +98,15 @@ export default {
     },
     print: function() {
       let ttp = []
-      this.titles.forEach(title => {
-        if (title.checked === true) {
-          ttp.push(title.id)
-        }
-      })
+      ttp = this.titles.filter((title) => {
+        return title.checked === true
+      }, ttp)
+
       if (ttp.length === 0) {
-        this.titles.forEach(title => {
-          ttp.push(title.id)
-      })
+        this.$printer.print(this.titles)
+      } else {
+        this.$printer.print(ttp)
       }
-      console.log(ttp)
     }
   }
 }

@@ -8,7 +8,7 @@
         </div>
         <div class="modal-card-body">
           <p class="is-center">
-            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :color="color" :fillArtist="fillArtist" :fillTitle="fillTitle" />
+            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :primaryColor="primaryColor" :artistFillColor="artistFillColor" :titleFillColor="titleFillColor" />
           </p>
           <div class="field">
             <div class="control">
@@ -49,18 +49,18 @@
               <label class="label">Color</label>
               <div class="control">
                 <div class="select">
-                  <select v-model="color" :disabled="styleOverride == false">
+                  <select v-model="primaryColor" :disabled="styleOverride == false">
                     <option v-for="color in $styles.colors" v-bind:key="color.name" :value="color.color">{{ color.name }}</option>
                   </select>
                 </div>
               </div>
             </div>
             <div class="field">
-              <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="fillArtist" :disabled="styleOverride == false">
+              <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="artistFillColor" :disabled="styleOverride == false">
               <label for="title-artist-fill">Colored background for artist</label>
             </div>
             <div class="field">
-              <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="fillTitle" :disabled="styleOverride == false">
+              <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="titleFillColor" :disabled="styleOverride == false">
               <label for="title-title-fill">Colored background for title</label>
             </div>
           </div>
@@ -92,11 +92,11 @@ export default {
       artist: '',
       artistb: '',
       styleOverride: false,
-      color: 'red',
+      primaryColor: 'red',
       font: 'retro',
       style: 'arrows',
-      fillArtist: false,
-      fillTitle: false,
+      artistFillColor: false,
+      titleFillColor: false,
     }
   },
   created: function () {
@@ -104,16 +104,15 @@ export default {
   methods: {
     resetValues: function() {
       this.style = this.$database.options.get('style')
-      this.color = this.$database.options.get('primaryColor')
-      this.fillArtist = this.$database.options.get('artistFillColor')
-      this.fillTitle = this.$database.options.get('titleFillColor')
+      this.primaryColor = this.$database.options.get('primaryColor')
+      this.artistFillColor = this.$database.options.get('artistFillColor')
+      this.titleFillColor = this.$database.options.get('titleFillColor')
       this.font = this.$database.options.get('font')
       this.styleOverride = false
       this.aside = ''
       this.bside = ''
       this.artist = ''
       this.artistb = ''
-
     },
     saveRecord: function () {
       let obj = {
@@ -124,11 +123,11 @@ export default {
       }
       if (this.styleOverride === true) {
         obj['styleOverride'] = {
-          color: this.color,
+          primaryColor: this.primaryColor,
           font: this.font,
           style: this.style,
-          fillArtist: this.fillArtist,
-          fillTitle: this.fillTitle
+          artistFillColor: this.artistFillColor,
+          titleFillColor: this.titleFillColor
         }
       }
       if (this.editId !== null && this.editId !== undefined) {
@@ -147,18 +146,16 @@ export default {
     //watch for editId to change then update the values on the form
     editId() {
       if (this.editId !== undefined && this.editId !== null) {
-        console.log(this.editId)
         const title = this.$database.titles.get(this.editId)
-        console.log(title)
         this.aside = title.aside
         this.bside = title.bside
         this.artist = title.artist
         this.artistb = title.artistb
         if (Object.keys(title).includes('styleOverride')) {
           this.styleOverride = true
-          this.color = title.styleOverride.color
-          this.fillArtist = title.styleOverride.fillArtist
-          this.fillTitle = title.styleOverride.fillTitle
+          this.primaryColor = title.styleOverride.primaryColor
+          this.artistFillColor = title.styleOverride.artistFillColor
+          this.titleFillColor = title.styleOverride.titleFillColor
           this.style = title.styleOverride.style
           this.font = title.styleOverride.font
         }
@@ -167,9 +164,9 @@ export default {
     styleOverride() {
       if (this.styleOverride === false) {
         this.style = this.$database.options.get('style')
-        this.color = this.$database.options.get('primaryColor')
-        this.fillArtist = this.$database.options.get('artistFillColor')
-        this.fillTitle = this.$database.options.get('titleFillColor')
+        this.primaryColor = this.$database.options.get('primaryColor')
+        this.artistFillColor = this.$database.options.get('artistFillColor')
+        this.titleFillColor = this.$database.options.get('titleFillColor')
         this.font = this.$database.options.get('font')
       }
     }

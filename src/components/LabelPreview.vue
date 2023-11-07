@@ -6,7 +6,7 @@
 
 export default {
   name: 'LabelPreview',
-  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'font', 'color', 'fillartist', 'filltitle', 'quotes', 'uppercase' ],
+  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'font', 'primaryColor', 'fillartist', 'filltitle', 'quotes', 'uppercase' ],
   inject:[ '$styles' ],
   data: () => {
     return {
@@ -85,23 +85,23 @@ export default {
 
       //border
       this.context.lineWidth = '1'
-      this.context.strokeStyle = this.primaryColor
+      this.context.strokeStyle = this.primaryColorHex
       this.context.strokeRect(0, 0, 225, 72)
     },
     paintArrows: function () {
       //wide red stripe
-      this.context.fillStyle = this.primaryColor
+      this.context.fillStyle = this.primaryColorHex
       this.context.fillRect(0, 32, 225, 8)
 
       //artist box
       this.context.fillStyle = this.artistFillColor
       this.context.lineWidth = '1'
-      this.context.strokeStyle = this.primaryColor
+      this.context.strokeStyle = this.primaryColorHex
       this.context.fillRect(32.5, 28, 160, 16)
       this.context.strokeRect(32.5, 28, 160, 16)
 
       //left triangle
-      this.context.fillStyle = this.primaryColor
+      this.context.fillStyle = this.primaryColorHex
       this.context.beginPath()
       this.context.moveTo(32.5, 29)
       this.context.lineTo(32.5, 43)
@@ -119,13 +119,13 @@ export default {
     },
     paintDiamond() {
       //wide red stripe
-      this.context.fillStyle = this.primaryColor
+      this.context.fillStyle = this.primaryColorHex
       this.context.fillRect(0, 32, 225, 8)
       
       //diamond shape (artist box)
       this.context.fillStyle = this.artistFillColor
       this.context.lineWidth = '1'
-      this.context.strokeStyle = this.primaryColor
+      this.context.strokeStyle = this.primaryColorHex
       this.context.beginPath()
       this.context.moveTo(22, 36)
       this.context.lineTo(31, 27)
@@ -138,7 +138,7 @@ export default {
       this.context.stroke()
     },
     paintSplitArtist() {
-      this.context.strokeStyle = this.primaryColor
+      this.context.strokeStyle = this.primaryColorHex
       this.context.lineWidth = '2'
       this.context.beginPath()
       this.context.moveTo(20, 36)
@@ -310,20 +310,20 @@ export default {
     this.paintLabel()
   },
   computed: {
-    primaryColor () {
-      return this.$styles.colors[this.color].primary
+    primaryColorHex () {
+      return this.$styles.colors[this.primaryColor].primary
     },
     artistFillColor () {
       let _color = '#ffffff'
       if (this.fillartist) {
-        _color = this.$styles.colors[this.color].fill
+        _color = this.$styles.colors[this.primaryColor].fill
       }
       return _color
     },
     titleFillColor () {
       let _color = '#ffffff'
       if (this.filltitle) {
-        _color = this.$styles.colors[this.color].fill
+        _color = this.$styles.colors[this.primaryColor].fill
       }
       return _color
     }

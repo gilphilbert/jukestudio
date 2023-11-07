@@ -1,13 +1,13 @@
 # Preview
-* Text-breaker
+* Background colors
+* Fonts
+* Caps
+* Quotes
 
 # New record
-* Alter style for record needs to turn on/off
-* Shouldn't be able to change colors, etc. for christmas themes
+* Alter style for record needs to hide?
+* Shouldn't be able to change colors, etc. for christmas themes (won't do anything when printing)
 * Trim width and center
-* Styling of box
-* Get style defaults
-* Save
 
 # Design
 * Everything
@@ -16,8 +16,9 @@
 * Everything
 
 # Print
-* Everything
+* Fonts other than Retro may not work
+* More than one page
+* Haven't tested anything other than letter sized paper
 
 # App
-* Implement database as this.$database
-* Implement options as this.$options (including save function)
+* Import from old system

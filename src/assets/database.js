@@ -53,7 +53,11 @@ let Database = {
             _options.update(options)
             _db.saveDatabase()
         }
-    } 
+    },
+    getAll: function () {
+      let options = _options.chain().find().data({ removeMeta: 1 })[0]
+      return options
+    }
   },
   titles: {
       get: id => {
