@@ -11,7 +11,7 @@
     font-weight: normal;
 }
 @font-face {
-    font-family: 'Typewriter';
+    font-family: 'ATypewriter';
     src: url('typewriter.woff2') format('woff2');
     src: url('typewriter.woff') format('woff');
     font-weight: normal;

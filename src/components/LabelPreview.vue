@@ -6,7 +6,7 @@
 
 export default {
   name: 'LabelPreview',
-  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'font', 'primaryColor', 'shadeArtist', 'shadeTitle' ],
+  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'primaryColor', 'shadeArtist', 'shadeTitle' ],
   inject:[ '$styles', '$database' ],
   data: () => {
     return {
@@ -229,7 +229,7 @@ export default {
     paintText () {
       this.context.fillStyle = 'black'
 
-      const font = this.$styles.fonts[this.font]
+      const font = this.$styles.fonts[this.$database.options.get('font')]
       this.context.font = font.titleSize + 'px ' + font.name
       this.context.textAlign = 'center'
       this.context.textBaseline = 'middle';

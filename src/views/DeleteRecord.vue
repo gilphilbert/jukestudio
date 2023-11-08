@@ -3,18 +3,20 @@
     <div class="modal-background"></div>
     <div class="modal-content">
       <div class="modal-card">
-        <div class="modal-card-head">
-          Delete record
-        </div>
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            <span class="title-text">Delete record</span>
+          </p>
+        </header>
         <div class="modal-card-body">
           <p class="is-center">
             Are you sure you want to delete this record?
           </p>
         </div>
-        <div class="modal-card-foot">
-          <button class="button is-light" @click="close">Cancel</button>
-          <button class="button is-primary" @click="deleteRecord">Delete</button>
-        </div>
+        <footer class="modal-card-foot columns">
+          <button class="button column is-light" @click="close">Cancel</button>
+          <button class="button column is-primary" @click="deleteRecord">Delete</button>
+        </footer>
       </div>
     </div>
   </div>

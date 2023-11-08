@@ -4,13 +4,13 @@ const pdfMake = require('pdfmake')
 let database = null
 
 pdfMake.fonts = {
-  Retro: {
+  retro: {
     bold: new URL('fonts/Retro.ttf', document.location.toString()).toString()
   },
-  RetroCondensed: {
+  retrocondensed: {
     bold: new URL('fonts/RetroCondensed.ttf', document.location.toString()).toString()
   },
-  ATypewriter: {
+  atypewriter: {
     bold: new URL('fonts/ATypewriter.ttf', document.location.toString()).toString()
   }
 }
@@ -19,7 +19,6 @@ function shadeColor2(color, percent) {
   var f = parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
   return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
 }
-
 
 let Printer = {
   init: (db) => {
@@ -79,9 +78,11 @@ let Printer = {
         dd.jsmeta.rows = 10
         break
     }
-    for (let i = 0; i < titles.length; i += dd.jsmeta.columns * dd.jsmeta.rows) {
+    let spliceTitles = JSON.parse(JSON.stringify(titles))
+    while (spliceTitles.length > 0) {
+      const pageTitles = spliceTitles.splice(0, dd.jsmeta.columns * dd.jsmeta.rows)
       dd.content.push({
-        jsmeta: { titles: Printer.formatTitles(titles.slice(i, i + dd.jsmeta.columns + dd.jsmeta.rows), dd.jsmeta) }
+        jsmeta: { titles: Printer.formatTitles(pageTitles, dd.jsmeta) }
       })
     }
     return dd;
@@ -367,43 +368,40 @@ let Printer = {
         // if we're supposed to have two columns and there's a corresponding title to populate
         const title_col2 = (dd.jsmeta.columns == 2 && page.jsmeta.titles.length > i + dd.jsmeta.rows) ? page.jsmeta.titles[i + dd.jsmeta.rows] : null
 
-        let columns = []
-
         //get asides
-        columns.push(this.getTitleASide(title))
-        if (title_col2 !== null) {
-          columns.push(this.getTitleASide(title_col2))
-        } else {
-          columns.push({ text: '', border: [false, false, false, false] })
+        let row = [this.getTitleASide(title)]
+
+        if (dd.jsmeta.columns == 2) {
+          if (title_col2) {
+            row.push(this.getTitleASide(title_col2))
+          } else {
+            row.push({ text: '', border: [false, false, false, false] })
+          }
         }
-
-        body.push(columns)
-
-        columns = []
+        body.push(row)
 
         //get artists
-        columns.push(this.getTitleArtist(title))
-        if (title_col2 !== null) {
-          columns.push(this.getTitleArtist(title_col2))
-        } else {
-          columns.push({ text: '', border: [false, false, false, false] })
+        row = [this.getTitleArtist(title)]
+
+        if (dd.jsmeta.columns == 2) {
+          if (title_col2 !== null) {
+            row.push(this.getTitleArtist(title_col2))
+          } else {
+            row.push({ text: '', border: [false, false, false, false] })
+          }
         }
-
-
-        body.push(columns)
-
-        columns = []
+        body.push(row)
 
         //get bsides
-        columns.push(this.getTitleBSide(title))
-        if (title_col2 !== null) {
-          columns.push(this.getTitleBSide(title_col2))
-        } else {
-          columns.push({ text: '', border: [false, false, false, false] })
+        row = [this.getTitleBSide(title)]
+        if (dd.jsmeta.columns == 2) {
+          if (title_col2 !== null) {
+            row.push(this.getTitleBSide(title_col2))
+          } else {
+            row.push({ text: '', border: [false, false, false, false] })
+          }
         }
-
-
-        body.push(columns)       
+        body.push(row)       
       }
 
       const spaced = dd.jsmeta.options.spacing
@@ -429,10 +427,10 @@ let Printer = {
       let str = title[side + 'side']
 
       let canvas = document.createElement('canvas')
-      canvas.width = 225
+      canvas.width = "225px"
 
       let context = canvas.getContext('2d')
-      context.font = font.titleSize + 'px ' + font.name
+      context.font = Math.ceil(font.titleSize) + 'px ' + font.font
       context.textAlign = 'center'
       context.textBaseline = 'middle';
 
@@ -468,7 +466,7 @@ let Printer = {
           }
         }
 
-        _words.splice(_splitPoint, 0, '\n')
+        _words[_splitPoint - 1] = _words[_splitPoint - 1] + '\n'
         str = _words.join(' ')
 
         title[side + 'wrap'] = true
@@ -491,7 +489,7 @@ let Printer = {
         bwrap: false
       }
 
-      let font = null
+      let font = StyleDefines.fonts[jsmeta.options.font]
       let style = null
 
       if (jsmeta.options.allCaps) {
@@ -510,13 +508,11 @@ let Printer = {
         for (let key of ['style', 'primaryColor', 'shadeTitle', 'shadeArtist']) {
           formattedTitle[key] = title.styleOverride[key]
         }
-        font = StyleDefines.fonts[title.styleOverride.font]
         style = StyleDefines.styles[title.styleOverride.style]
       } else {
         for (let key of ['style', 'primaryColor', 'shadeTitle', 'shadeArtist']) {
           formattedTitle[key] = jsmeta.options[key]
         }
-        font = StyleDefines.fonts[jsmeta.options.font]
         style = StyleDefines.styles[jsmeta.options.style]
       }
 
@@ -526,19 +522,19 @@ let Printer = {
       formattedTitle.mergeArtist = style.mergeArtist
 
       //add font details
-      formattedTitle.font = font.name
+      formattedTitle.font = font.font
       formattedTitle.titleSize = font.titleSize
       formattedTitle.artistSize = font.artistSize
 
       //provide the correct shades for fills
   
-      if (formattedTitle.shadeTitle === true) {
+      if (formattedTitle.shadeTitle === true && (jsmeta.options.paperType === 'a4' || jsmeta.options.paperType === 'letter')) {
         formattedTitle.titleTint=shadeColor2(StyleDefines.colors[formattedTitle.primaryColor].primary, 0.8)
       } else {
         formattedTitle.titleTint='#ffffff'
       }
 
-      if (formattedTitle.shadeArtist === true) {
+      if (formattedTitle.shadeArtist === true && (jsmeta.options.paperType === 'a4' || jsmeta.options.paperType === 'letter')) {
         formattedTitle.artistTint=shadeColor2(StyleDefines.colors[formattedTitle.primaryColor].primary, 0.8)
       } else {
         formattedTitle.artistTint='#ffffff'

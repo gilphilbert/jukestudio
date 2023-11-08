@@ -1,9 +1,11 @@
 <template>
-  <NavBar @print="print" @design="this.designVisible = true" />
+  <NavBar @print="print" @design="this.designVisible = true" @importExport="this.importExportVisible = true" />
   <section class="section">
     <div class="container">
       <!--<router-link to="new" class="button is-primary">+ Add Record</router-link>-->
-      <button @click="showNewRecord" class="button is-primary">+ Add Record</button>
+      <div class="has-text-right" style="margin-bottom: 10px">
+        <button @click="showNewRecord" class="button is-primary">+ Add Record</button>
+      </div>
       <table class="table is-fullwidth is-striped" id="record-table">
         <thead>
           <tr>
@@ -42,6 +44,7 @@
   <NewRecord :visible="newVisible" @close="closeNewRecord" :editId="recordToEdit"></NewRecord>
   <DeleteRecord :visible="deleteVisible" :recordid="recordToDelete" @close="closeDeleteRecord"></DeleteRecord>
   <DesignSettings :visible="designVisible" @close="closeDesignSettings"></DesignSettings>
+  <ImportExport :visible="importExportVisible" @close="closeImportExport" @reload="getRecords"></ImportExport>
 </template>
 
 <script>
@@ -49,6 +52,7 @@ import NavBar from './components/NavBar.vue'
 import NewRecord from './views/NewRecord.vue'
 import DeleteRecord from './views/DeleteRecord.vue'
 import DesignSettings from './views/DesignSettings.vue'
+import ImportExport from './views/ImportExport.vue'
 
 export default {
   name: 'App',
@@ -56,7 +60,8 @@ export default {
     NavBar,
     NewRecord,
     DeleteRecord,
-    DesignSettings
+    DesignSettings,
+    ImportExport
   },
   inject: [ '$styles', '$database', '$printer' ],
   data: () => {
@@ -66,7 +71,8 @@ export default {
       deleteVisible: false,
       recordToDelete: null,
       recordToEdit: null,
-      designVisible: false
+      designVisible: false,
+      importExportVisible: false
     }
   },
   created: function () {
@@ -102,6 +108,9 @@ export default {
     },
     closeDesignSettings: function () {
       this.designVisible = false
+    },
+    closeImportExport: function () {
+      this.importExportVisible = false
     },
     print: function() {
       let ttp = []

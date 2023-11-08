@@ -3,9 +3,11 @@
     <div class="modal-background"></div>
     <div class="modal-content">
       <div class="modal-card">
-        <div class="modal-card-head">
-          Add record
-        </div>
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            <span class="title-text">Add record</span>
+          </p>
+        </header>
         <div class="modal-card-body">
           <p class="is-center">
             <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :primaryColor="primaryColor" :shadeArtist="shadeArtist" :shadeTitle="shadeTitle" />
@@ -56,19 +58,19 @@
               </div>
             </div>
             <div class="field">
-              <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="shadeArtist" :disabled="styleOverride == false">
+              <input class="is-checkradio is-success is-circle" id="title-artist-fill" type="checkbox" name="" v-model="shadeArtist" :disabled="styleOverride === false || style === 'candycane' || style === 'holly'">
               <label for="title-artist-fill">Colored background for artist</label>
             </div>
             <div class="field">
-              <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="shadeTitle" :disabled="styleOverride == false">
+              <input class="is-checkradio is-success is-circle" id="title-title-fill" type="checkbox" name="" v-model="shadeTitle" :disabled="styleOverride === false || style === 'candycane' || style === 'holly'">
               <label for="title-title-fill">Colored background for title</label>
             </div>
           </div>
-          </div>
-        <div class="modal-card-foot">
-          <button class="button is-light" @click="resetAndClose">Cancel</button>
-          <button class="button is-primary" @click="saveRecord">Save</button>
         </div>
+        <footer class="modal-card-foot columns">
+          <button class="button column is-light" @click="resetAndClose">Cancel</button>
+          <button class="button column is-success" @click="saveRecord">Save</button>
+        </footer>
       </div>
     </div>
   </div>

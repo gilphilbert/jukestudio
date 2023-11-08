@@ -72,7 +72,7 @@
         </div>
         <footer class="modal-card-foot columns">
           <button class="button column is-light close-modal" @click="resetAndClose">Cancel</button>
-          <button class="button column is-success save" @click="saveRecord">Save</button>
+          <button class="button column is-success save" @click="save">Save</button>
         </footer>
       </div>
     </div>
@@ -109,14 +109,40 @@ export default {
   },
   methods: {
     getSettings() {
-
+      const settings = this.$database.options.getAll()
+      this.paperType = settings.paperType
+      this.wideSpacing = settings.spacing
+      this.font = settings.font
+      this.allCaps = settings.allCaps
+      this.quotes = settings.quotes
+      this.style = settings.style
+      this.primaryColor = settings.primaryColor
+      this.shadeArtist = settings.shadeArtist
+      this.shadeTitle = settings.shadeTitle
     },
     resetAndClose() {
       this.$emit('close')
       this.getSettings()
+    },
+    save() {
+      this.$database.options.set('paperType', this.paperType)
+      this.$database.options.set('spacing', this.spacing)
+      this.$database.options.set('font', this.font)
+      this.$database.options.set('allCaps', this.allCaps)
+      this.$database.options.set('quotes', this.quotes)
+      this.$database.options.set('style', this.style)
+      this.$database.options.set('primaryColor', this.primaryColor)
+      this.$database.options.set('shadeArtist', this.shadeArtist)
+      this.$database.options.set('shadeTitle', this.shadeTitle)
+      this.$emit('close')
     }
   },
   watch: { //how to do this?
+    visible() {
+      if (this.visible) {
+        this.getSettings()
+      }
+    }
   }
 }
 </script>

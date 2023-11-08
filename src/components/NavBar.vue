@@ -21,7 +21,7 @@
           <a class="navbar-item print-titles" href="#" @click="$emit('print')">
             Print
           </a>
-          <a class="navbar-item import-export" href="#">
+          <a class="navbar-item import-export" href="#" @click="$emit('importExport')">
             Import/export
           </a>
           <a class="navbar-item import-export" href="https://github.com/gilphilbert/jblabels/issues">
