@@ -30,7 +30,7 @@ jobs:
     - run: cd dist
     - run: git config --global user.email "gilphilbert@protonmail.com"
     - run: git config --global user.name "gilphilbert"
-    - run: git init
-    - run: git add -A
+    - run: git init .
+    - run: git add .
     - run: git commit -m 'Autodeploy'
     - run: git push -f https://gilphilbert:${{ secrets.GITHUB_TOKEN }}@github.com/gilphilbert/jukestudio.git master:dist
