@@ -1,60 +1,62 @@
 const loki = require('lokijs')
+const StyleDefines = require('./StyleDefines.json')
 
-var _db = null,
-    _titles = null,
-    _options = null
+let _db = null,
+  _titles = null,
+  _options = null
 
 let Database = {
   init: () => {
-      return new Promise((resolve) => {
-        _db = new loki('jukestudio.db', {
-            autoload: true,
-            autoloadCallback: () => {
-                _titles = _db.getCollection('titles')
-                _options = _db.getCollection('options')
-                if (_titles === null) {
-                    _titles = _db.addCollection('titles', { 'clone' : true })
-                    _options = _db.addCollection('options', { 'clone' : true })
-                    _options.insert({
-                        allCaps: true,
-                        quotes: true,
-                        primaryColor: 'red',
-                        shadeArtist: false,
-                        shadeTitle: false,
-                        font: 'retro',
-                        style: 'arrows',
-                        paperType: 'letter',
-                        spacing: 'normal'
-                      })
-                      resolve()
-                } else {
-                    resolve()
-                }
-                _titles.addListener('insert', function (input) {
-                    input.id = input.$loki
-                    _db.getCollection('titles').update(input)
-                })
-
-            }
+    return new Promise((resolve) => {
+      _db = new loki('jukestudio_v2.db', {
+        autoload: true,
+        autoloadCallback: () => {
+          _titles = _db.getCollection('titles')
+          _options = _db.getCollection('options')
+          if (_titles === null) {
+            _titles = _db.addCollection('titles', { 'clone' : true })
+            _options = _db.addCollection('options', { 'clone' : true })
+            _options.insert({
+              allCaps: true,
+              quotes: true,
+              primaryColor: 'red',
+              shadeArtist: false,
+              shadeTitle: false,
+              font: 'retro',
+              style: 'arrows',
+              paperType: 'letter',
+              spacing: 'normal'
+            })
+            Database.upgrade().then(() => {
+              resolve()
+            })
+          } else {
+            resolve()
+          }
+          _titles.addListener('insert', function (input) {
+            input.id = input.$loki
+            _db.getCollection('titles').update(input)
+          })
+        }
       })
     })
   },
   options: {
     get: function (key = false) {
-        const options = _options.findOne()
-        if (key in options) {
-            return options[key]
-        } else {
-            return null
-        }
+      const options = _options.findOne()
+      if (key in options) {
+        return options[key]
+      } else {
+        return null
+      }
     },
     set: function (key, value){
-        if (key !== undefined && value !== undefined) {
-            let options = _options.findOne()
-            options[key] = value
-            _options.update(options)
-            _db.saveDatabase()
-        }
+      if (key !== undefined && value !== undefined) {
+        let options = _options.findOne()
+        options[key] = value
+        _options.update(options)
+        _db.saveDatabase()
+      }
     },
     getAll: function () {
       let options = _options.chain().find().data({ removeMeta: 1 })[0]
@@ -141,6 +143,60 @@ let Database = {
       }
       return true
     }
+  },
+  upgrade: function () {
+    return new Promise((resolve) => {
+      let priorDB = new loki('jukestudio.db', {
+        autoload: true,
+        autoloadCallback: () => {
+          let prior_titles = priorDB.getCollection('titles')
+          let prior_options = priorDB.getCollection('options')
+          if (prior_titles !== null) {
+            // do the upgrade
+            prior_titles.chain().find().data({ removeMeta: 1 }).forEach(title => {
+              // configure new database object
+              let newTitle = {
+                aside: title.aside,
+                bside: title.bside,
+                artist: title.artist,
+                artistb: title.artistb
+              }
+              // include style overrides if they're included
+              if (Object.keys(title).includes('style')) {
+                newTitle.styleOverride = {
+                  primaryColor: title.primaryColor,
+                  style: title.style,
+                  shadeArtist: title.artistFillColor,
+                  shadeTitle: title.titleFillColor
+                }
+              }
+              Database.titles.add(newTitle)
+            })
+
+            const oo = prior_options.chain().find().data({ removeMeta: 1 })[0]
+            let primaryColor = ''
+            for (let colorKey in StyleDefines.colors) {
+              const color = StyleDefines.colors[colorKey]
+              if (color.primary == oo.primaryColor) {
+                primaryColor = color.color
+              }
+            }
+            Database.options.set('allCaps', oo.allCaps)
+            Database.options.set('quotes', oo.quotes)
+            Database.options.set('primaryColor', primaryColor)
+            Database.options.set('shadeArtist', oo.artistFillColor)
+            Database.options.set('shadeTitle', oo.titleFillColor)
+            Database.options.set('font', oo.font.toLowerCase())
+            Database.options.set('style', oo.style)
+            Database.options.set('paperType', oo.paperType)
+            Database.options.set('spacing', oo.spacing)
+
+            priorDB.deleteDatabase()
+            resolve()
+          }
+        }
+      })
+    })
   }
 }
 
