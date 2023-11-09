@@ -1,3 +1,5 @@
+const loki = require('lokijs')
+
 var _db = null,
     _titles = null,
     _options = null
@@ -5,7 +7,7 @@ var _db = null,
 let Database = {
   init: () => {
       return new Promise((resolve) => {
-        _db = new window.loki('jukestudio.db', {
+        _db = new loki('jukestudio.db', {
             autoload: true,
             autoloadCallback: () => {
                 _titles = _db.getCollection('titles')
