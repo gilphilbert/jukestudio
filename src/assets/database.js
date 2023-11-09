@@ -92,13 +92,7 @@ let Database = {
       _db.saveDatabase()
     },
     list: () => {
-      const titles = _titles.find()/*.map(title => {
-        return {
-          title: title.sidea,
-          sideb: title.sideb,
-          artist: title.artist
-        }
-      })*/
+      const titles = _titles.chain().find().data({ removeMeta: 1 })
       return titles
     }
   },
@@ -144,6 +138,15 @@ let Database = {
       return true
     }
   },
+  upgradeColor: function(hex) {
+    for (let colorKey in StyleDefines.colors) {
+      const color = StyleDefines.colors[colorKey]
+      if (color.primary == hex) {
+        return color.color
+      }
+    }
+    return 'red'
+  },
   upgrade: function () {
     return new Promise((resolve) => {
       let priorDB = new loki('jukestudio.db', {
@@ -164,7 +167,7 @@ let Database = {
               // include style overrides if they're included
               if (Object.keys(title).includes('style')) {
                 newTitle.styleOverride = {
-                  primaryColor: title.primaryColor,
+                  primaryColor: Database.upgradeColor(title.primaryColor),
                   style: title.style,
                   shadeArtist: title.artistFillColor,
                   shadeTitle: title.titleFillColor
@@ -174,16 +177,10 @@ let Database = {
             })
 
             const oo = prior_options.chain().find().data({ removeMeta: 1 })[0]
-            let primaryColor = ''
-            for (let colorKey in StyleDefines.colors) {
-              const color = StyleDefines.colors[colorKey]
-              if (color.primary == oo.primaryColor) {
-                primaryColor = color.color
-              }
-            }
+
             Database.options.set('allCaps', oo.allCaps)
             Database.options.set('quotes', oo.quotes)
-            Database.options.set('primaryColor', primaryColor)
+            Database.options.set('primaryColor', Database.upgradeColor(oo.primaryColor))
             Database.options.set('shadeArtist', oo.artistFillColor)
             Database.options.set('shadeTitle', oo.titleFillColor)
             Database.options.set('font', oo.font.toLowerCase())
@@ -191,7 +188,7 @@ let Database = {
             Database.options.set('paperType', oo.paperType)
             Database.options.set('spacing', oo.spacing)
 
-            priorDB.deleteDatabase()
+            //priorDB.deleteDatabase()
             resolve()
           }
         }
