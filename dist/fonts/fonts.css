@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'Retro';
+    src: url('retro.woff2') format('woff2');
+    src: url('retro.woff') format('woff');
+    font-weight: normal;
+}
+@font-face {
+    font-family: 'Retro Condensed';
+    src: url('retro-condensed.woff2') format('woff2');
+    src: url('retro-condensed.woff') format('woff');
+    font-weight: normal;
+}
+@font-face {
+    font-family: 'ATypewriter';
+    src: url('typewriter.woff2') format('woff2');
+    src: url('typewriter.woff') format('woff');
+    font-weight: normal;
+}
