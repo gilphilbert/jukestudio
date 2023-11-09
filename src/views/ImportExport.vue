@@ -25,7 +25,10 @@
               <button class="button is-success" @click="$refs.file.click()">Import</button>
               <input type="file" style="display: none" ref="file" v-on:change="file" @change="doStuff" />
             </div>
-            <p><strong>Note</strong> To import a library in CSV format, your file must be arranged with three or four columns as follows:<br/>&nbsp;&nbsp;Side A, Side B, Artist, Side B Artist<br/>(Side B Artist only needs to be included if different from Side A)</p>
+            
+            <div class="notification is-info is-light">
+              <strong>Note</strong> To import a library in CSV format, your file must be arranged with three or four columns as follows:<br/>&nbsp;&nbsp;Side A, Side B, Artist, Side B Artist<br/>(Side B Artist only needs to be included if different from Side A)
+            </div>
           </div>
           <footer class="modal-card-foot columns">
             <button class="button column is-light close-modal" @click="$emit('close')">Close</button>
