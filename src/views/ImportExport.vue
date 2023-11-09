@@ -26,7 +26,7 @@
               <input type="file" style="display: none" ref="file" v-on:change="file" @change="doStuff" />
             </div>
             
-            <div class="notification is-info is-light">
+            <div class="notification is-warning is-light">
               <strong>Note</strong> To import a library in CSV format, your file must be arranged with three or four columns as follows:<br/>&nbsp;&nbsp;Side A, Side B, Artist, Side B Artist<br/>(Side B Artist only needs to be included if different from Side A)
             </div>
           </div>
