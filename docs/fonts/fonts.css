@@ -16,3 +16,10 @@
     src: url('typewriter.woff') format('woff');
     font-weight: normal;
 }
+@font-face {
+    font-family: 'Merit';
+    src: url('merit-webfont.woff2') format('woff2'),
+         url('merit-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
