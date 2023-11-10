@@ -137,6 +137,9 @@ export default {
       this.context.fill()
       this.context.stroke()
     },
+    paintStars() {
+      
+    },
     paintSplitArtist() {
       this.context.strokeStyle = this.primaryColorHex
       this.context.lineWidth = '2'

@@ -14,6 +14,13 @@
             "margins": 8,
             "mergeArtist": true
         },
+        "stars": {
+            "name": "Stars",
+            "style": "stars",
+            "maxwidth": 265,
+            "margins": 8,
+            "mergeArtist": true
+        },
         "multiple": {
             "name": "Split Artist",
             "style": "multiple",

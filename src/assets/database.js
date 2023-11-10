@@ -191,6 +191,7 @@ let Database = {
             //priorDB.deleteDatabase()
             resolve()
           }
+          resolve()
         }
       })
     })
