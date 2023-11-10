@@ -12,6 +12,9 @@ pdfMake.fonts = {
   },
   atypewriter: {
     bold: new URL('fonts/ATypewriter.ttf', document.location.toString()).toString()
+  },
+  merit: {
+    bold: new URL('fonts/Merit.ttf', document.location.toString()).toString()
   }
 }
 
@@ -42,10 +45,12 @@ let Printer = {
 
     Printer.setupPages(dd, titles)
     Printer.printTitles(dd)
+    Printer.printRecordIDs(dd)
 
     if (dd.jsmeta.options.paperType === 'a4' || dd.jsmeta.options.paperType === 'letter') {
       Printer.printBackgrounds(dd)
     }
+
 
     pdfMake.createPdf(dd).open()
 
@@ -81,9 +86,9 @@ let Printer = {
     let spliceTitles = JSON.parse(JSON.stringify(titles))
     while (spliceTitles.length > 0) {
       const pageTitles = spliceTitles.splice(0, dd.jsmeta.columns * dd.jsmeta.rows)
-      dd.content.push({
+      dd.content.push([{
         jsmeta: { titles: Printer.formatTitles(pageTitles, dd.jsmeta) }
-      })
+      }])
     }
     return dd;
   },
@@ -297,8 +302,9 @@ let Printer = {
     // for each page
     dd.content.forEach((page, pageIndex) => {
       let background = []
+      const titles = page[0].jsmeta.titles
 
-      page.jsmeta.titles.forEach((title, index) => {
+      titles.forEach((title, index) => {
         var j = ((index < 10) ? index : index - 10); // counts 0..9 twice
         var x = ((index < 10) ? xPos[spaced].left : xPos[spaced].right ) // set the x-axis offset (left or right). Spaced will need to set 80.5 and 306.5 (2mm space)
         var y = (j * 72 + (j * tileYSpacing[spaced])) + pageTopMargin[spaced] // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
@@ -306,8 +312,38 @@ let Printer = {
         background.push(Printer.backgrounds[title.style](x, y, title.primaryColor, title.artistTint))
 
       })
-      let newPage = [background, page]
-      dd.content[pageIndex] = newPage
+      dd.content[pageIndex].splice(0, 0, background)
+    })
+  },
+
+  printRecordIDs: function(dd) {
+    const spaced = dd.jsmeta.options.spacing
+    const xPos = { normal: { left: 81.5, right: 305.5 }, wide: { left: 80.5, right: 306.5 } }
+    const pageTopMargin = { normal: 22.5, wide: 16.5 }  
+    const tileYSpacing = { normal: 0, wide: 4 }
+
+    // for each page
+    dd.content.forEach((page, pageIndex) => {
+      let recordIDs = []
+
+      page[0].jsmeta.titles.forEach((title, index) => {
+        var j = ((index < 10) ? index : index - 10); // counts 0..9 twice
+        var x = ((index < 10) ? xPos[spaced].left : xPos[spaced].right ) // set the x-axis offset (left or right). Spaced will need to set 80.5 and 306.5 (2mm space)
+        var y = (j * 72 + (j * tileYSpacing[spaced])) + pageTopMargin[spaced] // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
+
+        //background.push(Printer.backgrounds[title.style](x, y, title.primaryColor, title.artistTint))
+        recordIDs.push({
+          text: title.recordID,
+          font: title.font,
+          fontSize: title.idSize,
+          bold: true,
+          absolutePosition: {x: x + 112.5, y: y + 72 - title.idSize}
+        })
+      })
+      //let newPage = [background, page]
+      dd.content[pageIndex].push(recordIDs)
+      console.log(dd.content)
+console.log(pageIndex)
     })
   },
 
@@ -333,6 +369,15 @@ let Printer = {
       margin = [title.margins, -7, title.margins, -7]
       text = title.artist + '\n\n' + ((title.artistb !== '') ? title.artistb : title.artist)
     }
+    console.log({
+      text: text,
+      margin: margin,
+      border: [false, false, false, false],
+      fillColor: title.titleTint,
+      font: title.font,
+      fontSize: title.artistSize,
+      bold: true
+    })
     return {
       text: text,
       margin: margin,
@@ -358,7 +403,7 @@ let Printer = {
 
   printTitles: function(dd) {
     for (let p = 0; p < dd.content.length; p++) {
-      let page = dd.content[p]
+      let page = dd.content[p][0]
 
       let body = []
 
@@ -485,6 +530,8 @@ let Printer = {
         bside: title.bside,
         artist: title.artist,
         artistb: title.artistb,
+        recordID: title.recordID,
+        tag: title.tag,
         awrap: false,
         bwrap: false
       }
@@ -525,6 +572,7 @@ let Printer = {
       formattedTitle.font = font.font
       formattedTitle.titleSize = font.titleSize
       formattedTitle.artistSize = font.artistSize
+      formattedTitle.idSize = font.idSize
 
       //provide the correct shades for fills
   

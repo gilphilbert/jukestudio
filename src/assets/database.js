@@ -33,6 +33,7 @@ let Database = {
           } else {
             resolve()
           }
+          Database.update()
           _titles.addListener('insert', function (input) {
             input.id = input.$loki
             _db.getCollection('titles').update(input)
@@ -147,6 +148,17 @@ let Database = {
     }
     return 'red'
   },
+  update: function () {
+    const titles = _titles.chain().find().data()
+    titles.forEach(title => {
+      if (! Object.keys(title).includes('recordID')) {
+        title.recordID = ''
+        title.tag = ''
+        _titles.update(title)
+      }
+      _db.saveDatabase()
+    })
+  },
   upgrade: function () {
     return new Promise((resolve) => {
       let priorDB = new loki('jukestudio.db', {
@@ -162,7 +174,9 @@ let Database = {
                 aside: title.aside,
                 bside: title.bside,
                 artist: title.artist,
-                artistb: title.artistb
+                artistb: title.artistb,
+                recordID: '',
+                tag: ''
               }
               // include style overrides if they're included
               if (Object.keys(title).includes('style')) {

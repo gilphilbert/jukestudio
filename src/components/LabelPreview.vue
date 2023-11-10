@@ -6,7 +6,7 @@
 
 export default {
   name: 'LabelPreview',
-  props: [ 'aside', 'bside', 'artist', 'artistb', 'style', 'primaryColor', 'shadeArtist', 'shadeTitle' ],
+  props: [ 'aside', 'bside', 'artist', 'artistb', 'recordID', 'tag', 'style', 'primaryColor', 'shadeArtist', 'shadeTitle' ],
   inject:[ '$styles', '$database' ],
   data: () => {
     return {
@@ -77,6 +77,7 @@ export default {
           break
       }
       this.paintText()
+      this.printRecordID()
     },
     paintBox: function () {
       //background
@@ -229,10 +230,16 @@ export default {
       this.context.closePath()
       this.context.stroke()
     },
+    printRecordID () {
+      const font = this.$styles.fonts[this.$database.options.get('font')]
+      this.context.textAlign = 'left'
+      this.context.font = font.idSize + 'px ' + font.name
+      this.context.fillText(this.recordID, 112.5, 68)
+    },
     paintText () {
       this.context.fillStyle = 'black'
-
       const font = this.$styles.fonts[this.$database.options.get('font')]
+      console.log(font.titleSize + 'px ' + font.name)
       this.context.font = font.titleSize + 'px ' + font.name
       this.context.textAlign = 'center'
       this.context.textBaseline = 'middle';

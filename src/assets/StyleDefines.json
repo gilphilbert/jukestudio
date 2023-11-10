@@ -55,6 +55,7 @@
             "name": "Retro",
             "titleSize": 10,
             "artistSize": 9,
+            "idSize": 7,
             "margins":{
                 "aside": [1,7.5],
                 "artist": [2.5],
@@ -66,6 +67,7 @@
             "name": "Retro Condensed",
             "titleSize": 10,
             "artistSize": 9,
+            "idSize": 7,
             "margins": {
                 "aside": [1,7.5],
                 "artist": [2.5],
@@ -76,6 +78,19 @@
             "name":"ATypewriter",
             "titleSize":8.7,
             "artistSize":8,
+            "idSize": 6,
+            "margins":{
+                "aside":[0,7.5],
+                "artist":[2.5],
+                "bside":[0,4]
+            }
+        },
+        "merit":{
+            "font": "merit",
+            "name":"Merit",
+            "titleSize":10,
+            "artistSize":9,
+            "idSize": 7,
             "margins":{
                 "aside":[0,7.5],
                 "artist":[2.5],

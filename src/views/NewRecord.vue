@@ -10,7 +10,7 @@
         </header>
         <div class="modal-card-body">
           <p class="is-center">
-            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :style="style" :font="font" :primaryColor="primaryColor" :shadeArtist="shadeArtist" :shadeTitle="shadeTitle" />
+            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :recordID="recordID" :tag="tag" :style="style" :font="font" :primaryColor="primaryColor" :shadeArtist="shadeArtist" :shadeTitle="shadeTitle" />
           </p>
           <div class="field">
             <div class="control">
@@ -30,6 +30,11 @@
           <div class="field">
             <div class="control">
               <input class="input" type="text" placeholder="Side B artist (if different)" v-model="artistb">
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input" type="text" placeholder="Record ID (eg. COLUMBIA 3335)" v-model="recordID">
             </div>
           </div>
           <div class="box" id="style-override">
@@ -93,6 +98,8 @@ export default {
       bside: '',
       artist: '',
       artistb: '',
+      recordID: '',
+      tag: '',
       styleOverride: false,
       primaryColor: 'red',
       font: 'retro',
@@ -115,13 +122,17 @@ export default {
       this.bside = ''
       this.artist = ''
       this.artistb = ''
+      this.recordID = ''
+      this.tag = ''
     },
     saveRecord: function () {
       let obj = {
         aside: this.aside,
         bside: this.bside,
         artist: this.artist,
-        artistb: this.artistb
+        artistb: this.artistb,
+        recordID: this.recordID,
+        tag: this.tag
       }
       if (this.styleOverride === true) {
         obj['styleOverride'] = {
@@ -153,6 +164,8 @@ export default {
         this.bside = title.bside
         this.artist = title.artist
         this.artistb = title.artistb
+        this.recordID = title.recordID
+        this.tag = title.tag
         if (Object.keys(title).includes('styleOverride')) {
           this.styleOverride = true
           this.primaryColor = title.styleOverride.primaryColor
