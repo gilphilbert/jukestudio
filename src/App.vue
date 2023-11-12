@@ -9,6 +9,14 @@
       <table class="table is-fullwidth is-striped" id="record-table">
         <thead>
           <tr>
+            <th>
+              <div class="field">
+                <input class="is-checkradio" id="select-all-check" type="checkbox" v-model="affectAll" />
+                <label for="select-all-check"></label>
+              </div>
+            </th>
+            <th>Side A</th>
+            <th>Side B</th>
             <th @click="showDeleteRecord(listRecordsChecked)">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="feather feather-trash-2" :class="{ 'is-active': recordsChecked }">
                 <polyline points="3 6 5 6 21 6"></polyline>
@@ -16,8 +24,6 @@
                 <line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line>
               </svg>
             </th>
-            <th>Side A</th>
-            <th colspan=2>Side B</th>
           </tr>
         </thead>
         <tbody>
@@ -79,6 +85,7 @@ export default {
       recordToEdit: null,
       designVisible: false,
       importExportVisible: false,
+      affectAll: false
     }
   },
   created: function () {
@@ -129,6 +136,13 @@ export default {
       } else {
         this.$printer.print(ttp)
       }
+    }
+  },
+  watch: {
+    affectAll() {
+      this.titles.forEach(title => {
+        title.checked = this.affectAll
+      })
     }
   },
   computed: {
