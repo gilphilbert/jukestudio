@@ -5,12 +5,12 @@
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">
-            <span class="title-text">Delete record</span>
+            <span class="title-text">Delete record{{ ((recordid && recordid.length > 1) ? 's' : '') }}</span>
           </p>
         </header>
         <div class="modal-card-body">
           <p class="is-center">
-            Are you sure you want to delete this record?
+            Are you sure you want to delete {{ ((recordid && recordid.length > 1) ? 'multiple records' : 'this record') }}?
           </p>
         </div>
         <footer class="modal-card-foot columns">
@@ -32,7 +32,9 @@ export default {
       this.$emit('close')
     },
     deleteRecord: function () {
-      this.$database.titles.remove(this.recordid)
+      this.recordid.forEach(itemID => {
+        this.$database.titles.remove(itemID)
+      })
       this.$emit('close')
     }
   }

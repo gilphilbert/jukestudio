@@ -86,9 +86,6 @@ let Printer = {
     let spliceTitles = JSON.parse(JSON.stringify(titles))
     while (spliceTitles.length > 0) {
       const pageTitles = spliceTitles.splice(0, dd.jsmeta.columns * dd.jsmeta.rows)
-      //dd.content.push([{
-      //  jsmeta: { titles: Printer.formatTitles(pageTitles, dd.jsmeta) }
-      //}])
       dd.jsmeta.pageTitles.push(
         Printer.formatTitles(pageTitles, dd.jsmeta)
       )
@@ -353,7 +350,7 @@ let Printer = {
       text: title.aside,
       margin: [title.margins, title.fontMargins.aside, title.margins, 0],
       border: [false, false, false, false],
-      fillColor: false, //title.titleTint,
+      fillColor: false,
       font: title.font,
       fontSize: title.titleSize,
       bold: true
@@ -374,7 +371,7 @@ let Printer = {
       text: text,
       margin: margin,
       border: [false, false, false, false],
-      fillColor: false, //title.titleTint,
+      fillColor: false,
       font: title.font,
       fontSize: title.artistSize,
       bold: true
@@ -386,7 +383,7 @@ let Printer = {
       text: title.bside,
       margin:[title.margins, title.fontMargins.bside, title.margins, 0],
       border: [false, false, false, false],
-      fillColor: false, //title.titleTint,
+      fillColor: false,
       font: title.font,
       fontSize: title.titleSize,
       bold: true
@@ -456,8 +453,6 @@ let Printer = {
         },
         pageBreak: ((p !== dd.jsmeta.pageTitles.length - 1) ? 'after' : '')
       }]
-
-      //page.pageBreak = ((p !== dd.jsmeta.pageTitles.length - 1) ? 'after' : '')
 
       dd.content.push(page)
     }
