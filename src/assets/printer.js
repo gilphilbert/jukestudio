@@ -334,8 +334,7 @@ let Printer = {
         var x = ((index < 10) ? xPos[spaced].left : xPos[spaced].right ) // set the x-axis offset (left or right). Spaced will need to set 80.5 and 306.5 (2mm space)
         var y = (j * 72 + (j * tileYSpacing[spaced])) + pageTopMargin[spaced] // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
 
-        const offset = Printer.measureText(title.recordID, title.font, title.idSize)
-
+        const offset = Printer.measureText(title.recordID, title.fontName, title.idSize)
         recordIDs.push({
           text: title.recordID,
           font: title.font,
@@ -464,13 +463,12 @@ let Printer = {
     }
   },
 
-  measureText(str, font, fontSize) {
-    console.log(Math.ceil(font) + 'px ' + fontSize)
+  measureText(str, fontName, fontSize) {
     let canvas = document.createElement('canvas')
     canvas.width = "225"
 
     let context = canvas.getContext('2d')
-    context.font = Math.ceil(fontSize) + 'px ' + font
+    context.font = Math.ceil(fontSize) + 'px ' + fontName
     context.textBaseline = 'middle'
 
     return context.measureText(str).width
@@ -580,6 +578,7 @@ let Printer = {
 
       //add font details
       formattedTitle.font = font.font
+      formattedTitle.fontName = font.name
       formattedTitle.titleSize = font.titleSize
       formattedTitle.artistSize = font.artistSize
       formattedTitle.idSize = font.idSize
