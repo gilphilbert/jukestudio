@@ -239,7 +239,6 @@ export default {
     paintText () {
       this.context.fillStyle = 'black'
       const font = this.$styles.fonts[this.$database.options.get('font')]
-      console.log(font.titleSize + 'px ' + font.name)
       this.context.font = font.titleSize + 'px ' + font.name
       this.context.textAlign = 'center'
       this.context.textBaseline = 'middle';
@@ -312,6 +311,12 @@ export default {
       this.paintLabel()
     },
     artistb() { 
+      this.paintLabel()
+    },
+    recordID() { 
+      this.paintLabel()
+    },
+    tag() { 
       this.paintLabel()
     }
   },

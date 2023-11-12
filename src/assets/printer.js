@@ -3,6 +3,8 @@ const pdfMake = require('pdfmake')
 
 let database = null
 
+let dd = {}
+
 pdfMake.fonts = {
   retro: {
     bold: new URL('fonts/Retro.ttf', document.location.toString()).toString()
@@ -30,12 +32,13 @@ let Printer = {
 
   print: (titles) => {
 
-    let dd = {
+    dd = {
       content: [],
       jsmeta: {
         rows: 0,
         columns: 0,
-        options: database.options.getAll()
+        options: database.options.getAll(),
+        pageTitles: []
       },
       images: {
         holly: new URL('images/holly.png', document.location.toString()).toString(),
@@ -47,11 +50,8 @@ let Printer = {
     Printer.printTitles(dd)
     Printer.printRecordIDs(dd)
 
-    if (dd.jsmeta.options.paperType === 'a4' || dd.jsmeta.options.paperType === 'letter') {
-      Printer.printBackgrounds(dd)
-    }
-
-
+    dd.background = Printer.printBackgrounds
+    
     pdfMake.createPdf(dd).open()
 
   },
@@ -86,15 +86,18 @@ let Printer = {
     let spliceTitles = JSON.parse(JSON.stringify(titles))
     while (spliceTitles.length > 0) {
       const pageTitles = spliceTitles.splice(0, dd.jsmeta.columns * dd.jsmeta.rows)
-      dd.content.push([{
-        jsmeta: { titles: Printer.formatTitles(pageTitles, dd.jsmeta) }
-      }])
+      //dd.content.push([{
+      //  jsmeta: { titles: Printer.formatTitles(pageTitles, dd.jsmeta) }
+      //}])
+      dd.jsmeta.pageTitles.push(
+        Printer.formatTitles(pageTitles, dd.jsmeta)
+      )
     }
     return dd;
   },
 
   backgrounds: {
-    diamond: function (x, y, primaryColor, tint) {
+    diamond: function (x, y, title) {
       return {
         canvas:[
           {
@@ -103,29 +106,30 @@ let Printer = {
             y: 0,
             w: 224,
             h: 72,
-            lineColor: primaryColor,
-            lineWidth: 1
+            lineColor: title.primaryColor,
+            lineWidth: 1,
+            color: title.titleTint
           },
           {
             type: 'line',
             x1: 0, y1: 36,
             x2: 224, y2: 36,
             lineWidth: 9,
-            lineColor: primaryColor,
+            lineColor: title.primaryColor,
           },
           {
             type: 'polyline',
             lineWidth: 1.5,
             closePath: true,
             points: [{x: 35, y: 27},{x: 189, y: 27},{x: 198, y: 36},{x: 189, y: 45},{x: 35, y: 45},{x: 27, y: 36}],
-            lineColor: primaryColor,
-            color: tint
+            lineColor: title.primaryColor,
+            color: title.artistTint
           }
         ],
         absolutePosition: {x: x, y: y}
       }
     },
-    arrows: function (x, y, primaryColor, tint) {
+    arrows: function (x, y, title) {
       return {
         canvas:[
           {
@@ -134,15 +138,16 @@ let Printer = {
             y: 0,
             w: 224,
             h: 72,
-            lineColor: primaryColor,
-            lineWidth: 1
+            lineColor: title.primaryColor,
+            lineWidth: 1,
+            color: title.titleTint
           },
           {
             type: 'line',
             x1: 0, y1: 36,
             x2: 224, y2: 36,
             lineWidth: 9,
-            lineColor: primaryColor,
+            lineColor: title.primaryColor,
           },
           {
             type: 'rect',
@@ -150,8 +155,8 @@ let Printer = {
             y: 27,
             w: 160,
             h: 18,
-            color: tint,
-            lineColor: primaryColor,
+            color: title.artistTint,
+            lineColor: title.primaryColor,
             lineWidth: 1.5
           },
           {
@@ -159,20 +164,20 @@ let Printer = {
             lineWidth: 3,
             closePath: true,
             points: [{x: 32, y: 27}, {x: 32, y: 45}, {x: 40, y: 36}],
-            color: primaryColor 
+            color: title.primaryColor 
           },
           {
             type: 'polyline',
             lineWidth: 3,
             closePath: true,
             points: [{x: 193, y: 27}, {x: 193, y: 45}, {x: 184, y: 36}],
-            color: primaryColor
+            color: title.primaryColor
           }
         ],
         absolutePosition: {x: x, y: y}
       }
     },
-    multiple: function (x, y, primaryColor) {
+    multiple: function (x, y, title) {
       return {
         canvas:[
           {
@@ -181,21 +186,22 @@ let Printer = {
             y: 0,
             w: 224,
             h: 72,
-            lineColor: primaryColor,
-            lineWidth: 1
+            lineColor: title.primaryColor,
+            lineWidth: 1,
+            color: title.titleTint
           },
           {
             type: 'line',
             x1: 30, y1: 36,
             x2: 194, y2: 36,
             lineWidth: 2,
-            lineColor: primaryColor,
+            lineColor: title.primaryColor,
           }
         ],
         absolutePosition: {x: x, y: y}
       }
     },
-    holly: function (x, y, primaryColor) {
+    holly: function (x, y) {
       return [
         {
           canvas: [
@@ -206,7 +212,7 @@ let Printer = {
               w: 224,
               h: 72,
               color: '#ffffff',
-              lineColor: primaryColor,
+              lineColor: StyleDefines.styles.holly.primaryColor,
               lineWidth: 1
             },
             {
@@ -214,14 +220,14 @@ let Printer = {
               x1: 30, y1: 26,
               x2: 194, y2: 26,
               lineWidth: 1.5,
-              lineColor: primaryColor
+              lineColor: StyleDefines.styles.holly.primaryColor
             },
             {
               type: 'line',
               x1: 30, y1: 46,
               x2: 194, y2: 46,
               lineWidth: 1.5,
-              lineColor: primaryColor
+              lineColor: StyleDefines.styles.holly.primaryColor
             }
           ],
           absolutePosition: {x: x, y: y}
@@ -293,27 +299,24 @@ let Printer = {
     }
   },
 
-  printBackgrounds: function(dd) {
+  printBackgrounds: function(currentPage) {     
     const spaced = dd.jsmeta.options.spacing
     const xPos = { normal: { left: 81.5, right: 305.5 }, wide: { left: 80.5, right: 306.5 } }
     const pageTopMargin = { normal: 22.5, wide: 16.5 }  
     const tileYSpacing = { normal: 0, wide: 4 }
-    
-    // for each page
-    dd.content.forEach((page, pageIndex) => {
-      let background = []
-      const titles = page[0].jsmeta.titles
+
+    const titles = dd.jsmeta.pageTitles[currentPage - 1]
+      let pageBackground = []
 
       titles.forEach((title, index) => {
         var j = ((index < 10) ? index : index - 10); // counts 0..9 twice
         var x = ((index < 10) ? xPos[spaced].left : xPos[spaced].right ) // set the x-axis offset (left or right). Spaced will need to set 80.5 and 306.5 (2mm space)
         var y = (j * 72 + (j * tileYSpacing[spaced])) + pageTopMargin[spaced] // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
 
-        background.push(Printer.backgrounds[title.style](x, y, title.primaryColor, title.artistTint))
+        pageBackground.push(Printer.backgrounds[title.style](x, y, title))
 
       })
-      dd.content[pageIndex].splice(0, 0, background)
-    })
+    return pageBackground
   },
 
   printRecordIDs: function(dd) {
@@ -323,27 +326,26 @@ let Printer = {
     const tileYSpacing = { normal: 0, wide: 4 }
 
     // for each page
-    dd.content.forEach((page, pageIndex) => {
+    dd.jsmeta.pageTitles.forEach((titles, pageIndex) => {
       let recordIDs = []
 
-      page[0].jsmeta.titles.forEach((title, index) => {
+      titles.forEach((title, index) => {
         var j = ((index < 10) ? index : index - 10); // counts 0..9 twice
         var x = ((index < 10) ? xPos[spaced].left : xPos[spaced].right ) // set the x-axis offset (left or right). Spaced will need to set 80.5 and 306.5 (2mm space)
         var y = (j * 72 + (j * tileYSpacing[spaced])) + pageTopMargin[spaced] // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
 
-        //background.push(Printer.backgrounds[title.style](x, y, title.primaryColor, title.artistTint))
+        const offset = Printer.measureText(title.recordID, title.font, title.idSize)
+
         recordIDs.push({
           text: title.recordID,
           font: title.font,
           fontSize: title.idSize,
           bold: true,
-          absolutePosition: {x: x + 112.5, y: y + 72 - title.idSize}
+          absolutePosition: {x: x + 222 - offset, y: y + 72 - title.idSize}
         })
       })
-      //let newPage = [background, page]
-      dd.content[pageIndex].push(recordIDs)
-      console.log(dd.content)
-console.log(pageIndex)
+      
+      dd.content[pageIndex].unshift(recordIDs)
     })
   },
 
@@ -352,7 +354,7 @@ console.log(pageIndex)
       text: title.aside,
       margin: [title.margins, title.fontMargins.aside, title.margins, 0],
       border: [false, false, false, false],
-      fillColor: title.titleTint,
+      fillColor: false, //title.titleTint,
       font: title.font,
       fontSize: title.titleSize,
       bold: true
@@ -369,20 +371,11 @@ console.log(pageIndex)
       margin = [title.margins, -7, title.margins, -7]
       text = title.artist + '\n\n' + ((title.artistb !== '') ? title.artistb : title.artist)
     }
-    console.log({
-      text: text,
-      margin: margin,
-      border: [false, false, false, false],
-      fillColor: title.titleTint,
-      font: title.font,
-      fontSize: title.artistSize,
-      bold: true
-    })
     return {
       text: text,
       margin: margin,
       border: [false, false, false, false],
-      fillColor: title.titleTint,
+      fillColor: false, //title.titleTint,
       font: title.font,
       fontSize: title.artistSize,
       bold: true
@@ -394,7 +387,7 @@ console.log(pageIndex)
       text: title.bside,
       margin:[title.margins, title.fontMargins.bside, title.margins, 0],
       border: [false, false, false, false],
-      fillColor: title.titleTint,
+      fillColor: false, //title.titleTint,
       font: title.font,
       fontSize: title.titleSize,
       bold: true
@@ -402,16 +395,16 @@ console.log(pageIndex)
   },
 
   printTitles: function(dd) {
-    for (let p = 0; p < dd.content.length; p++) {
-      let page = dd.content[p][0]
+    for (let p = 0; p < dd.jsmeta.pageTitles.length; p++) {
 
       let body = []
 
-      for (let i = 0; i < dd.jsmeta.rows && i < page.jsmeta.titles.length; i++) {
+      for (let i = 0; i < dd.jsmeta.rows && i < dd.jsmeta.pageTitles[p].length; i++) {
         //get the title (current, i) and see if there is a corresponding second column title
-        const title = page.jsmeta.titles[i]
+        const title = dd.jsmeta.pageTitles[p][i]
+
         // if we're supposed to have two columns and there's a corresponding title to populate
-        const title_col2 = (dd.jsmeta.columns == 2 && page.jsmeta.titles.length > i + dd.jsmeta.rows) ? page.jsmeta.titles[i + dd.jsmeta.rows] : null
+        const title_col2 = (dd.jsmeta.columns == 2 && dd.jsmeta.pageTitles[p].length > i + dd.jsmeta.rows) ? dd.jsmeta.pageTitles[p][i + dd.jsmeta.rows] : null
 
         //get asides
         let row = [this.getTitleASide(title)]
@@ -455,16 +448,32 @@ console.log(pageIndex)
       for (let i = 0; i < 10; i++) {
         _heights = _heights.concat(_h[spaced])
       }
-      page.alignment = 'center'
-      page.table = {
-        heights: _heights,
-        widths: ((dd.jsmeta.columns == 2) ? [215, 215] : [215]),
-        body: body
-      }
+      let page = [{
+        alignment: 'center',
+        table: {
+          heights: _heights,
+          widths: ((dd.jsmeta.columns == 2) ? [215, 215] : [215]),
+          body: body
+        },
+        pageBreak: ((p !== dd.jsmeta.pageTitles.length - 1) ? 'after' : '')
+      }]
 
-      // if this isn't the last page, insert a page break
-      page.pageBreak = ((p !== dd.content.length - 1) ? 'after' : '')
+      //page.pageBreak = ((p !== dd.jsmeta.pageTitles.length - 1) ? 'after' : '')
+
+      dd.content.push(page)
     }
+  },
+
+  measureText(str, font, fontSize) {
+    console.log(Math.ceil(font) + 'px ' + fontSize)
+    let canvas = document.createElement('canvas')
+    canvas.width = "225"
+
+    let context = canvas.getContext('2d')
+    context.font = Math.ceil(fontSize) + 'px ' + font
+    context.textBaseline = 'middle'
+
+    return context.measureText(str).width
   },
 
   sideBreaker: function (title, font, style) {
@@ -544,6 +553,7 @@ console.log(pageIndex)
         formattedTitle.artist = formattedTitle.artist.toUpperCase()
         formattedTitle.artistb = formattedTitle.artistb.toUpperCase()
         formattedTitle.bside = formattedTitle.bside.toUpperCase()
+        formattedTitle.recordID = formattedTitle.recordID.toUpperCase()
       }
       if (jsmeta.options.quotes) {
         formattedTitle.aside = '"' + formattedTitle.aside + '"'
