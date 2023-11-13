@@ -257,7 +257,8 @@ export default {
       if (this.$database.options.get('allCaps')) {
         str = str.toUpperCase()
       }
-
+      
+      this.context.fillStyle = '#000000'
       this.context.textAlign = 'right'
       this.context.font = font.idSize + 'px ' + font.name
       this.context.fillText(str, 223, 68)
