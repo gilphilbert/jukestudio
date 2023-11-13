@@ -339,6 +339,34 @@ let Printer = {
           bold: true,
           absolutePosition: {x: x + 222 - offset, y: y + 72 - title.idSize}
         })
+
+        if (title.style === 'arrows' && title.genre !== '') {
+
+          const offset = Printer.measureText('HIT', 'retro', 8)
+          recordIDs.push({
+            text: 'HIT',
+            font: 'retro',
+            fontSize: 8,
+            color: '#ffffff',
+            bold: true,
+            absolutePosition: {
+              x: x + 30 - offset,
+              y: y + 36 - (title.idSize / 2)
+            }
+          })
+
+          recordIDs.push({
+            text: title.genre.toUpperCase(),
+            font: 'retro',
+            fontSize: 8,
+            color: '#ffffff',
+            bold: true,
+            absolutePosition: {
+              x: x + 225 - 30,
+              y: y + 36 - (title.idSize / 2)
+            }
+          })
+        }
       })
       
       dd.content[pageIndex].unshift(recordIDs)
@@ -533,6 +561,7 @@ let Printer = {
         artist: title.artist,
         artistb: title.artistb,
         recordID: title.recordID,
+        genre: title.genre,
         tag: title.tag,
         awrap: false,
         bwrap: false

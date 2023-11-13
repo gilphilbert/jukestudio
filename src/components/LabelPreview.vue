@@ -6,7 +6,7 @@
 
 export default {
   name: 'LabelPreview',
-  props: [ 'aside', 'bside', 'artist', 'artistb', 'recordID', 'tag', 'style', 'primaryColor', 'shadeArtist', 'shadeTitle' ],
+  props: [ 'aside', 'bside', 'artist', 'artistb', 'recordID', 'tag', 'style', 'primaryColor', 'shadeArtist', 'shadeTitle', 'smallLabel', 'genre' ],
   inject:[ '$styles', '$database' ],
   data: () => {
     return {
@@ -137,6 +137,26 @@ export default {
       this.context.closePath()
       this.context.fill()
       this.context.stroke()
+/* //STAR (not being used, hard to program for longer artists)
+      this.context.fillStyle = this.shadeArtistColor
+      this.context.lineWidth = '1'
+      this.context.strokeStyle = '#000000'
+      this.context.beginPath()
+      this.context.moveTo(45.597, 40.3665) //8.733) // 40.3665) //
+      this.context.lineTo(43.125, 39.0675) //7.434) // 39.0675) //
+      this.context.lineTo(40.653, 40.3665) //8.733) // 40.3665) //
+      this.context.lineTo(41.125, 37.6145) //5.981) // 37.6145) //
+      this.context.lineTo(39.125, 35.6645) //4.031) // 35.6645) //
+      this.context.lineTo(41.889, 35.2635) //3.63)  // 35.2635) //
+      this.context.lineTo(43.125, 32.7585) //1.125) // 32.7585) //
+      this.context.lineTo(44.361, 35.2635) //3.63)  // 35.2635) //
+      this.context.lineTo(47.125, 35.6645) //4.031) // 35.6645) //
+      this.context.lineTo(45.125, 37.6145) //5.981) // 37.6145) //
+      this.context.lineTo(45.597, 40.3665) //8.733) // 40.3665) //
+      this.context.closePath()
+      this.context.fill()
+      this.context.stroke()
+*/
     },
     paintStars() {
       
@@ -232,9 +252,15 @@ export default {
     },
     printRecordID () {
       const font = this.$styles.fonts[this.$database.options.get('font')]
-      this.context.textAlign = 'left'
+      let str = this.recordID
+
+      if (this.$database.options.get('allCaps')) {
+        str = str.toUpperCase()
+      }
+
+      this.context.textAlign = 'right'
       this.context.font = font.idSize + 'px ' + font.name
-      this.context.fillText(this.recordID, 112.5, 68)
+      this.context.fillText(str, 223, 68)
     },
     paintText () {
       this.context.fillStyle = 'black'
@@ -253,6 +279,7 @@ export default {
         _bside = _bside.toUpperCase()
         _artist = _artist.toUpperCase()
         _artistb = _artistb.toUpperCase()
+
       }
       if (this.$database.options.get('quotes')) {
         _aside = (_aside !== '') ? '"' + _aside + '"' : _aside
@@ -286,6 +313,15 @@ export default {
         this.context.fillText(_sb[0], 112.5, 53)
         this.context.fillText(_sb[1], 112.5, 64)
       }
+
+      if (this.style === 'arrows' && this.genre !== '') {
+        this.context.textAlign = 'right'
+        this.context.font = '8px Retro'
+        this.context.fillStyle = '#ffffff'
+        this.context.fillText('HIT', 30, 36)
+        this.context.textAlign = 'left'
+        this.context.fillText(this.genre.toUpperCase(), 195, 36)
+      }
     }
   },
   watch: {
@@ -317,6 +353,9 @@ export default {
       this.paintLabel()
     },
     tag() { 
+      this.paintLabel()
+    },
+    genre() { 
       this.paintLabel()
     }
   },

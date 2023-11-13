@@ -25,7 +25,8 @@ let Database = {
               font: 'retro',
               style: 'arrows',
               paperType: 'letter',
-              spacing: 'normal'
+              spacing: 'normal',
+              smallLabels: false
             })
             Database.upgrade().then(() => {
               resolve()
@@ -156,6 +157,13 @@ let Database = {
         title.tag = ''
         _titles.update(title)
       }
+      if (! Object.keys(title).includes('genre')) {
+        title.genre = ''
+        _titles.update(title)
+      }
+      if (! Object.keys('options').includes('smallLabels')) {
+        Database.options.set('smallLabels', 'false')
+      }
       _db.saveDatabase()
     })
   },
@@ -176,7 +184,8 @@ let Database = {
                 artist: title.artist,
                 artistb: title.artistb,
                 recordID: '',
-                tag: ''
+                tag: '',
+                genre: ''
               }
               // include style overrides if they're included
               if (Object.keys(title).includes('style')) {

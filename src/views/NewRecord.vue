@@ -10,7 +10,7 @@
         </header>
         <div class="modal-card-body">
           <p class="is-center">
-            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :recordID="recordID" :tag="tag" :style="style" :font="font" :primaryColor="primaryColor" :shadeArtist="shadeArtist" :shadeTitle="shadeTitle" />
+            <LabelPreview :aside="aside" :bside="bside" :artist="artist" :artistb="artistb" :recordID="recordID" :tag="tag" :style="style" :font="font" :primaryColor="primaryColor" :shadeArtist="shadeArtist" :shadeTitle="shadeTitle" :smallLabel="smallLabel" :genre="genre" />
           </p>
           <div class="field">
             <div class="control">
@@ -32,9 +32,25 @@
               <input class="input" type="text" placeholder="Side B artist (if different)" v-model="artistb">
             </div>
           </div>
+          <!--
           <div class="field">
             <div class="control">
               <input class="input" type="text" placeholder="Record ID (eg. COLUMBIA 3335)" v-model="recordID">
+            </div>
+          </div>
+          -->
+          <div class="field is-horizontal">
+            <div class="field-body">
+              <div class="field">
+                <p class="control is-expanded">
+                  <input class="input" type="text" placeholder="Record ID (eg. COLUMBIA 3335)" v-model="recordID">
+                </p>
+              </div>
+              <div class="field" v-if="style === 'arrows'">
+                <p class="control is-expanded">
+                  <input class="input" type="text" placeholder="Genre (appears on right arrow)" v-model="genre">
+                </p>
+              </div>
             </div>
           </div>
           <div class="box" id="style-override">
@@ -106,6 +122,8 @@ export default {
       style: 'arrows',
       shadeArtist: false,
       shadeTitle: false,
+      smallLabel: false,
+      genre: ''
     }
   },
   created: function () {
@@ -117,6 +135,7 @@ export default {
       this.shadeArtist = this.$database.options.get('shadeArtist')
       this.shadeTitle = this.$database.options.get('shadeTitle')
       this.font = this.$database.options.get('font')
+      this.smallLabel = this.$database.options.get('smallLabel')
       this.styleOverride = false
       this.aside = ''
       this.bside = ''
@@ -124,6 +143,7 @@ export default {
       this.artistb = ''
       this.recordID = ''
       this.tag = ''
+      this.genre = ''
     },
     saveRecord: function () {
       let obj = {
@@ -132,7 +152,8 @@ export default {
         artist: this.artist,
         artistb: this.artistb,
         recordID: this.recordID,
-        tag: this.tag
+        tag: this.tag,
+        genre: this.genre
       }
       if (this.styleOverride === true) {
         obj['styleOverride'] = {
@@ -166,6 +187,7 @@ export default {
         this.artistb = title.artistb
         this.recordID = title.recordID
         this.tag = title.tag
+        this.genre = title.genre
         if (Object.keys(title).includes('styleOverride')) {
           this.styleOverride = true
           this.primaryColor = title.styleOverride.primaryColor
