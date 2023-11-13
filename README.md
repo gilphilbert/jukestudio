@@ -1,24 +1,23 @@
-# jukestudio
+# juke.studio
 
-## Project setup
-```
-npm install
-```
+![Desktop](images/desktop.png)
+![Mobile](images/mobile.png)
 
-### Compiles and hot-reloads for development
+JukeStudio is an online jukebox title strip creator that creates true-to-original title strips for 1950s and later jukeboxes.
+
+This is the source repository, the application is available at https://juke.studio
+
+![Labels](images/labels.png)
+
+## Development environment
 ```
+git clone git@github.com:gilphilbert/jukestudio.git
+cd jukestudio
+npm i
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Building for production
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
