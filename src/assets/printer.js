@@ -488,10 +488,11 @@ let Printer = {
 
   measureText(str, fontName, fontSize) {
     let canvas = document.createElement('canvas')
-    canvas.width = "225"
+    canvas.width = "225px"
 
     let context = canvas.getContext('2d')
     context.font = Math.ceil(fontSize) + 'px ' + fontName
+    context.textAlign = 'center'
     context.textBaseline = 'middle'
 
     return context.measureText(str).width
@@ -499,55 +500,21 @@ let Printer = {
 
   sideBreaker: function (title, font, style) {
     for (let side of ['a', 'b']) {
-      let str = title[side + 'side']
+      //let str = title[side + 'side']
 
-      let canvas = document.createElement('canvas')
-      canvas.width = "225px"
+      //let canvas = document.createElement('canvas')
+      //canvas.width = "225px"
 
-      let context = canvas.getContext('2d')
-      context.font = Math.ceil(font.titleSize) + 'px ' + font.font
-      context.textAlign = 'center'
-      context.textBaseline = 'middle';
+      //let context = canvas.getContext('2d')
+      //context.font = Math.ceil(font.titleSize) + 'px ' + font.font
+      //context.textAlign = 'center'
+      //context.textBaseline = 'middle';
 
-      let _width = context.measureText(str).width
+      //let _width = context.measureText(str).width
+      let _width = Printer.measureText(title[side + 'side'], font.font, font.titleSize)
 
       if (_width > (215 - (style.margins * 2))) {
-        var _splitPoint = 0
-        let _words = str.split(" ")
-
-        /*
-        
-        // if we're breaking strings, look for a natural breaking point
-        if (str.indexOf('(') > -1) {
-          const chrToLookFor = (str.startsWith('(') || str.slice(1, 2) === '(' ? ')' : '(')
-          for (let i = 0; i < _words.length; i++) {
-            if (_words[i].indexOf(chrToLookFor) > -1) {
-              _splitPoint = i
-              if (chrToLookFor === ')') {
-                _splitPoint++
-              }
-              break
-            }
-          }
-        }
-        */
-
-        //otherwise let's find the widest first line and split there
-        if (_splitPoint === 0) {
-          let _w = ''
-          for (_splitPoint = 0; _splitPoint < _words.length; _splitPoint++) {
-            _w += (((_splitPoint > 0) ? ' ' : '') + _words[_splitPoint])
-            if (context.measureText(_w).width > (215 - (style.margins * 2))) {
-              _splitPoint = _splitPoint - 1
-              break
-            }
-          }
-        }
-
-        //_words[_splitPoint - 1] = _words[_splitPoint - 1]
-
         title[side + 'wrap'] = true
-        //title[side + 'side'] = _words.join(' ')
       }
     }
   },
