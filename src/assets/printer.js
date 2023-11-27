@@ -53,7 +53,6 @@ let Printer = {
     dd.background = Printer.printBackgrounds
     
     pdfMake.createPdf(dd).open()
-
   },
 
   setupPages(dd, titles) {
@@ -303,16 +302,16 @@ let Printer = {
     const tileYSpacing = { normal: 0, wide: 4 }
 
     const titles = dd.jsmeta.pageTitles[currentPage - 1]
-      let pageBackground = []
+    let pageBackground = []
 
-      titles.forEach((title, index) => {
-        var j = ((index < 10) ? index : index - 10); // counts 0..9 twice
-        var x = ((index < 10) ? xPos[spaced].left : xPos[spaced].right ) // set the x-axis offset (left or right). Spaced will need to set 80.5 and 306.5 (2mm space)
-        var y = (j * 72 + (j * tileYSpacing[spaced])) + pageTopMargin[spaced] // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
+    titles.forEach((title, index) => {
+      var j = ((index < 10) ? index : index - 10); // counts 0..9 twice
+      var x = ((index < 10) ? xPos[spaced].left : xPos[spaced].right ) // set the x-axis offset (left or right). Spaced will need to set 80.5 and 306.5 (2mm space)
+      var y = (j * 72 + (j * tileYSpacing[spaced])) + pageTopMargin[spaced] // set the y axis, 22.5 is the page top margin. Spaced will need to reduce this by 10mm then add 2mm to each
 
-        pageBackground.push(Printer.backgrounds[title.style](x, y, title))
+      pageBackground.push(Printer.backgrounds[title.style](x, y, title))
 
-      })
+    })
     return pageBackground
   },
 
@@ -381,7 +380,7 @@ let Printer = {
       fillColor: false,
       font: title.font,
       fontSize: title.titleSize,
-      bold: true
+      bold: true,
     }
   },
 
@@ -402,7 +401,7 @@ let Printer = {
       fillColor: false,
       font: title.font,
       fontSize: title.artistSize,
-      bold: true
+      bold: true,
     }
   },
 
@@ -477,7 +476,8 @@ let Printer = {
         table: {
           heights: _heights,
           widths: ((dd.jsmeta.columns == 2) ? [215, 215] : [215]),
-          body: body
+          body: body,
+          
         },
         pageBreak: ((p !== dd.jsmeta.pageTitles.length - 1) ? 'after' : '')
       }]
@@ -511,10 +511,12 @@ let Printer = {
 
       let _width = context.measureText(str).width
 
-      if (_width > (225 - (style.margins * 2))) {
+      if (_width > (215 - (style.margins * 2))) {
         var _splitPoint = 0
         let _words = str.split(" ")
 
+        /*
+        
         // if we're breaking strings, look for a natural breaking point
         if (str.indexOf('(') > -1) {
           const chrToLookFor = (str.startsWith('(') || str.slice(1, 2) === '(' ? ')' : '(')
@@ -528,25 +530,25 @@ let Printer = {
             }
           }
         }
+        */
 
         //otherwise let's find the widest first line and split there
         if (_splitPoint === 0) {
           let _w = ''
           for (_splitPoint = 0; _splitPoint < _words.length; _splitPoint++) {
             _w += (((_splitPoint > 0) ? ' ' : '') + _words[_splitPoint])
-            if (context.measureText(_w).width > (225 - (style.margins * 2))) {
+            if (context.measureText(_w).width > (215 - (style.margins * 2))) {
               _splitPoint = _splitPoint - 1
               break
             }
           }
         }
 
-        _words[_splitPoint - 1] = _words[_splitPoint - 1] + '\n'
-        str = _words.join(' ')
+        //_words[_splitPoint - 1] = _words[_splitPoint - 1]
 
         title[side + 'wrap'] = true
-        title[side + 'side'] = str
-      }    
+        //title[side + 'side'] = _words.join(' ')
+      }
     }
   },
 
@@ -575,7 +577,7 @@ let Printer = {
         formattedTitle.artist = formattedTitle.artist.toUpperCase()
         formattedTitle.artistb = formattedTitle.artistb.toUpperCase()
         formattedTitle.bside = formattedTitle.bside.toUpperCase()
-        formattedTitle.recordID = formattedTitle.recordID.toUpperCase()
+        formattedTitle.recordID = formattedTitle.recordID.toUpperCase() || ''
       }
       if (jsmeta.options.quotes) {
         formattedTitle.aside = '"' + formattedTitle.aside + '"'
