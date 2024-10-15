@@ -168,7 +168,6 @@ let Database = {
     })
 
     const options = _options.chain().find().data()[0]
-    console.log(options)
     if (! Object.keys(options).includes('smallLabels')) {
       Database.options.set('smallLabels', 'false')
     }
