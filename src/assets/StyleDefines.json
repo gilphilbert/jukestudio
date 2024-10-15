@@ -121,6 +121,12 @@
             "name": "Orange",
             "primary": "#ee6b3f",
             "fill": "#fce1d9"
+        },
+        "mono": {
+            "color": "mono",
+            "name": "Monochrome",
+            "primary": "#000000",
+            "fill": "#dddddd"
         }
     }
 }
