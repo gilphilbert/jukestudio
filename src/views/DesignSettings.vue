@@ -69,6 +69,10 @@
             <input class="is-checkradio is-success is-circle" id="force-shade-title" type="checkbox" name="" v-model="shadeTitle">
             <label for="force-shade-title">Colored background for titles</label>
           </div>
+          <div class="field">
+            <input class="is-checkradio is-success is-circle" id="thick-borders" type="checkbox" name="" v-model="thickBorders">
+            <label for="thick-borders">Thick borders</label>
+          </div>
         </div>
         <footer class="modal-card-foot columns">
           <button class="button column is-light close-modal" @click="resetAndClose">Cancel</button>
@@ -101,7 +105,8 @@ export default {
       style: 'arrows',
       primaryColor: 'red',
       shadeArtist: false,
-      shadeTitle: false
+      shadeTitle: false,
+      thickBorders: false
     }
   },
   created: function () {
@@ -119,6 +124,7 @@ export default {
       this.primaryColor = settings.primaryColor
       this.shadeArtist = settings.shadeArtist
       this.shadeTitle = settings.shadeTitle
+      this.thickBorders = settings.thickBorders
     },
     resetAndClose() {
       this.$emit('close')
@@ -134,6 +140,7 @@ export default {
       this.$database.options.set('primaryColor', this.primaryColor)
       this.$database.options.set('shadeArtist', this.shadeArtist)
       this.$database.options.set('shadeTitle', this.shadeTitle)
+      this.$database.options.set('thickBorders', this.thickBorders)
       this.$emit('close')
     }
   },

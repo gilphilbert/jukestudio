@@ -85,7 +85,7 @@ export default {
       this.context.fillRect(0, 0, 225, 72)
 
       //border
-      this.context.lineWidth = '1'
+      this.context.lineWidth = this.$database.options.get('thickBorders') ? '5' : '1'
       this.context.strokeStyle = this.primaryColorHex
       this.context.strokeRect(0, 0, 225, 72)
     },

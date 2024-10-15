@@ -87,6 +87,19 @@ let Printer = {
     return dd;
   },
 
+  thickBorders: function (pos, color) {
+    if (dd.jsmeta.options.thickBorders) return {
+      type: 'rect',
+      x: 0 + pos,
+      y: 0 + pos,
+      w: 224 - pos * 2,
+      h: 72 - pos * 2,
+      lineColor: color,
+      lineWidth: 1,
+    }
+    return {}
+  },
+
   backgrounds: {
     diamond: function (x, y, title) {
       return {
@@ -101,6 +114,9 @@ let Printer = {
             lineWidth: 1,
             color: title.titleTint
           },
+          Printer.thickBorders(1, title.primaryColor),
+          Printer.thickBorders(2, title.primaryColor),
+          Printer.thickBorders(3, title.primaryColor),
           {
             type: 'line',
             x1: 0, y1: 36,
@@ -133,6 +149,9 @@ let Printer = {
             lineWidth: 1,
             color: title.titleTint
           },
+          Printer.thickBorders(1, title.primaryColor),
+          Printer.thickBorders(2, title.primaryColor),
+          Printer.thickBorders(3, title.primaryColor),
           {
             type: 'line',
             x1: 0, y1: 36,
@@ -181,6 +200,9 @@ let Printer = {
             lineWidth: 1,
             color: title.titleTint
           },
+          Printer.thickBorders(1, title.primaryColor),
+          Printer.thickBorders(2, title.primaryColor),
+          Printer.thickBorders(3, title.primaryColor),
           {
             type: 'line',
             x1: 30, y1: 36,

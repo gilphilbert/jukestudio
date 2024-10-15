@@ -122,6 +122,12 @@
             "primary": "#ee6b3f",
             "fill": "#fce1d9"
         },
+        "pink": {
+            "color": "pink",
+            "name": "Pink",
+            "primary": "#f55ea3",
+            "fill": "#f1a3cb"
+        },
         "mono": {
             "color": "mono",
             "name": "Monochrome",

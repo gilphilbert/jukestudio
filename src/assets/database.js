@@ -26,8 +26,10 @@ let Database = {
               style: 'arrows',
               paperType: 'letter',
               spacing: 'normal',
-              smallLabels: false
+              smallLabels: false,
+              thickBorders: false
             })
+            //import from previous version
             Database.upgrade().then(() => {
               resolve()
             })
@@ -163,11 +165,17 @@ let Database = {
         title.genre = ''
         _titles.update(title)
       }
-      if (! Object.keys('options').includes('smallLabels')) {
-        Database.options.set('smallLabels', 'false')
-      }
-      _db.saveDatabase()
     })
+
+    const options = _options.chain().find().data()[0]
+    console.log(options)
+    if (! Object.keys(options).includes('smallLabels')) {
+      Database.options.set('smallLabels', 'false')
+    }
+    if (! Object.keys(options).includes('thickBorders')) {
+      Database.options.set('thickBorders', 'false')
+    }
+    _db.saveDatabase()
   },
   upgrade: function () {
     return new Promise((resolve) => {
