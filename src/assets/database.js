@@ -103,7 +103,7 @@ let Database = {
       let titles = _titles.chain().find().data({ removeMeta: 1 })
       let data = "data:text/csv;charset=utf-8,"
       titles.forEach(title => {
-        data += [title.aside, title.bside, title.artist, title.artistb].join(',') + "\r\n"
+        data += [title.aside, title.bside, title.artist, title.artistb, title.recordID, title.genre].join(',') + "\r\n"
       })
       return data
     },
@@ -122,7 +122,9 @@ let Database = {
             aside: fields[0],
             bside: fields[1],
             artist: fields[2],
-            artistb: ((fields.length == 4) ? fields[3] : '')
+            artistb: ((fields.length >= 4) ? fields[3] : ''),
+            recordID: ((fields.length >= 5) ? fields[4] : ''),
+            genre: ((fields.length >= 6) ? fields[5] : '')
           })
         }
       })
