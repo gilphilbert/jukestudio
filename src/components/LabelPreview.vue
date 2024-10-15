@@ -366,9 +366,6 @@ export default {
   },
   computed: {
     primaryColorHex () {
-      console.log(this.primaryColor)
-      console.log(this.$styles.colors[this.primaryColor])
-      console.log(this.$styles.colors[this.primaryColor].primary)
       return this.$styles.colors[this.primaryColor].primary
     },
     shadeArtistColor () {

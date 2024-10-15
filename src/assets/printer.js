@@ -20,11 +20,6 @@ pdfMake.fonts = {
   }
 }
 
-function shadeColor2(color, percent) {   
-  var f = parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
-  return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
-}
-
 let Printer = {
   init: (db) => {
     database = db
@@ -576,16 +571,19 @@ let Printer = {
       formattedTitle.artistSize = font.artistSize
       formattedTitle.idSize = font.idSize
 
+      const primaryColorName = formattedTitle.primaryColor
+      formattedTitle.primaryColor = StyleDefines.colors[formattedTitle.primaryColor].primary
+
       //provide the correct shades for fills
   
       if (formattedTitle.shadeTitle === true && (jsmeta.options.paperType === 'a4' || jsmeta.options.paperType === 'letter')) {
-        formattedTitle.titleTint=shadeColor2(StyleDefines.colors[formattedTitle.primaryColor].primary, 0.8)
+        formattedTitle.titleTint=StyleDefines.colors[primaryColorName].fill
       } else {
         formattedTitle.titleTint='#ffffff'
       }
 
       if (formattedTitle.shadeArtist === true && (jsmeta.options.paperType === 'a4' || jsmeta.options.paperType === 'letter')) {
-        formattedTitle.artistTint=shadeColor2(StyleDefines.colors[formattedTitle.primaryColor].primary, 0.8)
+        formattedTitle.artistTint=StyleDefines.colors[primaryColorName].fill
       } else {
         formattedTitle.artistTint='#ffffff'
       }
